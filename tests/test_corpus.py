@@ -62,7 +62,7 @@ def _ingest(path) -> object:
 
 
 def test_corpus_chia_hai_nhom_text_va_scan() -> None:
-    assert len(TEXT_PDFS) == 7
+    assert len(TEXT_PDFS) == 8
     assert len(SCAN_PDFS) == 4
     for path in SCAN_PDFS:
         with pymupdf.open(path) as doc:

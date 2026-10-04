@@ -179,8 +179,7 @@ for hit in index.search("tỷ trọng mới của BSR"):
     ├── Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md
     ├── De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md
     ├── Ky_thuat_da_su_dung.md
-    ├── Ky_thuat_va_Tham_khao.md     # đối chiếu từng kỹ thuật với bài báo (A/B/C)
-    └── Tai_lieu_tham_khao.md
+    ├── Ky_thuat_va_Tham_khao.md     # đối chiếu từng kỹ thuật với bài báo (A/B/C) + danh mục đầy đủ
 ```
 
 ---

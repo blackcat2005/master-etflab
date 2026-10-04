@@ -2,7 +2,7 @@
 
 Tài liệu này ghi lại **kỹ thuật đã cài đặt thật trong code**, kèm vị trí cụ thể để tra cứu được,
 và ghi rõ hạn chế đã biết của từng kỹ thuật. Danh mục bài báo đi kèm nằm ở
-[`Tai_lieu_tham_khao.md`](./Tai_lieu_tham_khao.md).
+[`Ky_thuat_va_Tham_khao.md`](./Ky_thuat_va_Tham_khao.md).
 
 > Khi cần viết phần "phương pháp" trong luận văn, dùng
 > [`Ky_thuat_va_Tham_khao.md`](./Ky_thuat_va_Tham_khao.md) — file đó đối chiếu **từng kỹ
