@@ -1,0 +1,7 @@
+# Research — cài 1 lần cho toàn bộ models (hợp của 3 base requirements, đã verify)
+# Cài: pip install -r research/requirements-all.txt
+torch==2.14.0
+sentence-transformers==6.1.0
+scikit-learn==1.9.1
+numpy==2.5.3
+pytest==9.1.1

@@ -1,0 +1,7 @@
+# RAPTOR — base requirements (offline demo + test, đã verify trên Python 3.13 / win32)
+# Cài: pip install -r research/raptor/requirements.txt
+torch==2.14.0                # backend của sentence-transformers
+sentence-transformers==6.1.0 # embedding (all-MiniLM-L6-v2) — dùng ở embedding.py
+scikit-learn==1.9.1          # TruncatedSVD + GaussianMixture — dùng ở clustering.py
+numpy==2.5.3                 # cosine search, matrix — dùng ở tree/retrieval/pipeline
+pytest==9.1.1                # chạy test_raptor.py

@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from test_chunking import make_table
 
-from etflab.chunking import Chunk, ChunkConfig, row_chunks, table_card
+from etflab.chunk import Chunk
 from etflab.retrieval import BM25, HybridIndex, RetrievalConfig, tokenize
 
 
@@ -99,22 +98,36 @@ def test_bm25_chi_muc_rong() -> None:
 
 
 # ------------------------------------------------------------ HybridIndex
-@pytest.fixture()
-def table() -> object:
-    return make_table(
-        rows=[
-            {"0": "1", "1": "BSR", "2": "0,87%"},
-            {"0": "2", "1": "TCX", "2": "1.423,1"},
-            {"0": "3", "1": "DGC", "2": "5,00%"},
-        ],
-        n_rows=3,
+def make_chunks() -> list[Chunk]:
+    """4 chunk gia lap: 1 the bang + 3 dong (khong phu thuoc parser)."""
+    src = "doc__t01"
+    card_text = (
+        "Bảng: Tỷ trọng mới. Cột: Mã CP; Tỷ trọng mới. "
+        "Số dòng: 3. Số cột: 2."
     )
+    chunks = [Chunk(
+        chunk_id=f"{src}#card", kind="table_card", label="Bảng: Tỷ trọng mới",
+        text=card_text, sparse_text=card_text,
+        source_file="a.pdf", page=1, table_id=src,
+    )]
+    for i, (ticker, value) in enumerate(
+        [("BSR", "0,87%"), ("TCX", "1.423,1"), ("DGC", "5,00%")]
+    ):
+        text = (f"Bảng: Tỷ trọng mới\nMã CP = {ticker}\n"
+                f"Tỷ trọng mới = {value}")
+        chunks.append(Chunk(
+            chunk_id=f"{src}#r{i + 1}", kind="table_row",
+            label=f"Mã CP = {ticker}", text=text,
+            sparse_text=f"Mã CP {ticker} Tỷ trọng mới {value}",
+            source_file="a.pdf", page=1, parent_id=src, table_id=src,
+            row_index=i,
+        ))
+    return chunks
 
 
 @pytest.fixture()
-def index(table) -> HybridIndex:
-    chunks = [table_card(table), *row_chunks(table)]
-    return HybridIndex(chunks, RetrievalConfig(use_dense=False))
+def index() -> HybridIndex:
+    return HybridIndex(make_chunks(), RetrievalConfig(use_dense=False))
 
 
 def test_index_co_ca_the_bang_va_dong(index) -> None:
@@ -146,8 +159,8 @@ def test_hit_mo_rong_nguon_cha(index) -> None:
     assert len(hit.parent_text) <= 420
 
 
-def test_tat_mo_rong_cha(table) -> None:
-    chunks = [table_card(table), *row_chunks(table)]
+def test_tat_mo_rong_cha() -> None:
+    chunks = make_chunks()
     idx = HybridIndex(chunks, RetrievalConfig(use_dense=False, expand_parent=False))
     assert idx.search("BSR")[0].parent_text == ""
 
@@ -171,8 +184,8 @@ def test_index_rong_dense(index) -> None:
     assert index.search("BSR")
 
 
-def test_rrf_gop_hai_nguon(table) -> None:
-    chunks = [table_card(table), *row_chunks(table)]
+def test_rrf_gop_hai_nguon() -> None:
+    chunks = make_chunks()
     idx = HybridIndex(chunks, RetrievalConfig(use_dense=True), embed_fn=fake_embed)
     hits = idx.search("TCX")
     top = hits[0]
@@ -180,8 +193,8 @@ def test_rrf_gop_hai_nguon(table) -> None:
     assert top.bm25_rank is not None and top.dense_rank is not None
 
 
-def test_dense_bat_dung_khi_co_embed_fn(table) -> None:
-    chunks = [table_card(table), *row_chunks(table)]
+def test_dense_bat_dung_khi_co_embed_fn() -> None:
+    chunks = make_chunks()
     idx = HybridIndex(chunks, RetrievalConfig(use_dense=True), embed_fn=fake_embed)
     assert idx._ensure_dense() is True
     assert idx.search("BSR")
@@ -194,28 +207,13 @@ def test_cau_hinh_tu_dinh_khong_tu_tai_model() -> None:
     assert cfg.rrf_k == 60.0
 
 
-def test_hit_to_dict(table) -> None:
-    chunks = [table_card(table), *row_chunks(table)]
+def test_hit_to_dict() -> None:
+    chunks = make_chunks()
     idx = HybridIndex(chunks, RetrievalConfig(use_dense=False))
     data = idx.search("BSR")[0].to_dict()
     assert set(data) == {
         "chunk_id", "score", "bm25_rank", "dense_rank", "text", "metadata", "parent_text",
     }
-
-
-def test_build_chunks_va_index_khop_nhau() -> None:
-    from etflab.chunking import build_chunks
-    from etflab.pipeline import DocumentResult, PageText
-
-    result = DocumentResult(
-        source_file="a.pdf", n_pages=1, tables=[make_table()],
-        pages_text=[PageText(page=1, blocks=[{"text": "Văn bản.", "y0": 0, "y1": 1}])],
-        warnings=[],
-    )
-    chunks = build_chunks(result, ChunkConfig())
-    idx = HybridIndex(chunks, RetrievalConfig(use_dense=False))
-    kinds = {h.chunk.kind for h in idx.search("tỷ trọng", top_k=5)}
-    assert kinds <= {"table_card", "table_row", "prose"}
 
 
 def test_chunk_rong_khong_gay_loi() -> None:

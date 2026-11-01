@@ -1,0 +1,6 @@
+# RAFT — optional: full SFT Llama-2 theo paper (CHỈ máy có GPU, không cần cho demo/test)
+# Cài: pip install -r research/raft/requirements-optional.txt
+transformers==5.17.0 # SFT Trainer — dùng ở training.py (import lazy)
+peft>=0.10           # LoRA để SFT rẻ (khuyến nghị thay vì full-finetune)
+accelerate>=0.28     # multi-GPU / mixed precision cho Trainer
+datasets>=2.18       # load raft_train.jsonl sinh từ data.to_jsonl()

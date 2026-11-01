@@ -1,0 +1,749 @@
+% !TeX program = xelatex
+% Bien dich:  tectonic --reruns 2 slides/table_extraction_and_indexing.tex
+%
+% Trinh bày KY THUẬT ĐANG CHẠY trong etflab: dò bảng không viền trong PDF
+% bao cao tai chinh, chuan hoa thanh chunk, va lap chi muc truy van.
+% Moi con so trong slide deu trich tu ma nguon hoac tu thu nghiem da ghi
+% trong docs/Tham_khao_va_nguon.md muc 5.5.
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ---- Font: uu tien font Windows, tu lui ve font TeX mac dinh ----
+% -> cung bien dich duoc tren Windows, Overleaf va Docker
+\usepackage{fontspec}
+\IfFontExistsTF{Arial}
+  {\setsansfont{Arial}}
+  {\IfFontExistsTF{TeX Gyre Heros}
+     {\setsansfont{TeX Gyre Heros}}
+     {\setsansfont{Latin Modern Sans}}}
+\IfFontExistsTF{Times New Roman}
+  {\setmainfont{Times New Roman}}
+  {\IfFontExistsTF{TeX Gyre Termes}
+     {\setmainfont{TeX Gyre Termes}}
+     {\setmainfont{Latin Modern Roman}}}
+\IfFontExistsTF{Consolas}
+  {\setmonofont{Consolas}}
+  {\IfFontExistsTF{DejaVu Sans Mono}
+     {\setmonofont{DejaVu Sans Mono}}
+     {\setmonofont{Latin Modern Mono}}}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+
+\usetheme{Madrid}
+\usecolortheme{beaver}
+% ``beaver'' khong phai ten mau cua xcolor (Beamer chi khai bao noi bo),
+% nen phai tu dinh nghia de dung duoc trong TikZ va \color.
+\definecolor{brand}{HTML}{7B4B2A}
+\setbeamercolor{structure}{fg=brand}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{brand!80!black}$\bullet$}
+
+\newcommand{\src}[1]{{\footnotesize\ttfamily #1}}
+
+\title[Kỹ thuật tách bảng và lập chỉ mục]{Tách bảng tài chính và lập chỉ mục cho RAG}
+\subtitle[Đặc tả kỹ thuật của hệ thống \texttt{etflab}]{Dò bảng không viền $\rightarrow$ phân đoạn $\rightarrow$ truy xuất lai}
+\author{}
+\date{}
+
+\begin{document}
+
+% =============================================================
+\begin{frame}
+  \titlepage
+  \vspace{-1.6em}
+  {\footnotesize
+  Toàn bộ nội dung mô tả mã đang chạy trong \src{etflab/}, không phải thiết kế
+  đề xuất. Kết quả đo thật trên corpus của đồ án được ghi ở \src{docs/Tham\_Khao\_va\_nguon.md}, mục 5.5.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Đặt vấn đề: bảng tài chính trong PDF của công ty chứng khoán}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small Dạng dữ liệu}
+        \begin{itemize}\small
+          \item Bảng tỷ trọng, danh mục, thay đổi thành phần chỉ số.
+          \item Bố cục dạng cột, \textbf{không có đường viền}.
+          \item Chỉ có một lớp ký tự có tọa độ, không có nét vẽ.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Hai điểm khó}
+        \begin{itemize}\small
+          \item Về \textbf{bố cục}: biên cột phải suy ra từ khoảng trống ngang.
+          \item Về \textbf{lớp ký tự}: 307/340 trang là bản scan, không đọc được gì.
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \vspace{0.3em}
+  \begin{block}{\small Hệ quả}
+    Không có công cụ ``bấm vào vùng bảng'' như khi làm Excel. Mọi thứ phải
+    dựng lại từ hộp toạ độ của từng từ.
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Vì sao không dùng \src{pymupdf.find\_tables()}}
+  \begin{itemize}
+    \item \src{find\_tables()} dò theo \textbf{đường vẽ} (vector line) rồi dựng lưới ô.
+    \item Báo cáo của công ty chứng khoán Việt Nam \emph{không vẽ bảng}: chỉ có
+          chữ, các cột ngăn cách bằng khoảng trắng.
+    \item Nhận xét này được ghi thẳng trong docstring của module hình học:
+  \end{itemize}
+  \begin{quotation}\small
+    ``\src{pymupdf.find\_tables()} chỉ làm việc với bảng có đường viền. Báo cáo của
+    CTCK Việt Nam dùng bảng không viền — chỉ được bảo vệ bảng bằng cách sắp xếp
+    theo trục $x$. Từ đó khôi phục trực tiếp từ toạ độ từ.''
+    \hfill\src{etflab/geometry.py}
+  \end{quotation}
+  \begin{block}{\small Hướng giải quyết}
+    Khôi phục lưới tọa độ (dòng $\rightarrow$ ô $\rightarrow$ cột) từ hộp bao
+    của các từ, rồi áp ngưỡng để quyết định vùng nào \emph{là} bảng.
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kiến trúc tổng thể}
+  \centering
+  \begin{tabular}{@{}c@{$\rightarrow$}c@{$\rightarrow$}c@{$\rightarrow$}c@{$\rightarrow$}c@{$\rightarrow$}c@{}}
+    \fbox{\shortstack{\textbf{PDF}\\[1pt]\scriptsize PyMuPDF}} &
+    \fbox{\shortstack{\textbf{words}\\[1pt]\scriptsize hộp toạ độ}} &
+    \fbox{\shortstack{\textbf{lines}\\[1pt]\scriptsize theo $y$}} &
+    \fbox{\shortstack{\textbf{cells}\\[1pt]\scriptsize theo khe ngang}} &
+    \fbox{\shortstack{\textbf{columns}\\[1pt]\scriptsize khe dọc}} &
+    \fbox{\shortstack{\textbf{table}\\[1pt]\scriptsize JSON}} \\[4pt]
+    \src{geometry.py} & \src{geometry.py} & \src{geometry.py} & \src{geometry.py} &
+    \src{geometry.py} & \src{tables.py}
+  \end{tabular}
+  \vspace{1.2em}
+  \begin{tabular}{@{}c@{$\rightarrow$}c@{$\rightarrow$}c@{$\rightarrow$}c@{}}
+    \fbox{\shortstack{\textbf{table}\\[1pt]\scriptsize + caption}} &
+    \fbox{\shortstack{\textbf{chunks}\\[1pt]\scriptsize card / row / prose}} &
+    \fbox{\shortstack{\textbf{index}\\[1pt]\scriptsize BM25 + E5}} &
+    \fbox{\shortstack{\textbf{hits}\\[1pt]\scriptsize + ngữ cảnh cha}}
+  \end{tabular}
+  \vspace{0.6em}
+  \src{pipeline.py} \quad \src{chunking.py} \quad \src{retrieval.py}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Tầng 1: từ ký tự đến ô}
+  \begin{description}\small
+    \item[\src{words\_from\_page}] Đọc \src{page.get\_text("words")} $\rightarrow$ \src{Word(x0,y0,x1,y1,text)}, sắp xếp theo $(c_y, x_0)$.
+    \item[\src{median\_char\_width}] Trung vị của $(x_1-x_0)/\text{len}$ trên từ dài $\ge 3$ ký tự.
+      \textbf{Mọi ngưỡng sau đều bằng bội số của số này}, nên không phụ thuộc cỡ chữ.
+    \item[\src{build\_lines(y\_tol=3.0)}] Hai từ cùng dòng nếu $|c_y - c'_y| \le 3$pt.
+    \item[\src{group\_cells}] Tách ô khi khe ngang $>\max(4.0,\;1.6\,c_w)$.
+  \end{description}
+  \vspace{0.3em}
+  \begin{block}{\small Vì sao đo bằng ký tự}
+    Báo cáo tiếng Việt trộn cỡ chữ (chú thích nhỏ hơn số liệu). Ngưỡng tính theo
+    \emph{số ký tự} tự co theo cỡ chữ thay vì phải cấu hình riêng cho từng font.
+  \end{block}
+  \vspace{0.2em}
+  \begin{alertblock}{\small Bước quyết định}
+    Mỗi ô vừa tách xong được \src{parse\_number()} ngay. Ô nào đọc được như số
+    thì mang thông tin \emph{nhịp số} — đây là manh mốc mọi bước sau.
+  \end{alertblock}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Tầng 2: biên cột bằng khe trống dọc chung}
+  \begin{block}{\small Ý tưởng: cột là khoảng trống \emph{dọc} không bị từ nào phủ}
+    Một cột đúng thì \textbf{mọi dòng dữ liệu} đều hở ra ở cùng một đoạn $x$.
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{enumerate}\small
+        \item Rải toàn bộ từ của vùng lên trục $x$ với ô lưới 1pt.
+        \item Đếm số dòng phủ từng ô lưới; ô nào $\le$ \src{allow\_sparse} coi là trống.
+        \item Các đoạn trống liên tiếp dài $\ge \max(7.0,\;2.0\,c_w)$ là biên cột.
+        \item \src{tighten\_columns} thu biên về phân bố thật $\pm 1$pt.
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{block}{\small Gán ô vào cột}
+        \src{assign\_to\_columns}: chọn cột có độ phủ lớn nhất; bỏ ô nếu phủ
+        $< 30\%$ bề rộng ô; gộp nhiều ô rơi cùng cột.
+      \end{block}
+      \begin{alertblock}{\small \src{allow\_sparse = 1}}
+        Cho phép một cột trống ở một dòng. Nếu phải đủ mọi dòng, những dòng có
+        ô rỗng (cột rộng) sẽ làm nát lưới cột.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Tầng 3: dò vùng bảng}
+  \begin{block}{\small Điều kiện bắt buộc phải có số}
+    Một dòng được đánh dấu là ``dòng bảng'' khi thỏa \textbf{cả hai}:
+  \end{block}
+  \[
+    \text{số ô đọc được như số} \;\ge\; 3
+    \qquad\textbf{và}\qquad
+    \frac{\text{số ô số}}{\text{số từ trên dòng}} \;\ge\; 0.25
+  \]
+  \begin{itemize}\small
+    \item Các dòng đánh dấu liên tiếp $\ge 4$ tạo thành một \emph{vùng ứng viên}.
+    \item Rồi vùng đó phải qua kiểm tra lưới ở slide kế tiếp mới được giữ.
+  \end{itemize}
+  \vspace{0.2em}
+  \centering
+  {\footnotesize
+  \begin{tabular}{@{}l l@{}}
+    \toprule
+    \textbf{Tham số (\src{TableConfig})} & \textbf{Ý nghĩa} \\
+    \midrule
+    \src{min\_numeric\_cells = 3} & dòng phải có tối thiểu 3 ô số \\
+    \src{min\_numeric\_density = 0.25} & tỉ lệ ô số trên dòng \\
+    \src{min\_run\_rows = 4} & số dòng liên tiếp tối thiểu \\
+    \src{max\_cols\_single\_table = 8} & quá ngưỡng này thì nghi là \emph{bảng kép} \\
+    \src{min\_row\_alignment = 0.60} & tỉ lệ số cột phủ tối thiểu trên một dòng \\
+    \bottomrule
+  \end{tabular}}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Loại văn xuôi căn đều: \src{\_grid\_is\_stable()}}
+  \begin{alertblock}{\small Vì sao cần bước này}
+    Văn xuôi căn đều (\emph{justify}) có nhiều con số rải rác: ``tăng 12\% so với
+    đầu năm'', ``từ 1.234 đồng''. Ba ô số vẫn đạt. Chỉ nhịp số chưa đủ.
+  \end{alertblock}
+  \begin{enumerate}\small
+    \item Lưới cột phải có $\ge 3$ cột.
+    \item Gọi một dòng là \emph{đúng lưới} khi: có $\ge 2$ ô số \textbf{và}
+      các ô phủ $\ge 60\%$ số cột.
+    \item Tổng số dòng đúng lưới phải $\ge \max(4,\;0.7 \times \text{số dòng vùng})$.
+  \end{enumerate}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small \src{\_grow\_run()} — nới vùng}
+        Nhiều dòng hợp lệ có \emph{cột rỗng} nên không đủ 3 ô số, vùng bị cắt làm
+        mất dữ liệu ngầm. Ta nới tối đa 2 vòng, chỉ nhận dòng khi dòng đó \emph{vẫn
+        còn} ô số và vẫn phủ lưới cột — nên không lan sang header hay văn xuôi.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Cột rỗng không phá vỡ tiêu chí}
+        Tiêu chí là số ô \emph{phủ một cột đã xác định}, không phải số ô thực tế.
+        Vì vậy dòng thiếu ô ở cột rộng vẫn là dòng dữ liệu hợp lệ.
+      \end{block}
+      \vspace{-0.4em}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Tách khối tiêu đề: \src{\_header\_block()}}
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      \begin{block}{\small Cách làm}
+        Từ dòng đầu tiên của vùng dữ liệu, đi \emph{lên} tối đa
+        \src{max\_header\_lines = 6} dòng.
+      \end{block}
+      \begin{block}{\small Bốn điều kiện dừng}
+        \begin{enumerate}\footnotesize
+          \item dòng đã có $\ge 2$ ô số $\rightarrow$ đã vào dữ liệu;
+          \item khớp mẫu caption \src{``Bảng 3: ...''};
+          \item khớp mẫu header chạy (URL, ``Trang 12'', DOI);
+          \item là \emph{câu văn} sót lại.
+        \end{enumerate}
+      \end{block}
+    \end{column}
+    \begin{column}{0.52\textwidth}
+      \begin{alertblock}{\small Vì sao cần điều kiện 4}
+        Dòng chú thích kiểu ``22/04/2026.'' nằm giữa caption và header thật.
+        Nó có đúng \emph{một} ô và dấu hiệu đầu dòng lệch sang trái khỏi mép trái
+        cột dữ liệu. Nếu giữ lại, nó bị gán cho \emph{mọi} cột và tên cột biến
+        thành ``22/04/2026. STT''.
+      \end{alertblock}
+      \begin{block}{\small Chỉ cản một ô lẻ}
+        Dòng nhiều ô thì dùng cấu trúc bảng để quyết định — không cản.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Header nhiều tầng và tên cột}
+  \begin{itemize}\small
+    \item \src{\_header\_levels()} ghi \textbf{từng tầng header} $\times$ \textbf{từng cột}.
+    \item Ô header được nhận nếu
+      $\max\!\big(\tfrac{\text{phủ ô}}{\text{rộng cột}},\; \tfrac{\text{phủ ô}}{\text{rộng chính ô}}\big) \ge 0.25$.
+      Tỉ lệ thứ hai ổn định hơn vì bề rộng cột biến thiên giữa các trang.
+    \item Ô \textbf{loại} nếu trải $\ge 3$ cột và chiếm quá nửa tổng số cột —
+          đó là chú thích đặt ngang, không phải tên cột.
+  \end{itemize}
+  \vspace{0.3em}
+  \centering
+  {\footnotesize
+  \begin{tabular}{@{}l l@{}}
+    \toprule
+    \textbf{Khoá tầng vào cột} & \textbf{Kết quả} \\
+    \midrule
+    \src{\_column\_names()} & gom ô theo \src{\_match\_column()}: phủ $\ge 40\%$ bề rộng cột, \\
+                              & nếu không thì lấy tâm gần nhất trong bán khoảng \\
+    \src{\_names\_from\_levels()} & nối các tầng bằng dấu \texttt{/}, bỏ tầng rỗng và tầng lặp lại \\
+    \bottomrule
+  \end{tabular}}
+  \vspace{0.4em}
+  {\footnotesize
+  Header nhiều tầng ``Số lượng CP mua/bán'' trải trên cột đầu và cột sau:
+  giải pháp là \emph{cho phép một ô xuất hiện ở nhiều cột}.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Tách hai bảng đặt cạnh nhau}
+  \begin{itemize}\small
+    \item Nếu bảng dựng được có $n_{\text{cols}} \le 8$ $\rightarrow$ coi là một bảng.
+    \item Vượt ngưỡng $\rightarrow$ nghi là \textbf{hai bảng đặt cạnh nhau}, thử cắt đôi.
+  \end{itemize}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{block}{\small \src{\_split\_slab()} — nguyên tắc ``cả hai bên đều phải là bảng''}
+        \begin{enumerate}\footnotesize
+          \item Tìm khe dọc rộng (rộng hơn \src{min\_split\_band}, mặc định $\max(14,\;4c_w)$).
+          \item Dựng thử bảng bên trái và bên phải.
+          \item \textbf{Chỉ cắt} khi cả hai đều hợp lý; nếu không thì thử khe kế tiếp.
+          \item Lặp tối đa 2 tầng.
+        \end{enumerate}
+      \end{block}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{alertblock}{\small Ưu tiên khe gần giữa}
+        Hai bảng cạnh nhau thường được \emph{căn giữa} trang, nên khe ở gần giữa
+        vùng là ứng viên đúng nhất. Khe giữa hai cột của \emph{cùng một} bảng cũng
+        thỏa điều kiện ``hai bên đều là bảng'' — chọn sai sẽ cắt nhầm một bảng
+        thành hai.
+      \end{alertblock}
+      \begin{block}{\small \src{\_is\_plausible()}}
+        $\ge 4$ dòng, $\ge 2$ cột, $\ge 2$ cột chứa số.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Khi hai bảng không hề có khe: tiêu đề nhóm}
+  \begin{alertblock}{\small Tình huống thật — bản tin Q1/2026}
+    Hai bảng đặt cạnh nhau nhưng khe giữa chỉ \textbf{12pt}, nhỏ hơn khe giữa hai
+    cột của \emph{cùng} bảng (16--70pt). Dò tìm khe không ra gì.
+  \end{alertblock}
+  \begin{block}{\small Nhưng header lại có dấu hiệu mạnh hơn}
+    Một dòng ``Kich bản 1: ... \quad|\quad Kich bản 2: ...'' — mỗi ô là tên của
+    một bảng. Đây là bằng chứng \emph{cấu trúc}, không phụ thuộc bề rộng khe.
+  \end{block}
+  \vspace{0.2em}
+  \centering
+  {\footnotesize
+  \begin{tabular}{@{}l@{}}
+    \toprule
+    \textbf{\src{\_group\_title\_bands()} chỉ nhận dòng khi thỏa đồng thời} \\
+    \midrule
+    $\ge 6$ tâm ô dữ liệu khác nhau \quad (ít hơn thì chưa đủ tin cậy) \\
+    mỗi ô là chuỗi dài $\ge 12$ ký tự, và các nhãn \emph{khác nhau} \\
+    mỗi ô phủ $\ge 2$ cột; mỗi nhóm còn $\ge 3$ cột; khe rộng $\ge 3c_w$ \\
+    \bottomrule
+  \end{tabular}}
+  \vspace{0.3em}
+  {\footnotesize
+  Dòng tiêu đề nhóm được \emph{giữ trong header} (để đối chiếu khi gộp bảng qua
+  trang) nhưng bị đánh dấu để không dùng làm tên cột.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Chuẩn hoá số và đơn vị kiểu Việt Nam}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small \src{parse\_number()}}
+        \begin{itemize}\footnotesize
+          \item Dấu chấm là phân cách nghìn, dấu phẩy là thập phân:
+                \src{2.976,9} $\rightarrow 2976.9$.
+          \item Phân biệt ngày \src{22/04/2026} với số.
+          \item Gắn cờ \src{is\_percent} cho số có \texttt{\%}.
+        \end{itemize}
+      \end{block}
+      \begin{block}{\small Đơn vị \src{unit\_notes}}
+        Quét tên cột theo mẫu \src{(nghìn|ngàn|tr|tỷ|triệu) (cổ phiếu|cp|đồng|usd|vnd)}
+        cộng với cờ \texttt{percent}.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Nhận diện cột STT và cột mã chứng khoán}
+        \begin{itemize}\footnotesize
+          \item \src{\_is\_row\_index()}: số nguyên tăng đúng $1$, ít nhất 4 giá trị
+                $\Rightarrow$ cột số thứ tự, \emph{không phải} cột đo lường.
+          \item \src{TickerExtractor}: \src{\^{}A-ZĐ\{2,6\}\$}, dài $\le 6$, không
+                phải số; $\ge \max(2,\;60\%)$ dòng khớp thì là cột \texttt{ticker}.
+        \end{itemize}
+      \end{block}
+      \begin{alertblock}{\small \src{numeric\_cols}}
+        Cột được tính là cột số nếu $\ge 40\%$ số dòng đọc được như số. Đây là đầu
+        vào cho \src{\_is\_plausible()} và cho việc loại cột STT khỏi phần rút gọn.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Hậu xử lý ở tầng tài liệu}
+  \begin{tabular}{@{}l p{0.62\textwidth}@{}}
+    \toprule
+    \textbf{Hàm (\src{pipeline.py})} & \textbf{Nhiệm vụ} \\
+    \midrule
+    \src{\_find\_caption()} & gom tối đa 4 dòng phía trên vùng bảng; dừng ở mục mới, caption mới, hoặc dấu kết câu \\
+    \src{\_prose\_blocks()} & phần văn xuôi: loại vùng bảng, chân trang ($y>0.94H$) và mẫu footer \\
+    \src{\_merge\_continuations()} & gộp bảng bị cắt giữa 2 trang \\
+    \src{\_assign\_ids()} & đánh số \src{\{tên\_file\}\_\_t01} \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.5em}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small Gộp bảng xuyên trang}
+        Khớp \emph{chữ ký} = tên cột đã bỏ dấu, cần $\ge 2$ cột khác rỗng;
+        phải trùng vùng $x$; bỏ qua hai bảng cùng trang cách nhau $\ge 120$pt.
+        Khi khớp: nối dòng, hợp \src{page\_span}, nới vùng $y$ và $x$.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Cảnh báo thiếu lớp ký tự}
+        Đếm trang không có từ nào. Nếu \emph{tất cả} trang đều rỗng, cảnh báo rõ:
+        PDF đang scan, cần OCR trước khi nạp. Nếu chỉ một phần, liệt kê tối đa
+        10 trang đầu.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bài toán lập chỉ mục: chia chunk thế nào}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small Ba loại chunk}
+        \begin{itemize}\footnotesize
+          \item \src{table\_card} --- 1 chunk/bảng: tên cột + nhãn dòng.
+          \item \src{table\_row} --- 1 chunk/dòng dữ liệu, \src{parent\_id = table\_id}.
+          \item \src{prose} --- văn xuôi, đã loại footer.
+        \end{itemize}
+      \end{block}
+      \begin{block}{\small Ô rỗng được giữ lại}
+        Ô trống ghi \src{missing: true} thay vì bị xoá — nếu xoá, không phân biệt
+        được ``không có dữ liệu'' với ``cột này không áp dụng''.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Hai bản văn cho mỗi chunk}
+        \begin{itemize}\footnotesize
+          \item \src{text} --- đầy đủ, dạng ``Tỷ trọng: 12,4\% | ...'', cho vector.
+          \item \src{sparse\_text} --- rút gọn: nhãn dòng + các cột số, cho BM25.
+        \end{itemize}
+      \end{block}
+      \begin{block}{\small Cột định danh không lấy theo vị trí}
+        Nhiều bảng không có cột STT mà bắt đầu bằng ``Ma CK'' rồi tới cột số.
+        Nếu cắm số thứ tự, cột ``Ma CK'' rơi vào phần \emph{rút gọn} và giá trị
+        mất khỏi chỉ mục BM25. Chỉ cột \emph{chữ} mới là nhãn dòng.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Token hoá tiếng Việt cho BM25}
+  \begin{itemize}\small
+    \item Bỏ dấu, đưa \texttt{đ} $\rightarrow$ \texttt{d}, hạ chữ thường.
+    \item \textbf{Không} bỏ từ ``trong'' khỏi danh sách dừng — cột quan trọng nhất
+          của báo cáo Việt Nam là ``Tỷ \emph{trọng}''.
+  \end{itemize}
+  \vspace{0.2em}
+  \begin{block}{\small Số: lập chỉ mục cả hai cách hiểu}
+    Người dùng hỏi ``2976.9'', tài liệu ghi ``2.976,9''. Thay vì phải chọn, ta
+    \textbf{index cả hai}:
+    \begin{itemize}\footnotesize
+      \item thử cả ``chấm = nghìn'' lẫn ``chấm = thập phân'' $\rightarrow$ sinh token số chuẩn hoá;
+      \item thêm \texttt{phan\_tram} nếu là phần trăm;
+      \item thêm các thành phần tách theo \texttt{[.,]} để hỏi theo cách viết khác cũng trúng.
+    \end{itemize}
+  \end{block}
+  \vspace{0.2em}
+  \begin{block}{\small Đơn vị ngữ nghĩa của BM25}
+    Người hỏi theo \textbf{mã chứng khoán} và \textbf{con số} — BM25 khoп chính xác
+    các token này, vector search thường bỏ qua. Ngược lại, câu hỏi kiểu ``quy mô
+    đầu tư tăng mạnh'' thì BM25 không hiểu, vector search hiểu.
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Metadata là ràng buộc, không phải từ khoá}
+  \begin{block}{\small Nhận dạng tài liệu (\src{docmeta.py})}
+    Từ tên file (``Thay\_doi\_thanh\_phan\_chi\_so\_VN30\_Q2\_2026.pdf``), không
+    có kỳ thì lấy từ trang đầu: loại tài liệu, chỉ số, kỳ, năm, ngày.
+    Nhãn dạng ``Bản tin thay đổi thành phần chỉ số VN30 kỳ Q2/2026'' được
+    \textbf{tiền tố} cho mọi \src{sparse\_text}.
+  \end{block}
+  \vspace{0.2em}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small \src{DocFilter} — lọc cứng}
+        Nhận diện từ câu hỏi: \src{Q1}--\src{Q4}, ``quý II'', \src{VN30}/
+        \src{VN-DIAMOND}/\src{VN-FIN-LEAD}, ``dự báo''/``điều lệ'', năm 4 số.
+        Chunk không khớp bị loại \textbf{trước khi tính điểm}.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Vì sao không giao cho BM25 tự xử lý}
+        BM25 \emph{cộng} điểm. Với 223 chunk chứa \texttt{q2} (idf 1.2) và 12 chunk
+        chứa \texttt{bsr} (idf 4.1), câu ``tỷ trọng mới của BSR Q2'' vẫn trả về
+        bản Q3. \texttt{q2} là \emph{điều kiện}, không phải \emph{điểm cộng}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Truy xuất lai: BM25 + vector + RRF}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small Nhánh thưa}
+        Okapi BM25, $k_1=1.5$, $b=0.75$:
+        \[
+          \mathrm{idf} = \ln\!\left(1+\frac{N-df+0.5}{df+0.5}\right)
+        \]
+        Không cần ANN, không cần thư viện ngoài.
+      \end{block}
+      \begin{block}{\small Nhánh dày}
+        \src{multilingual-e5-small}, vector chuẩn hoá, so khớp cosin.
+        Bắt buộc tiền tố \src{``query: ''} và \src{``passage: ''} — thiếu làm
+        khoảng cách đầu vào và đầu ra lệch nhau.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Ghép bằng RRF}
+        \[
+          \mathrm{RRF} = \sum \frac{w}{k + \text{rank}},\quad k = 60
+        \]
+        Chỉ cần \emph{thứ hạng}, không cần chuẩn hoá thang điểm hai bên —
+        đây là lý do RRF hợp hơn cộng điểm thô.
+      \end{block}
+      \begin{alertblock}{\small Mặc định tắt nhánh dày}
+        \src{use\_dense = False}: bật sẽ tải mô hình ~500MB ngay lần chạy đầu.
+        Nếu thiếu \src{sentence\_transformers} hoặc lỗi tải, hệ thống \textbf{tự
+        ghi cảnh báo và chạy tiếp bằng BM25} thay vì sập.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Đọc kết quả: mở rộng ngữ cảnh cha}
+  \begin{itemize}\small
+    \item Chunk cha (\src{table\_card}) được lưu theo \emph{khoá} \src{table\_id},
+          không phải \src{chunk\_id}: chunk dòng có \src{parent\_id = table\_id},
+          còn chunk cha có khoá dạng \src{...\#card}.
+    \item Khi trả hit dòng, \src{parent\_text} cắt ở \src{parent\_max\_chars = 420}.
+  \end{itemize}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small Cách đọc hit}
+        \src{Hit} mang cả \src{bm25\_rank}, \src{dense\_rank} và \src{score} RRF —
+        nhìn thấy \emph{vì sao} chunk đó lọt vào top-k, không chỉ biết nó có trong kết quả.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Phạm vi}
+        Đây là cơ chế \emph{cha--con}, cùng hướng với bài báo dual-granularity đã
+        trình bày riêng. Hiện chưa có bộ câu hỏi vàng để chứng minh cơ chế này
+        tăng độ chính xác so với chia chunk theo phần tử.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Đo thật trên corpus của đồ án}
+  \begin{block}{\small Cách đo}
+    12 PDF / 340 trang (33 trang có lớp ký tự, 307 trang scan). So sánh quy tắc của
+    đồ án với Table Transformer (TATR) — hai checkpoint công khai. Mã đo nằm ngoài
+    kho mã nguồn, không đụng vào hệ thống.
+  \end{block}
+  \centering
+  {\footnotesize
+  \begin{tabular}{@{}l r r@{}}
+    \toprule
+    & \textbf{Quy tắc (\src{tables.py})} & \textbf{Table Transformer} \\
+    \midrule
+    33 trang có lớp ký tự & \textbf{18} bảng & 43 bảng \\
+    307 trang scan & 0 (không có lớp ký tự để dò) & 343 bảng \\
+    \midrule
+    \multicolumn{3}{@{}l}{\emph{Trên 33 trang có lớp ký tự} (có ground truth):} \\
+    \quad Cả hai cùng thấy (TP) & \multicolumn{2}{r}{13} \\
+    \quad Chỉ TATR thấy (FP) & \multicolumn{2}{r}{\textbf{13}} \\
+    \quad Chỉ quy tắc thấy (FN) & \multicolumn{2}{r}{1} \\
+    \midrule
+    \textbf{Precision / Recall} & \multicolumn{2}{r}{\textbf{50\%} / \textbf{93\%}} \\
+    \bottomrule
+  \end{tabular}}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Cấu trúc: khớp 11/15 cột, số dòng thì không}
+  \begin{block}{\small So sánh cấu trúc trên 15/18 bảng đo được}
+    3 bảng bị bỏ vì ghép qua trang, không lấy được nhãn.
+  \end{block}
+  \centering
+  {\footnotesize
+  \begin{tabular}{@{}l r@{}}
+    \toprule
+    \textbf{Kiểm tra} & \textbf{Kết quả} \\
+    \midrule
+    Số cột khớp & \textbf{11/15 (73\%)} \\
+    Số dòng & \textbf{không đáng tin} --- lệch từ $\pm 1$ đến $+12$ \\
+    \bottomrule
+  \end{tabular}}
+  \vspace{0.6em}
+  \begin{block}{\small Bốn ca lệch số cột đều rơi vào lỗi đã biết trước}
+    \begin{itemize}\footnotesize
+      \item \src{18$\times$5 $\rightarrow$ TATR 18$\times$4} và
+            \src{46$\times$8 $\rightarrow$ TATR 61$\times$6}: \textbf{hai bảng cạnh nhau bị tách nhầm}.
+      \item \src{18$\times$8 $\rightarrow$ 18$\times$9} và
+            \src{32$\times$7 $\rightarrow$ 32$\times$6}: chênh lệch ở biên cột đầu/cuối.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Điểm mù của hai bên}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{alertblock}{\small Quy tắc thua ở đâu}
+        Bảng \textbf{văn bản thuần, ít cột, ít số}. Ví dụ phụ lục ``Tiêu chí đánh
+        giá chỉ số VN DIAMOND INDEX 3.0'' (\src{Q4\_2024} trang 5, điểm 0.953): đòi
+        $\ge 3$ ô số nên bị \src{\_find\_regions()} loại. Trang 2 cùng tệp cũng
+        có thể là danh sách quỹ.
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small TATR thua ở đâu}
+        Trang \emph{miễn trừ trách nhiệm} và khối thông tin liên hệ bị nhận là
+        bảng với điểm tới \textbf{1.0} --- gần như toàn bộ 13 trang FP thuộc nhóm
+        này. Ngược lại một trang có \textbf{2 bảng thật} thì TATR phát hiện \textbf{0}.
+        Cả hai hệ đều không có khái niệm bảng xuyên trang.
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.4em}
+  \begin{block}{\small Kết luận: kiến trúc lai, không thay thế}
+    Quy tắc làm \textbf{neo độ chính xác}; mô hình \textbf{bổ sung độ bao phủ}
+    cho lớp bảng mà quy tắc cố ý loại. Mọi đề xuất của TATR phải đi qua bộ lọc
+    trước khi được nhận. Bằng chứng không cho phép kết luận ``quy tắc thắng mô hình''.
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bộ lọc khe lặp: một phép đo thay cho ground truth}
+  \begin{block}{\small Vì sao cần}
+    307 trang scan không có ground truth. Nhưng một bảng --- kể cả không viền ---
+    luôn thể hiện \emph{cùng các khe cột nội bộ} trên nhiều dòng; văn xuôi thì méo.
+  \end{block}
+  \centering
+  {\footnotesize
+  \begin{tabular}{@{}l r r r@{}}
+    \toprule
+    \textbf{Nhóm} & \textbf{n trang} & \textbf{khe lặp (median)} & \textbf{\(\ge 2\) khe lặp} \\
+    \midrule
+    POS --- trang có bảng, quy tắc xác nhận & 15 & \textbf{8.0} & \textbf{100\%} \\
+    NEG --- trang văn xuôi, quy tắc loại & 28 & 1.0 & 29\% \\
+    SCAN --- 307 trang scan & 40 & \textbf{1.0} & 38\% \\
+    \bottomrule
+  \end{tabular}}
+  \vspace{0.5em}
+  \begin{itemize}\footnotesize
+    \item Nhóm SCAN thống kê \emph{giống nhóm báo động giả}, xa nhóm bảng thật $\Rightarrow$
+          phần lớn 343 phát hiện trên trang scan là văn xuôi bị nhận nhầm, dù điểm
+          tin cậy rất cao (0.83--0.999).
+    \item Bộ lọc loại \textbf{62\%} của NEG trong khi giữ \textbf{100\%} của POS
+          $\Rightarrow$ dùng được làm bộ kiểm lọc đề xuất của TATR.
+  \end{itemize}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Giới hạn đã biết}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small Giới hạn về đo lường}
+        \begin{itemize}\footnotesize
+          \item Chưa có ground truth độc lập cho 307 trang scan.
+          \item Chưa đo TEDS --- mới chỉ so số cột.
+          \item Số dòng TATR trả về lệch tới $+12$, chưa dùng được.
+          \item Chưa có bộ câu hỏi vàng để đo \src{Recall@k}, MRR hay chất lượng sinh.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Giới hạn về phạm vi}
+        \begin{itemize}\footnotesize
+          \item Chỉ chạy trên PDF có lớp ký tự; trang scan cần OCR trước.
+          \item Không xử lý bảng xoay.
+          \item Cần biết kích thước số lượng phần trăm, cột không đều nhau, ô gộp dọc.
+          \item Nhánh dày mặc định tắt, chưa so sánh BM25 thuần với lai trên câu vàng.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.3em}
+  \begin{alertblock}{\small Cách đọc đúng các con số đã trình bày}
+    Chúng là kết quả đo trên \emph{đúng corpus của đồ án}, không phải điểm chuẩn
+    công bố. Vì vậy dùng để so sánh \emph{giữa hai hệ trong cùng điều kiện},
+    không dùng để so với số liệu đào tạo của TATR.
+  \end{alertblock}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bản đồ mã nguồn}
+  \centering
+  {\footnotesize
+  \begin{tabular}{@{}l l@{}}
+    \toprule
+    \textbf{Module} & \textbf{Trách nhiệm} \\
+    \midrule
+    \src{vnnum.py} & chuẩn hoá số kiểu Việt Nam, bỏ dấu, gỡ hiểu ngày \\
+    \src{geometry.py} & dòng, ô, biên cột, gán ô vào cột \\
+    \src{tables.py} & dò vùng bảng, tách bảng kép, dựng tên cột, đơn vị, cột mã \\
+    \src{pipeline.py} & đọc PDF, caption, gộp bảng qua trang, đánh số, cảnh báo \\
+    \src{docmeta.py} & nhận dạng loại tài liệu, chỉ số, kỳ, năm \\
+    \src{chunking.py} & \src{table\_card} / \src{table\_row} / \src{prose} \\
+    \src{retrieval.py} & token hoá, \src{BM25}, dense, \src{RRF}, \src{DocFilter} \\
+    \src{cli.py} & nạp tài liệu và tra cứu \\
+    \bottomrule
+  \end{tabular}}
+  \vspace{1.0em}
+  {\footnotesize
+  Tài liệu chi tiết theo từng hàm: \src{docs/Huong\_dan\_ky\_thuat.md}\\[2pt]
+  Thí nghiệm và nguồn trích dẫn: \src{docs/Tham\_Khao\_va\_nguon.md}}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết luận}
+  \begin{enumerate}
+    \item Bảng tài chính không viền được nhận diện bằng \textbf{nhịp số} và
+          \textbf{khe dọc lặp lại}, không dựa vào đường vẽ nào.
+    \item Ba tầng quyết định chất lượng: \emph{dòng có số} $\rightarrow$
+          \emph{lưới cột ổn định} $\rightarrow$ \emph{đúng là bảng}.
+    \item Tách bảng kép cần hai loại bằng chứng: khe dọc rộng, và tiêu đề nhóm
+          trong header khi khe không đủ rõ.
+    \item Chunk tách theo \textbf{dòng dữ liệu} và \textbf{giữ nguyên ô rỗng};
+          nhãn dòng lấy từ cột chữ, không phải cột đầu.
+    \item Chỉ mục là \textbf{hybrid}: BM25 cho mã và con số, vector cho ý nghĩa,
+          RRF để ghép; metadata dùng để \emph{lọc}, không dùng để cộng điểm.
+    \item Bằng chứng trên corpus cho thấy \textbf{quy tắc tốt hơn về độ chính xác,
+          mô hình tốt hơn về độ bao phủ} --- hướng đi là kiến trúc lai, không phải
+          thay thế.
+  \end{enumerate}
+\end{frame}
+
+\end{document}

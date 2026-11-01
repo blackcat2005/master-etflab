@@ -1,0 +1,1006 @@
+{
+ "source_file": "Du_bao_thay_doi_danh_muc_chi_so_VN30_VNFINLEAD_Q1_2026.pdf",
+ "parser": "unstructured hi_res + infer_table_structure",
+ "n_pages": 4,
+ "n_tables": 1,
+ "seconds": 126.7,
+ "elements": [
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "_SSI"
+  },
+  {
+   "kind": "image",
+   "page": 1,
+   "text": "SSI"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Ngày 5/1/2026"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Bản tin ETF"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Dự báo thay đổi danh mục chỉ số VN30 và VNFIN Lead kỳ Q1/2026"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "1. Tổng quan và một số mốc thời gian đáng chú ý"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "„"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Các quỹ ETF mô phỏng bộ chỉ số HOSE-Index, VNX-Index cũng chỉ số đầu tư bao gồm VNDiamond, VNFIN Lead, VNFIN Select ước"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "tính sẽ hoàn thành cơ cấu danh mục vào ngày 30/1/2026, ngày chỉ số mới có hiệu lực là 2/2/2026. Ngày chốt số liệu là 31/12/2025."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "VN30 Index và VNFIN Lead Index: sẽ thực hiện đối với các thay đổi về thành phần."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "VN Diamond, VNFIN Select Index, VNX-Index: cập nhật số liệu và tính toán lại tỷ trọng danh mục."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Dựa vào số liệu ngày 31/12/2025, chúng tôi đưa ra dự báo về danh mục các chỉ số như sau:"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Dựa vào số liệu ngày 31/12/2025, chúng tôi đưa ra dự báo về danh mục các chỉ số như sau:"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "2. VN30 Index"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Ước tính thay đổi danh mục"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "BCM có thể bị loại khỏi danh mục chỉ số do không thỏa mãn điều kiện về thanh khoản. Giá trị giao dịch khớp lệnh trung bình 12 tháng"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "của BCM ở mức 26,3 tỷ đồng, thấp hơn ngưỡng yêu cầu 30 tỷ đồng."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "«"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "«"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "VPL có thể được thêm vào chỉ số kỳ này do đã thỏa mãn các điều kiện yêu cầu và đứng thứ 11 về vốn hóa trung bình 12 tháng"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "(154,6 nghìn tỷ đồng)."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "BSR nằm sát Top 20 về vốn hóa, do đó, chúng tôi xem xét hai kịch bản đối với cổ phiếu này."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "« _ BSR nằm sát Top 20 về vốn hóa, do đó, chúng tôi xem xét hai kịch bản đối với cổ phiếu này."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Nếu BSR được thêm vào chỉ số kỳ này, DGC có thể bị loại khỏi danh mục do là cổ phiếu có vốn hóa nhỏ nhất trong chỉ số."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "« _ Nếu BSR được thêm vào chỉ số kỳ này, DGC có thể bị loại khỏi danh mục do là cổ phiếu có vốn hóa nhỏ nhất trong chỉ"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Điều chỉnh tỷ trọng cổ phiếu"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "Giá cổ phiếu VIC đã tăng 94% kể từ đợt rà soát trước đó vào ngày 30/9/2025, tỷ trọng cổ phiếu trong danh mục chỉ số là 15,16%, vượt ngưỡng giới hạn tỷ trọng cho một cổ phiếu đơn lẻ là 10%. Do đó, các quỹ ETF mô phỏng chỉ số VN30 cần bán ra cổ phiếu này để cân đối tỷ trọng các cổ phiếu trong danh mục."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "«"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "«"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "Tỷ trọng của nhóm cổ phiếu liên quan đến Vingroup (VIC, VHM, VPL) cũng được giới hạn ở mức 15%, theo mục 7.2 của Quy tắc Bộ chỉ số HOSE-Index phiên bản 4.0, áp dụng cho nhóm cổ phiếu có liên quan gồm công ty mẹ và các công ty con."
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Cổ phiếu chưa đủ điều kiện thêm vào rổ chỉ số kỳ này"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "MCH, VCK, TCX, VPX chưa thỏa mãn thời gian niêm yết tối thiểu trên HOSE (quy định là trên 3 tháng đối với cổ phiếu thuộc Top 5 vốn hóa và trên 6 tháng đối với cổ phiếu khác, tính đến ngày chốt dữ liệu)."
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "3. Các quỹ ETF sử dụng chỉ số VN30 làm tham chiếu"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Hiện tại có bốn (4) ETF đang sử dụng chỉ số VN30 làm tham chiếu với tổng giá trị tài sản ròng (AUM) vào khoảng 10,3 nghìn tỷ đồng (393 triệu USD):"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "DCVFMVN30 ETF: AUM: 6,6 nghìn tỷ đồng, giảm 2,1% so với cuối năm 2024; giá trị rút vốn ròng trong năm 2025 ở mức -2,7 nghìn tỷ"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "đồng."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "KIM Growth VN30 ETF: AUM: 2,5 nghìn tỷ đồng."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "header",
+   "page": 1,
+   "text": "ETF"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Trang 1"
+  },
+  {
+   "kind": "header",
+   "page": 2,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "MAFM VN30 ETF: AUM 902 tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "- MAFM VN30 ETF: AUM 902 tỷ đồng."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "SSIAM VN30 ETF: AUM 230 tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "„ SSIAM VN30 ETF: AUM 230 tỷ đồng."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "4. Các kịch bản tái cơ cấu danh mục chỉ số VN30"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Kịch bản 1: Thêm VPL; Loại BCM trong danh mục chỉ số"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu mua vào"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu mua vào"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "„"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "_"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo khối lượng: VPB (+1,7 triệu cổ phiếu), ACB (+1,5 triệu cổ phiếu), VPL (+1,2 triệu cổ phiếu)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo số phiên giao dịch ước tính: VPL (0,7 ngày), LPB (0,5 ngày)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "« _ Xét theo số phiên giao dịch ước tính: VPL (0,7 ngày), LPB (0,5 ngày)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu bán ra"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo khối lượng: VIC (~5 triệu cổ phiếu), BCM (~315.000 cổ phiếu)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "« _ Xét theo khối lượng: VIC (~5 triệu cổ phiếu), BCM (~315.000 cổ phiếu)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo số phiên giao dịch ước tính: BCM (1,7 ngày), VIC (0,7 ngày)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "« _ Xét theo số phiên giao dịch ước tính: BCM (1,7 ngày), VIC (0,7 ngày)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Kịch bản 2: Thêm VPL và BSR; Loại BCM và DGC trong danh mục chỉ số"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Kịch bản 2: Thêm VPL và BSR; Loại BCM và DGC trong danh mục chỉ số"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu mua vào"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu mua vào"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo khối lượng: BSR (+3,2 triệu cổ phiếu), HPG (+2,2 triệu cổ phiếu), VPL (+1,2 triệu cổ phiếu)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "„ _ Xét theo khối lượng: BSR (+3,2 triệu cổ phiếu), HPG (+2,2 triệu cổ phiếu), VPL (+1,2 triệu cổ phiếu)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo số phiên giao dịch ước tính: VPL (0,7 ngày), LPB (0,5 ngày)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "„ _ Xét theo số phiên giao dịch ước tính: VPL (0,7 ngày), LPB (0,5 ngày)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu bán ra"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu bán ra"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo khối lượng: VIC (~5 triệu cổ phiếu), DGC (~1,7 triệu cổ phiếu), BCM (~315.000 cổ phiếu)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "« _ Xét theo khối lượng: VIC (~5 triệu cổ phiếu), DGC (~1,7 triệu cổ phiếu), BCM (~315.000 cổ phiếu)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo số phiên giao dịch ước tính: BCM (1,7 ngày), VIC (0,7 ngày), DGC (0,2 ngày)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "« _ Xét theo số phiên giao dịch ước tính: BCM (1,7 ngày), VIC (0,7 ngày), DGC (0,2 ngày)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "5. VNFIN Lead Index"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Chúng tôi ước tính danh mục chỉ số không thay đổi về cổ phiếu thành phần."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "« _ Chúng tôi ước tính danh mục chỉ số không thay đổi về cổ phiếu thành phần."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Cập nhật quỹ SSIAM VNFIN Lead ETF"
+  },
+  {
+   "kind": "title",
+   "page": 2,
+   "text": "Cập nhật quỹ SSIAM VNFIN Lead ETF"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Giá trị tài sản ròng (AUM) tại ngày 30/12/2025 ở mức 545 tỷ đồng, tăng 13,6% so với cuối năm 2024, với dòng vốn rút ròng trong"
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "năm 2025 ở mức 81 tỷ đồng."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Trang 2"
+  },
+  {
+   "kind": "header",
+   "page": 3,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "title",
+   "page": 3,
+   "text": "Bảng: Tổng hợp thay đổi về số lượng cổ phiếu mua bán của các quỹ liên quan đến VN30 và quỹ SSIAM VNFIN Lead ETF, dữ liệu đến ngày 31/12/2025"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Cần lưu ý rằng các chỉ số HOSE Index sẽ có hiệu lực vào ngày 2/2/2026."
+  },
+  {
+   "kind": "table",
+   "page": 3,
+   "table_id": "Du_bao_thay_doi_danh_muc_chi_so_VN30_VNFINLEAD_Q1_2026#ut1",
+   "html": "<table><thead><tr><th rowspan=\"2\">TT MãCP</th><th colspan=\"3\">Số lượng CP mua/bán (Triệu cổ phiếu)</th><th rowspan=\"2\">Số phiên GD tương đương</th><th rowspan=\"2\">Mã CP</th><th colspan=\"3\">Số lượng CP mua/bán (Triệu cổ phiếu)</th><th rowspan=\"2\">Số phiên tương đươn</th></tr><tr><th>Các quỹ ETF mô phỏng VN30</th><th>SSIAM VNFIN Lead ETF</th><th>Tổng</th><th>VN30</th><th></th><th>Tổng</th></tr></thead><tbody><tr><td>VPB</td><td>1,74</td><td>0,04</td><td>1,78</td><td>0,11</td><td>VPB</td><td>1,74</td><td>0,04</td><td>1,78</td><td></td></tr><tr><td>MBB</td><td>1,47</td><td>0,25</td><td>1,73</td><td>0,07</td><td>MBB</td><td>1,47</td><td>0,25</td><td>1,73</td><td></td></tr><tr><td>SHB</td><td>1,18</td><td>0,53</td><td>1,71</td><td>0,03</td><td>SHB</td><td>1,18</td><td>0,53</td><td>1,71</td><td></td></tr><tr><td>HPG</td><td>1,56</td><td>0,00</td><td>1,56</td><td>0,05</td><td>HPG</td><td>2,26</td><td>0,00</td><td>2,26</td><td></td></tr><tr><td>VHM</td><td>1,55</td><td>0,00</td><td>1,55</td><td>0,24</td><td>VHM</td><td>1,57</td><td>0,00</td><td>1,57</td><td></td></tr><tr><td>ACB</td><td>1,60</td><td>-0,13</td><td>1,46</td><td>0,20</td><td>ACB</td><td>1,60</td><td>-0,13</td><td>1,46</td><td></td></tr><tr><td>HDB</td><td>1,37</td><td>-0,06</td><td>1,31</td><td>0,07</td><td>HDB</td><td>1,37</td><td>-0,06</td><td>1,31</td><td></td></tr><tr><td>TCB</td><td>1,42</td><td>-0,15</td><td>1,28</td><td>0/15</td><td>TCB</td><td>1,42</td><td>-0,15</td><td>1,28</td><td></td></tr><tr><td>VPL</td><td>1,22</td><td>0,00</td><td>1,22</td><td>0,69</td><td>VPL</td><td>1,23</td><td>0,00</td><td>1,23</td><td></td></tr><tr><td>LPB</td><td>1,04</td><td>-0,04</td><td>0,99</td><td>0,48</td><td>LPB</td><td>1,04</td><td>-0,04</td><td>0,99</td><td></td></tr><tr><td>SSI</td><td>0,64</td><td>0,20</td><td>0,84</td><td>0,03</td><td>SSI</td><td>0,64</td><td>0,20</td><td>0,84</td><td></td></tr><tr><td>VIB</td><td>0,75</td><td>-0,09</td><td>0,66</td><td>0,15</td><td>VIB</td><td>0,75</td><td>-0,09</td><td>0,66</td><td></td></tr><tr><td>SSB</td><td>0,57</td><td>-0,03</td><td>0,54</td><td>0,24</td><td>SSB</td><td>0,57</td><td>-0,03</td><td>0,54</td><td></td></tr><tr><td>TPB</td><td>0,56</td><td>-0,05</td><td>0,51</td><td>0,08</td><td>TPB</td><td>0,56</td><td>-0,05</td><td>0,51</td><td></td></tr><tr><td>STB</td><td>0,65</td><td>-0,15</td><td>0,51</td><td>0,08</td><td>STB</td><td>0,65</td><td>-0,15</td><td>0,51</td><td></td></tr><tr><td>CTG</td><td>0,43</td><td>0,03</td><td>0,46</td><td>0,05</td><td>CTG</td><td>0,43</td><td>0,03</td><td>0,46</td><td></td></tr><tr><td>MWG</td><td>0,41</td><td>0,00</td><td>0,41</td><td>0,06</td><td>MWG</td><td>0,59</td><td>0,00</td><td>0,59</td><td></td></tr><tr><td>VRE</td><td>0,34</td><td>0,00</td><td>0,34</td><td>0,03</td><td>VRE</td><td>0,49</td><td>0,00</td><td>0,49</td><td></td></tr><tr><td>VCB</td><td>0,34</td><td>-0,01</td><td>0,32</td><td>0,10</td><td>VCB</td><td>0,34</td><td>-0,01</td><td>0,32</td><td></td></tr><tr><td>MSN</td><td>0,32</td><td>0,00</td><td>0,32</td><td>0,07</td><td>MSN</td><td>0,46</td><td>0,00</td><td>0,46</td><td></td></tr><tr><td>VNM</td><td>0,31</td><td>0,00</td><td>0,31</td><td>0,08</td><td>VNM</td><td>0,45</td><td>0,00</td><td>0,45</td><td></td></tr><tr><td>VIX</td><td>0,00</td><td>0,24</td><td>0,24</td><td>0,01</td><td>VIX</td><td>0,00</td><td>0,24</td><td>0,24</td><td></td></tr><tr><td>BID</td><td>0,10</td><td>0,00</td><td>0,10</td><td>0,05</td><td>BID</td><td>0,10</td><td>0,00</td><td>0,10</td><td></td></tr><tr><td>VỤUC</td><td>0,10</td><td>0,00</td><td>0,10</td><td>0,05</td><td>VUC</td><td>0,14</td><td>0,00</td><td>0,14</td><td></td></tr><tr><td>DGC</td><td>0,08</td><td>0,00</td><td>0,08</td><td>0,01</td><td>DGC</td><td>-1,74</td><td>0,00</td><td>-1,74</td><td></td></tr><tr><td>GVR</td><td>0,06</td><td>0,00</td><td>0,06</td><td>0,03</td><td>GVR</td><td>0,09</td><td>0,00</td><td>0,09</td><td></td></tr><tr><td>SAB PLX</td><td>0,05</td><td>0,00 0,00</td><td>0,05</td><td>0,02 0,03</td><td>SAB PLX</td><td>0,08</td><td>0,00 0,00</td><td>0,08</td><td></td></tr><tr><td>VND</td><td>0,05 0,00</td><td></td><td>0,05</td><td>0,00</td><td>VND</td><td>0,07</td><td>0,05</td><td>0,07</td><td></td></tr><tr><td>GAS</td><td>0,04</td><td>0,05 0,00</td><td>0,05 0,04</td><td>0,03</td><td>GAS</td><td>0,00 0,06</td><td>0,00</td><td>0,05 0,06</td><td></td></tr><tr><td>VCI</td><td>0,00</td><td>0,01</td><td>0,01</td><td>0,00</td><td>VCI</td><td>0,00</td><td>0,01</td><td>0,01</td><td></td></tr><tr><td>BSR</td><td>0,00</td><td>0,00</td><td>0,00</td><td>0,00</td><td>BSR</td><td>3,27</td><td>0,00</td><td>3,27</td><td></td></tr><tr><td>HCM</td><td>0,00</td><td>-0,01</td><td>-0,01</td><td>0,00</td><td>HCM</td><td>0,00</td><td>-0,01</td><td>-0,01</td><td></td></tr><tr><td>OCB</td><td>0,00</td><td>-0,01</td><td>-0,01</td><td>0,01</td><td>OCB</td><td>0,00</td><td>-0,01</td><td>-0,01</td><td></td></tr><tr><td>NAB</td><td>0,00</td><td>-0,01</td><td>-0,01</td><td>0,01</td><td>NAB</td><td>0,00</td><td>-0,01</td><td>-0,01</td><td></td></tr><tr><td>FPT</td><td>-0,14</td><td>0,00</td><td>-0,14</td><td>0,03</td><td>FPT</td><td>-0,14</td><td>0,00</td><td>-0,14</td><td></td></tr><tr><td>MSB</td><td>0,00</td><td>-0,16</td><td>-0,16</td><td>0,02</td><td>MSB</td><td>0,00</td><td>-0,16</td><td>-0,16</td><td></td></tr><tr><td>BHB</td><td>0,00</td><td>-0,17</td><td>-0,17</td><td>0,03</td><td>EIB</td><td>0,00</td><td>-0,17</td><td>-0,17</td><td></td></tr><tr><td>BCM</td><td>-0,32</td><td>0,00</td><td>-0,32</td><td>1,67</td><td>BCM</td><td>-0,32</td><td>0,00</td><td>-0,32</td><td></td></tr><tr><td>VIC</td><td>-5,00</td><td>0,00</td><td>-5,00</td><td>0,73</td><td>VIC</td><td>-5,02</td><td>0,00</td><td>-5,02</td><td></td></tr></tbody></table>",
+   "text": "Kịch bản 1: Các quỹ VN30 ETF sẽ thêm VPL; loại BCM Kịch bản 2: Các quỹ VN30 ETF sẽ thêm VPL và BSR; loại BCM và DGC Số lượng CP mua/bán (Triệu cổ phiếu) Các quỹ ETF SSIAM mô phỏng VNFIN Lead VN30 ETF Tổng Số phiên GD tương đương Mã CP Số lượng CP mua/bán (Triệu cổ phiếu) Các quỹ ETF mô phỏng VN30 SSIAM VNFIN Lead ETF Tổng VPB 1,74 0,04 1,78 0,11 VPB 1,74 0,04 1,78 MBB 1,47 0,25 1,73 0,07 MBB 1,47 0,25 1,73 SHB 1,18 0,53 1,71 0,03 SHB 1,18 0,53 1,71 HPG 1,56 0,00 1,56 0,05 HPG 2,26 0,00 2,26 VHM 1,55 0,00 1,55 0,24 VHM 1,57 0,00 1,57 ACB 1,60 -0,13 1,46 0,20 ACB 1,60 -0,13 1,46 HDB 1,37 -0,06 1,31 0,07 HDB 1,37 -0,06 1,31 TCB 1,42 -0,15 1,28 0,15 TCB 1,42 -0,15 1,28 VPL 1,22 0,00 1,22 0,69 VPL 1,23 0,00 1,23 LPB 1,04 -0,04 0,99 0,48 LPB 1,04 -0,04 0,99 SSI 0,64 0,20 0,84 0,03 SSI 0,64 0,20 0,84 VIB 0,75 -0,09 0,66 0,15 VIB 0,75 -0,09 0,66 SSB 0,57 -0,03 0,54 0,24 SSB 0,57 -0,03 0,54 TPB 0,56 -0,05 0,51 0,08 TPB 0,56 -0,05 0,51 STB 0,65 -0,15 0,51 0,08 STB 0,65 -0,15 0,51 CTG 0,43 0,03 0,46 0,05 CTG 0,43 0,03 0,46 0,41 0,00 0,41 0,06 MWG 0,59 0,00 0,59 VRE 0,34 0,00 0,34 0,03 VRE 0,49 0,00 0,49 VCB 0,34 -0,01 0,32 0,10 VCB 0,34 -0,01 0,32 0,32 0,00 0,32 0,07 MSN 0,46 0,00 0,46 VNM 0,31 0,00 0,31 0,08 VNM 0,45 0,00 0,45 VIX 0,00 0,24 0,24 0,01 VIX 0,00 0,24 0,24 BID 0,10 0,00 0,10 0,05 BID 0,10 0,00 0,10 VJC 0,10 0,00 0,10 0,05 VJC 0,14 0,00 0,14 DGC 0,08 0,00 0,08 0,01 DGC -1,74 0,00 -1,74 GVR 0,06 0,00 0,06 0,03 GVR 0,09 0,00 0,09 SAB 0,05 0,00 0,05 0,02 SAB 0,08 0,00 0,08 PLX 0,05 0,00 0,05 0,03 PLX 0,07 0,00 0,07 VND 0,00 0,05 0,05 0,00 VND 0,00 0,05 0,05 GAS 0,04 0,00 0,04 0,03 GAS 0,06 0,00 0,06 VCI 0,00 0,01 0,01 0,00 VCI 0,00 0,01 0,01 BSR 0,00 0,00 0,00 0,00 BSR 3,27 0,00 3,27 HCM 0,00 -0,01 -0,01 0,00 HCM 0,00 -0,01 -0,01 OCB 0,00 -0,01 -0,01 0,01 OCB 0,00 -0,01 -0,01 NAB 0,00 -0,01 -0,01 0,01 NAB 0,00 -0,01 -0,01 FPT -0,14 0,00 -0,14 0,03 FPT -0,14 0,00 -0,14 0,00 -0,16 -0,16 0,02 MSB 0,00 -0,16 -0,16 EIB 0,00 -0,17 -0,17 0,03 EIB 0,00 -0,17 -0,17 BCM -0,32 0,00 -0,32 1,67 BCM -0,32 0,00 -0,32 VIC -5,00 0,00 -5,00 0,73 VIC -5,02 0,00 -5,02"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "STT Mã CP"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "1"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "2"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "3"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "4"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "5"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "6"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "7"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "8"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "9"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "10"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "11"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "12"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "13"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "14"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "15"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "16"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "17 MWG"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "18"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "19"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "20 MSN"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "21"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "22"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "23"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "24"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "25"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "26"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "27"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "28"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "29"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "30"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "31"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "32"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "33"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "34"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "35"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "36"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Số phiên GD"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "tương đương"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,11"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,07"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,03"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,08"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,24"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,20"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,07"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,15"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,70"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,48"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,03"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,15"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,24"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,08"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,08"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,05"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,09"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,05"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,10"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,09"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,11"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,01"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,05"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,07"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,27"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,05"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,03"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,04"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,00"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,04"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,00"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,39"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,00"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,01"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,01"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,03"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "37 MSB"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,02"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "38"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,03"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "39"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "1,67"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "40"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "0,73"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Nguồn: SSI Research"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Nguồn: SSI Research"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Trang 3"
+  },
+  {
+   "kind": "header",
+   "page": 4,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "title",
+   "page": 4,
+   "text": "CAM KẾT PHÂN TÍCH"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Chuyên viên phân tích trong báo cáo này này cam kết rằng (1) quan điểm thể hiện trong báo cáo phân tích này phản ánh chính xác quan điểm cá nhân đối với chứng khoán và/hoặc tổ chức phát hành và (2) chuyên viên phân tích đã/ đang/sẽ được miễn trách nhiệm bồi thường trực tiếp hoặc gián tiếp liên quan đến khuyến nghị cụ thể hoặc quan điểm trong báo cáo phân tích này."
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "KHUYẾN NGHỊ"
+  },
+  {
+   "kind": "title",
+   "page": 4,
+   "text": "KHUYẾN NGHỊ"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Mua: Ước tính tiềm năng tăng giá lớn hơn hoặc bằng 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Khả quan: Ước tính tiềm năng tăng giá dưới 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Trung lập: Ước tính tiềm năng tăng giá tương đương so với mức tăng chung của thị trường trong 12 tháng tới. Kém khả quan: Ước tính tiềm năng giảm giá dưới 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Bán: Ước tính tiềm năng giảm giá lớn hơn hoặc bằng 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Trong một số trường hợp, khuyến nghị dựa trên tiềm năng tăng giá 1 năm có thể được điều chỉnh lại theo ý kiến của chuyên viên phân tích sau khi cân nhắc một số yếu tố thị trường có thể làm ảnh hưởng đến giá cổ phiếu trong ngắn hạn và trung hạn."
+  },
+  {
+   "kind": "title",
+   "page": 4,
+   "text": "TUYÊN BỐ MIỄN TRỪ"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Các thông tin, tuyên bố, dự báo và dự đoán trong báo cáo này, bao gồm cả các ý kiến đã thể hiện, được dựa trên các nguồn thông tin mà SSI cho là đáng tin cậy, tuy nhiên SSI không đảm bảo sự chính xác và đầy đủ của các thông tin này. Báo cáo không có bất kỳ thông tin nhạy cảm về giá chưa công bố nào. Các ý kiến thể hiện trong báo cáo này được đưa ra sau khi đã được xem xét kỹ càng và cẩn thận và dựa trên thông tin tốt nhất chúng tôi được biết, và theo ý kiến cá nhân của chúng tôi là hợp lý trong các trường hợp tại thời điểm đưa ra báo cáo. Các ý kiến thể hiện trong báo cáo này có thể thay đổi bất kì lúc nào mà không cần thông báo. Báo cáo này không và không nên được giải thích như một lời đề nghị hay lời kéo đề nghị mua hay bán bất cứ chứng khoán nào. SSI và các công ty con và/ hoặc các chuyên viên, giám đốc, nhân viên của SSI và công ty con có thể có vị thế hoặc có thể ảnh hưởng đến giao dịch chứng khoán của các công ty được đề cập trong báo cáo này và có thể cung cấp dịch vụ hoặc tìm kiếm để cung cấp dịch vụ ngân hàng đầu tư cho các công ty đó."
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Báo cáo này không được sử dụng dưới bất kỳ mục đích thương mại nào, và không được công bố công khai trên báo chí hay bất kỳ phương tiện"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "nào khác nếu không được sự đồng ý của SSI. Người dùng có thể trích dẫn hoặc trình chiếu báo cáo cho các mục đích phi thương mại. SSI có thể có thỏa thuận cho phép sử dụng cho mục đích thương mại hoặc phân phối lại báo cáo với điều kiện người dùng trả phí cho SSI. SSI không chịu trách nhiệm đối với bất kỳ thiệt hại trực tiếp hay thiệt hại do hậu quả phát sinh từ việc sử dụng báo cáo này hay nội dung báo cáo này. Việc sử dụng bất kỳ thông tin, tuyên bố, dự báo, và dự đoán nào trong báo cáo này sẽ do người dùng tự quyết định và tự chịu rủi ro."
+  },
+  {
+   "kind": "title",
+   "page": 4,
+   "text": "THÔNG TIN LIÊN HỆ"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Trung tâm phân tích và tư vấn đầu tư"
+  },
+  {
+   "kind": "title",
+   "page": 4,
+   "text": "Trung tâm phân tích và tư vấn đầu tư"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Chiến lược thị trường"
+  },
+  {
+   "kind": "title",
+   "page": 4,
+   "text": "Chiến lược thị trường"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Phân tích cổ phiếu / Dữ liệu"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Phạm Lưu Hưng"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Giám đốc Trung tâm phân tích và tư vấn đầu tư hungpl@ssi.com.vn SĐT: (+84 – 24) 3936 6321 ext. 8711"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Đào Minh Châu, CFA"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Phó giám đốc Trung tâm phân tích và tư vấn đầu tư chaudm@ssi.com.vn SĐT: (+84 – 28) 3636 3688"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Nguyễn Thu Hà, CFA"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Giám đốc Phân tích cổ phiếu hant4@ssi.com.vn"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Nguyễn Thị Anh Thư"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Chuyên viên hỗ trợ thunta2@ssi.com.vn"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Trang 4"
+  }
+ ]
+}

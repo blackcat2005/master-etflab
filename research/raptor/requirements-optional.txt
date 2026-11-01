@@ -1,0 +1,5 @@
+# RAPTOR — optional (chỉ cài khi cần, không bắt buộc cho demo/test)
+# Cài: pip install -r research/raptor/requirements-optional.txt
+faiss-cpu==1.15.1  # ANN search khi scale >100k nodes (hiện tại retrieval.py dùng numpy, chưa cần)
+umap-learn>=0.5    # clustering đúng paper (UMAP+GMM thay cho SVD+GMM hiện tại)
+openai>=1.0        # OpenAISummarizer abstractive cho production (thay ExtractiveSummarizer)

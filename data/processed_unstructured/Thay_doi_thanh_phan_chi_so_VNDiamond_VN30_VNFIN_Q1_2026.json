@@ -1,0 +1,597 @@
+{
+ "source_file": "Thay_doi_thanh_phan_chi_so_VNDiamond_VN30_VNFIN_Q1_2026.pdf",
+ "parser": "unstructured hi_res + infer_table_structure",
+ "n_pages": 6,
+ "n_tables": 4,
+ "seconds": 146.3,
+ "elements": [
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "_SSI"
+  },
+  {
+   "kind": "image",
+   "page": 1,
+   "text": "SSI"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Ngày 24/1/2026"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Bản tin ETF"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Kết quả thay đổi danh mục chỉ số VNDiamond, VN30 và VNFIN Lead kỳ Q1/2026"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "1. Tổng quan và một số mốc thời gian đáng chú ý"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "HOSE đã chính thức công bố kết quả rà soát danh mục các chỉ số cho kỳ Quý 1/2026."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "« _ HOSE đã chính thức công bố kết quả rà soát danh mục các chỉ số cho kỳ Quý 1/2026."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "Ngày ước tính hoàn thành cơ cấu danh mục: ngày 30/1/2026."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "Ngày chỉ số mới có hiệu lực: ngày 2/2/2026."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "2. Chỉ số VN30"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Kết quả thay đổi danh mục sát với dự báo của chúng tôi:"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Thêm mới cổ phiếu VPL."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "„ _ Thêm mới cổ phiếu VPL."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Loại cổ phiếu BCM."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "« _ Loại cổ phiếu BCM."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Các quỹ ETF sử dụng chỉ số VN30 làm tham chiếu"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Các quỹ ETF sử dụng chỉ số VN30 làm tham chiếu"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Hiện tại có bốn (4) ETF đang sử dụng chỉ số VN30 làm tham chiếu với tổng giá trị tài sản ròng (AUM) ở thời điểm viết bài đạt khoảng"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "10,4 nghìn tỷ đồng:"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "DCVFMVN30 ETF: AUM: 6,6 nghìn tỷ đồng, giảm 0,7% kể từ đầu năm 2026; giá trị rút vốn ròng trong ba tháng gần đây ở mức -60 tỷ"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "đồng."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "„"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "KIM Growth VN30 ETF: AUM: 2,7 nghìn tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "_ KIM Growth VN30 ETF: AUM: 2,7 nghìn tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "MAFM VN30 ETF: AUM: 921 tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "SSIAM VN30 ETF: AUM: 238 tỷ đồng."
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "3. Chỉ số VNFIN Lead"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Kết quả thay đổi danh mục:"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Tương tự như dự báo trước đó, chỉ số VNFIN Lead không có thay đổi về danh mục trong kỳ này với 23 cổ phiếu."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "« Tương tự như dự báo trước đó, chỉ số VNFIN Lead không có thay đổi về danh mục trong kỳ này với 23 cổ phiếu."
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Cập nhật về Quỹ SSIAM VNFIN Lead ETF"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Tại ngày 21/1/2026, tổng giá trị tài sản ròng (AUM) ở mức 567,8 tỷ đồng, tăng 4% kể từ đầu năm 2026; trong ba tháng gần đây ghi"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "nhận 38 tỷ đồng giá trị vốn vào ròng."
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "4. Chỉ số VNDiamond"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Kết quả thay đổi danh mục:"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Chỉ số không thay đổi danh mục thành phần trong kỳ này, mà chỉ cập nhật số liệu và tính toán lại tỷ trọng."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "_ Chỉ số không thay đổi danh mục thành phần trong kỳ này, mà chỉ cập nhật số liệu và tính toán lại tỷ trọng."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "«"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "header",
+   "page": 1,
+   "text": "ETF"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Trang 1"
+  },
+  {
+   "kind": "header",
+   "page": 2,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "title",
+   "page": 2,
+   "text": "Các quỹ ETF sử dụng chỉ số VNDiamond làm tham chiếu"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Hiện tại có sáu (6) ETF đang sử dụng chỉ số VNDiamond làm tham chiếu, với tổng giá trị tài sản ròng (AUM) ở thời điểm viết bài đạt khoảng 14,8 nghìn tỷ đồng:"
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "DCVFMVN Diamond ETF: AUM: 14,2 nghìn tỷ đồng, tăng 4,4% kể từ đầu năm 2026; giá trị vốn vào ròng trong ba tháng gần đây ở mức 188 tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "MAFM VNDiamond ETF: AUM: 311 tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "KIM Growth VN Diamond ETF: AUM: 80 tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "ABFVN Diamond ETF: AUM: 80 tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "VFCVN Diamond ETF: AUM: 68 tỷ đồng."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "BVFVN Diamond ETF: AUM: 61 tỷ đồng."
+  },
+  {
+   "kind": "title",
+   "page": 2,
+   "text": "5. Tái cơ cấu danh mục ETF"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Dựa trên giá cổ phiếu ngày 21/1, chúng tôi ước tính giao dịch của các quỹ ETF liên quan đến VN30, VNDiamond, và VNFIN Lead như sau:"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu mua vào"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "«"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "_"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo khối lượng: HDB (+8,2 triệu cổ phiếu), TCB (+2,8 triệu cổ phiếu), VPB (2,7 triệu cổ phiếu), và VPL (797.000 cổ phiếu)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo số phiên giao dịch ước tính: REE (1,3 phiên), GMD (1,1 phiên), PNJ (1 phiên), và VPL (0,65 phiên)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "„ _ Xét theo số phiên giao dịch ước tính: REE (1,3 phiên), GMD (1,1 phiên), PNU (1 phiên), và VPL (0,65 phiên)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Top cổ phiếu bán ra"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "„"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo khối lượng: KDH (-8,1 triệu cổ phiếu), FPT (~4 triệu cổ phiếu), VIC (-2,5 triệu cổ phiếu), và BCM (-416.000 cổ phiếu)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Xét theo số phiên giao dịch ước tính: KDH (1,5 phiên), FPT (0,5 phiên), và VIC (0,4 phiên)."
+  },
+  {
+   "kind": "list",
+   "page": 2,
+   "text": "« _ Xét theo số phiên giao dịch ước tính: KDH (1,5 phiên), FPT (0,5 phiên), và VIC (0,4 phiên)."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Chi tiết số lượng cổ phiếu mua bán cho từng quỹ ETF như sau:"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Trang 2"
+  },
+  {
+   "kind": "header",
+   "page": 3,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Bảng 1: Danh mục VN30 và giao dịch các quỹ ETF liên quan"
+  },
+  {
+   "kind": "table",
+   "page": 3,
+   "table_id": "Thay_doi_thanh_phan_chi_so_VNDiamond_VN30_VNFIN_Q1_2026#ut1",
+   "html": "<table><thead><tr><th>STT</th><th>Mã</th><th>Tỷ trọng mới</th><th>DCVFMVN30</th><th>Số lượng CP SSIAM VN30</th><th>mua/bán</th><th>(000 cổ phiếu ( ) KIM Growth VN30</th><th>MAFM VN30</th><th>TỔNG (000 cổ phiếu)</th></tr></thead><tbody><tr><td></td><td>HDB</td><td>3,97%</td><td>1.828,5</td><td></td><td>48,9</td><td>799,5</td><td>148,0</td><td>2.824,8</td></tr><tr><td>2</td><td>SHB</td><td>1,93%</td><td>1.091,4</td><td></td><td>40,9</td><td>476,8</td><td>186,2</td><td>1.795,4</td></tr><tr><td>3</td><td>HPG</td><td>8,52%</td><td>870,7</td><td></td><td>39,5</td><td>314,4</td><td>145,8</td><td>1.370,4</td></tr><tr><td>4</td><td>VPB</td><td>4,72%</td><td>829,2</td><td></td><td>37,4</td><td>337,5</td><td>100,1</td><td>1.304,2</td></tr><tr><td>5</td><td>VIB</td><td>1,34%</td><td>677,1</td><td></td><td>32,5</td><td>305,7</td><td>125,7</td><td>1.141,1</td></tr><tr><td>6</td><td>ACB</td><td>3,70%</td><td>662,4</td><td></td><td>32,6</td><td>366,6</td><td>74,1</td><td>1.135,7</td></tr><tr><td>7</td><td>TCB</td><td>4,76%</td><td>677,1</td><td></td><td>31,1</td><td>313,0</td><td>92,1</td><td>1.113,3</td></tr><tr><td>8</td><td>MBB</td><td>3,71%</td><td>629,9</td><td></td><td>32,5</td><td>246,4</td><td>105,1</td><td>1.013,9</td></tr><tr><td>9</td><td>LPB</td><td>4,16%</td><td>454,7</td><td></td><td>18,7</td><td>303,6</td><td>55,0</td><td>831,9</td></tr><tr><td>10</td><td>VPL</td><td>0,70%</td><td>503,7</td><td></td><td>18,2</td><td>205,0</td><td>70,4</td><td>797,4</td></tr><tr><td>11</td><td>§SI</td><td>1,89%</td><td>509,0</td><td></td><td>13,2</td><td>63,4</td><td>24,7</td><td>610,3</td></tr><tr><td>12.</td><td>MWG</td><td>7,09%</td><td>267,3</td><td></td><td>13,6</td><td>124,5</td><td>30,9</td><td>436,2</td></tr><tr><td>13</td><td>STB</td><td>3,79%</td><td>257,4</td><td></td><td>16,6</td><td>109,1</td><td>43,4</td><td>426,4</td></tr><tr><td>14</td><td>VNM</td><td>4,43%</td><td>204,2</td><td></td><td>12,1</td><td>159,3</td><td>29,9</td><td>405,6</td></tr><tr><td>15</td><td>VRE</td><td>2/14%</td><td>211,0</td><td></td><td>16,0</td><td>120,2</td><td>41,3</td><td>388,4</td></tr><tr><td>16</td><td>CTG</td><td>1,60%</td><td>290,1</td><td></td><td>11,7</td><td>(81,9)</td><td>45,2</td><td>265,1</td></tr><tr><td>17</td><td>MSN</td><td>522%</td><td>183,6</td><td></td><td>8,4</td><td>34,5</td><td>14,2</td><td>240,7</td></tr><tr><td>18</td><td>VCB</td><td>2,28%</td><td>92,1</td><td></td><td>10,2</td><td>78,0</td><td>35,6</td><td>215,9</td></tr><tr><td>19</td><td>BID</td><td>0,51%</td><td>96,4</td><td></td><td>4.4</td><td>64,5</td><td>18,7</td><td>184,0</td></tr><tr><td>20</td><td>PLX</td><td>0,57%</td><td>95,6</td><td></td><td>4,3</td><td>66,1</td><td>10,3</td><td>176,2</td></tr><tr><td>21</td><td>DGC</td><td>1,18%</td><td>52,2</td><td></td><td>4,0</td><td>79,5</td><td>11,3</td><td>146,9</td></tr><tr><td>22</td><td>— TPB</td><td>0,89%</td><td>210,2</td><td></td><td>13,1</td><td>(132,5)</td><td>50,8</td><td>141,6</td></tr><tr><td>23</td><td>GAS</td><td>1,00%</td><td>59,8</td><td></td><td>3,2</td><td>53,6</td><td>8,4</td><td>125,0</td></tr><tr><td>24</td><td>SAB</td><td>0,54%</td><td>(15,8)</td><td></td><td>7,0</td><td>94,2</td><td>(11,3)</td><td>74,1</td></tr><tr><td>25</td><td>— VJC</td><td>3,65%</td><td>67,6</td><td></td><td>11,0</td><td>(35,8)</td><td>2,4</td><td>45,1</td></tr><tr><td>26</td><td>— GVR</td><td>0,46%</td><td>75,5</td><td></td><td>10,2</td><td>(59,8)</td><td>(8,6)</td><td>17,3</td></tr><tr><td>27</td><td>SSB</td><td>0,84%</td><td>(22,4)</td><td></td><td>A7</td><td>(39,9)</td><td>23,3</td><td>(34,4)</td></tr><tr><td>28</td><td>BCM</td><td>0,00%</td><td>(181,2)</td><td></td><td>(9,1)</td><td>(189,6)</td><td>(36,2)</td><td>(416,1)</td></tr><tr><td>29</td><td>VHM</td><td>4,31%</td><td>(381,7)</td><td></td><td>(8,6)</td><td>(205,5)</td><td>(44,4)</td><td>(640,1)</td></tr><tr><td>30</td><td>FPT</td><td>10,11%</td><td>(469,8)</td><td></td><td>(10,0)</td><td>(91,7)</td><td>(69,2)</td><td>(640,7)</td></tr></tbody></table>",
+   "text": "STT Mã Tỷ trọng mới DCVFMVN30 Số lượng CP mua/bán ('000 cổ phiếu) SSIAM VN30 KIM Growth VN30 MAFM VN30 TỔNG ('000 cổ phiếu) 1 HDB 3,97% 1.828,5 48,9 799,5 148,0 2.824,8 2 SHB 1,93% 1.091,4 40,9 476,8 186,2 1.795,4 3 HPG 8,52% 870,7 39,5 314,4 145,8 1.370,4 4 VPB 4,72% 829,2 37,4 337,5 100,1 1.304,2 5 VIB 1,34% 677,1 32,5 305,7 125,7 1.141,1 6 ACB 3,70% 662,4 32,6 366,6 74,1 1.135,7 7 TCB 4,76% 677,1 31,1 313,0 92,1 1.113,3 8 MBB 3,71% 629,9 32,5 246,4 105,1 1.013,9 9 LPB 4,16% 454,7 18,7 303,6 55,0 831,9 10 VPL 0,70% 503,7 18,2 205,0 70,4 797,4 11 SSI 1,89% 509,0 13,2 63,4 24,7 610,3 12 MWG 7,09% 267,3 13,6 124,5 30,9 436,2 13 STB 3,79% 257,4 16,6 109,1 43,4 426,4 14 VNM 4,43% 204,2 12,1 159,3 29,9 405,6 15 VRE 2,14% 211,0 16,0 120,2 41,3 388,4 16 CTG 1,60% 290,1 11,7 (81,9) 45,2 265,1 17 MSN 5,22% 183,6 8,4 34,5 14,2 240,7 18 VCB 2,28% 92,1 10,2 78,0 35,6 215,9 19 BID 0,51% 96,4 4,4 64,5 18,7 184,0 20 PLX 0,57% 95,6 4,3 66,1 10,3 176,2 21 DGC 1,18% 52,2 4,0 79,5 11,3 146,9 22 TPB 0,89% 210,2 13,1 (132,5) 50,8 141,6 23 GAS 1,00% 59,8 3,2 53,6 8,4 125,0 24 SAB 0,54% (15,8) 7,0 94,2 (11,3) 74,1 25 VJC 3,65% 67,6 11,0 (35,8) 2,4 45,1 26 GVR 0,46% 75,5 10,2 (59,8) (8,6) 17,3 27 SSB 0,84% (22,4) 4,7 (39,9) 23,3 (34,4) 28 BCM 0,00% (181,2) (9,1) (189,6) (36,2) (416,1) 29 VHM 4,31% (381,7) (8,6) (205,5) (44,4) (640,1) 30 FPT 10,11% (469,8) (10,0) (91,7) (69,2) (640,7) 31 VIC 9,99% (1.635,1) (54,1) (622,0) (229,8) (2.541,1)"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Nguồn: SSI Research"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Trang 3"
+  },
+  {
+   "kind": "header",
+   "page": 4,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Bảng 2: Danh mục VNDiamond và giao dịch các quỹ ETF liên quan"
+  },
+  {
+   "kind": "table",
+   "page": 4,
+   "table_id": "Thay_doi_thanh_phan_chi_so_VNDiamond_VN30_VNFIN_Q1_2026#ut2",
+   "html": "<table><thead><tr><th>STT</th><th>Mã</th><th>Tỷ trọng mới</th><th>pCVEMVN DIAMOND</th><th>VNDIAMOND</th><th>KIM GROWTH VN DIAMOND</th><th>BVFVN DIAMOND</th><th>ABFVN DIAMOND</th><th>VFCVN DIAMOND</th><th>TỔNG (000 CP)</th></tr></thead><tbody><tr><td>1</td><td>HDB</td><td>5,7%</td><td>5.051,6</td><td>49,8</td><td>42,6</td><td>20,6</td><td>13,3</td><td>20,6</td><td>5.198,4</td></tr><tr><td>2</td><td>MSB</td><td>1,83%</td><td>2.294,6</td><td>57,8</td><td>9,1</td><td>8,8</td><td>12,9</td><td>9,3</td><td>2.392,5</td></tr><tr><td>3.</td><td>TCB</td><td>8,74%</td><td>1.625,6</td><td>38,2</td><td>6,3</td><td>5,5</td><td>6,0</td><td>2,3</td><td>1.683,9</td></tr><tr><td>4.</td><td>GMD</td><td>6,97%</td><td>1.601,8</td><td>29,4</td><td>8,9</td><td>8,2</td><td>7,2</td><td>5,0</td><td>1.660,6</td></tr><tr><td>5</td><td>ACB</td><td>6,80%</td><td>1.521,7</td><td>37,1</td><td>2,8</td><td>5,7</td><td>9,8</td><td>5,3</td><td>1.582,5</td></tr><tr><td>6</td><td>MBB</td><td>6,81%</td><td>1.375,6</td><td>24,</td><td>7,5</td><td>5,</td><td>6,0</td><td>7,8</td><td>1.426,4</td></tr><tr><td>7</td><td>VPB</td><td>6,50%</td><td>1.206,0</td><td>31,8</td><td>6,3</td><td>4,6</td><td>9,2</td><td>5,3</td><td>1.263,2</td></tr><tr><td>8</td><td>PNJ</td><td>11,58%</td><td>1.112,4</td><td>13,6</td><td>3,4</td><td>5,3</td><td>6,0</td><td>9,5</td><td>1.150,2</td></tr><tr><td>9.</td><td>NLG</td><td>2,98%</td><td>1.033,3</td><td>18,5</td><td>20,6</td><td>44</td><td>1,5</td><td>5,8</td><td>1.084,1</td></tr><tr><td>10</td><td>REE</td><td>4,04%</td><td>710,1</td><td>17,1</td><td>3,5</td><td>2,9</td><td>-0,1</td><td>47</td><td>738,2</td></tr><tr><td>11</td><td>CTG</td><td>2,20%</td><td>671,5</td><td>0,0</td><td>6,0</td><td>1,0</td><td>-2,0</td><td>-2,3</td><td>674,2</td></tr><tr><td>12_</td><td>TPB</td><td>1,23%</td><td>601,2</td><td>6,0</td><td>3,4</td><td>0,3</td><td>LÝ)</td><td>-18,7</td><td>597,3</td></tr><tr><td>13</td><td>CTD</td><td>1,49%</td><td>363,2</td><td>8,0</td><td>-0,1</td><td>0,9</td><td>3,0</td><td>24</td><td>377,3</td></tr><tr><td>14</td><td>OCB</td><td>0,45%</td><td>338,6</td><td>12,6</td><td>3,3</td><td>0,7</td><td>3,9</td><td>-2,9</td><td>356,2</td></tr><tr><td>15</td><td>BMP</td><td>1,52%</td><td>-72,4</td><td>10,1</td><td>2,2</td><td>0,5</td><td>1,0</td><td>0,8</td><td>-57,8</td></tr><tr><td>16</td><td>MWG</td><td>14,69%</td><td>-89,4</td><td>-0,5</td><td>-2,8</td><td>1,5</td><td>0,5</td><td>-1,5</td><td>-92,2</td></tr><tr><td>17</td><td>FPT</td><td>14,92%</td><td>-3.272,3</td><td>-76,5</td><td>-21,3</td><td>-12,5</td><td>-16,8</td><td>-16,2</td><td>-3.415,6</td></tr></tbody></table>",
+   "text": "Số lượng CP mua/bán ('000 cổ phiếu) STT Mã Tỷ trọng mới DCVFMVN MAFM KIM GROWTH BVFVN ABFVN VFCVN TỔNG ('000 CP) DIAMOND VNDIAMOND VN DIAMOND DIAMOND DIAMOND DIAMOND 1 HDB 5,47% 5.051,6 49,8 42,6 20,6 13,3 20,6 5.198,4 2 MSB 1,83% 2.294,6 57,8 9,1 8,8 12,9 9,3 2.392,5 3 TCB 8,74% 1.625,6 38,2 6,3 5,5 6,0 2,3 1.683,9 4 GMD 6,97% 1.601,8 29,4 8,9 8,2 7,2 5,0 1.660,6 5 ACB 6,80% 1.521,7 37,1 2,8 5,7 9,8 5,3 1.582,5 6 MBB 6,81% 1.375,6 24,4 7,5 5,2 6,0 7,8 1.426,4 7 VPB 6,50% 1.206,0 31,8 6,3 4,6 9,2 5,3 1.263,2 8 PNJ 11,58% 1.112,4 13,6 3,4 5,3 6,0 9,5 1.150,2 9 NLG 2,98% 1.033,3 18,5 20,6 4,4 1,5 5,8 1.084,1 10 REE 4,04% 710,1 17,1 3,5 2,9 -0,1 4,7 738,2 11 CTG 2,20% 671,5 0,0 6,0 1,0 -2,0 -2,3 674,2 12 TPB 1,23% 601,2 6,0 3,4 0,3 5,2 -18,7 597,3 13 CTD 1,49% 363,2 8,0 -0,1 0,9 3,0 2,4 377,3 14 OCB 0,45% 338,6 12,6 3,3 0,7 3,9 -2,9 356,2 15 BMP 1,52% -72,4 10,1 2,2 0,5 1,0 0,8 -57,8 16 MWG 14,69% -89,4 -0,5 -2,8 1,5 0,5 -1,5 -92,2 17 FPT 14,92% -3.272,3 -76,5 -21,3 -12,5 -16,8 -16,2 -3.415,6 18 KDH 1,80% -7.772,7 -173,7 -63,4 -32,8 -41,2 -36,1 -8.119,8"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Nguồn: SSI Research"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Bảng 3: Danh mục VNFINLead và giao dịch quỹ SSIAM VNFIN Lead ETF"
+  },
+  {
+   "kind": "table",
+   "page": 4,
+   "table_id": "Thay_doi_thanh_phan_chi_so_VNDiamond_VN30_VNFIN_Q1_2026#ut3",
+   "html": "<table><thead><tr><th>1</th><th>SHB</th><th>8,95%</th><th>745%</th><th>518,5</th></tr></thead><tbody><tr><td>2</td><td>VIX</td><td>4,88%</td><td>41,08%</td><td>187,3</td></tr><tr><td>3</td><td>HDB</td><td>8,45%</td><td>7,68%</td><td>150,5</td></tr><tr><td>4</td><td>VPB</td><td>15,03%</td><td>14,41%</td><td>122/7</td></tr><tr><td>5</td><td>TCB</td><td>14,24%</td><td>14,00%</td><td>38,5</td></tr><tr><td>6</td><td>SSI</td><td>7,94%</td><td>7,82%</td><td>21,0</td></tr><tr><td>H</td><td>VCI</td><td>1,15%</td><td>1,08%</td><td>11,3</td></tr><tr><td>8</td><td>MBB</td><td>10,51%</td><td>10,46%</td><td>10,9</td></tr><tr><td>9</td><td>HCM</td><td>0,68%</td><td>0,69%</td><td>-1,3</td></tr><tr><td>10</td><td>VND</td><td>1,44%</td><td>1,46%</td><td>-5,0</td></tr><tr><td>11</td><td>NAB</td><td>0,12%</td><td>0,14%</td><td>-6,8</td></tr><tr><td>12</td><td>BID</td><td>0,38%</td><td>0,46%</td><td>-8,8</td></tr><tr><td>13</td><td>OCB</td><td>0,08%</td><td>0,10%</td><td>-9,3</td></tr><tr><td>14</td><td>CTG</td><td>2,59%</td><td>2,67%</td><td>-11,5</td></tr><tr><td>15</td><td>SSB</td><td>0,25%</td><td>0,32%</td><td>-20,6</td></tr><tr><td>16</td><td>VCB</td><td>2,90%</td><td>3,24%</td><td>-26,3</td></tr><tr><td>17</td><td>MSB</td><td>0,83%</td><td>0,94%</td><td>-49,0</td></tr><tr><td>18</td><td>VỊB</td><td>1,17%</td><td>1,36%</td><td>-60,4</td></tr><tr><td>19</td><td>LPB</td><td>2,07%</td><td>2,60%</td><td>-70,7</td></tr><tr><td>20</td><td>TPB</td><td>1,13%</td><td>1,39%</td><td>-83,8</td></tr><tr><td>21</td><td>EIB</td><td>1,64%</td><td>2,06%</td><td>-109,6</td></tr><tr><td>22</td><td>STB</td><td>8,62%</td><td>10,01%</td><td>-127,1</td></tr><tr><td>23</td><td>ACB</td><td>4,93%</td><td>9,59%</td><td>-149,9</td></tr></tbody></table>",
+   "text": "STT Mã CP Tỷ trọng mới Tỷ trọng cũ Số lượng CP mua/bán ('000 cổ phiếu) 1 SHB 8,95% 7,45% 518,5 2 VIX 4,88% 4,08% 187,3 3 HDB 8,45% 7,68% 150,5 4 VPB 15,03% 14,41% 122,7 5 TCB 14,24% 14,00% 38,5 6 SSI 7,94% 7,82% 21,0 7 VCI 1,15% 1,08% 11,3 8 MBB 10,51% 10,46% 10,9 9 HCM 0,68% 0,69% -1,3 10 VND 1,44% 1,46% -5,0 11 NAB 0,12% 0,14% -6,8 12 BID 0,38% 0,46% -8,8 13 OCB 0,08% 0,10% -9,3 14 CTG 2,59% 2,67% -11,5 15 SSB 0,25% 0,32% -20,6 16 VCB 2,90% 3,24% -26,3 17 MSB 0,83% 0,94% -49,0 18 VIB 1,17% 1,36% -60,4 19 LPB 2,07% 2,60% -70,7 20 TPB 1,13% 1,39% -83,8 21 EIB 1,64% 2,06% -109,6 22 STB 8,62% 10,01% -127,1 23 ACB 4,93% 5,59% -149,9"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Nguồn: SSI Research"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 4,
+   "text": "Trang 4"
+  },
+  {
+   "kind": "title",
+   "page": 5,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "narrative",
+   "page": 5,
+   "text": "Bảng 4: Tổng hợp thay đổi về số lượng cổ phiếu mua bán của các quỹ liên quan đến VN30, VNDiamond và quỹ SSIAM VNFIN Lead ETF, dữ liệu đến ngày 21/1/2026"
+  },
+  {
+   "kind": "narrative",
+   "page": 5,
+   "text": "Cần lưu ý rằng các chỉ số HOSE Index sẽ có hiệu lực vào ngày 2/2/2026."
+  },
+  {
+   "kind": "table",
+   "page": 5,
+   "table_id": "Thay_doi_thanh_phan_chi_so_VNDiamond_VN30_VNFIN_Q1_2026#ut4",
+   "html": "<table><thead><tr><th>Các quỹ ETF mô phỏng T</th><th>Các quỹ ETF mô phỏng VN30</th><th>SSIAM VNFIN Lead ETF</th></tr></thead><tbody><tr><td rowspan=\"3\">STT</td><td rowspan=\"2\">MãCP</td><td colspan=\"3\">Số lượng CP mua/bán (000 cổ phiếu)</td><td rowspan=\"2\">'000 cổ TỔNG (000 cổ phiếu)</td><td rowspan=\"2\">.. : làn h (000 cổ phiếu)</td><td rowspan=\"2\">tạo nn, ng ương đương</td></tr><tr><td>HDB</td><td>5.198,4</td><td>2.824,8</td><td>150,5</td><td>8.173,7</td><td>24.018,5</td><td>0,34</td></tr><tr><td>2</td><td>TCB</td><td>1.683,9</td><td>1.113,3</td><td>38,5</td><td>2.835,6</td><td>15.426,1</td><td>0,18</td></tr><tr><td>3</td><td>VPB</td><td>1.263,2</td><td>1.304,2</td><td>122,7</td><td>2.690,0</td><td>28.503,3</td><td>0,09</td></tr><tr><td>4</td><td>ACB</td><td>1.582,5</td><td>1.135,7</td><td>-149,9</td><td>2.568,4</td><td>13.180,3</td><td>0,19</td></tr><tr><td>5</td><td>MBB</td><td>1.426,4</td><td>1.013,9</td><td>10,9</td><td>2.451,3</td><td>33.605,5</td><td>0,07</td></tr><tr><td>6</td><td>MSB</td><td>2.392,5</td><td>0,0</td><td>-49,0</td><td>2.343,5</td><td>7.633,4</td><td>0,31</td></tr><tr><td>7</td><td>SHB</td><td>0,0</td><td>1.795,4</td><td>518,5</td><td>2.313,9</td><td>75.943,4</td><td>0,03</td></tr><tr><td>8</td><td>GMD</td><td>1.660,6</td><td>0,0</td><td>0,0</td><td>1.660,6</td><td>1.477,7</td><td>1,12</td></tr><tr><td>9</td><td>HPG</td><td>0,0</td><td>1.370,4</td><td>0,0</td><td>1.370,4</td><td>43.914,5</td><td>0,03</td></tr><tr><td>10</td><td>PNUJ</td><td>1.150,2</td><td>0,0</td><td>0,0</td><td>1.150,2</td><td>1.144,6</td><td>1,00</td></tr><tr><td>T1</td><td>NLG</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>1.084,1</td><td>0,0</td><td>0,0</td><td>1.084,1</td><td>2.835,5</td><td>0,38</td></tr><tr><td>12</td><td>VIB</td><td>0,0</td><td>1.141,1</td><td>-60,4</td><td>1.080,7</td><td>8.246,0</td><td>0,13</td></tr><tr><td>13</td><td>CTG</td><td>674,2</td><td>265,1</td><td>~11,5</td><td>927,8</td><td>19.092,8</td><td>0,05</td></tr><tr><td>14</td><td>VPL</td><td>0,0</td><td>797,4</td><td>0,0</td><td>797,4</td><td>1.223,2</td><td>0,65</td></tr><tr><td>15</td><td>LPB</td><td>0,0</td><td>831,9</td><td>-70,7</td><td>761,2</td><td>2.726,5</td><td>0,28</td></tr><tr><td>16</td><td>REE</td><td>738,2</td><td>0,0</td><td>0,0</td><td>738,2</td><td>594,5</td><td>1,24</td></tr><tr><td>17</td><td>TPB</td><td>597,3</td><td>141,6</td><td>-83,8</td><td>655,2</td><td>13.485,3</td><td>0,05</td></tr><tr><td>18</td><td>SSI</td><td>0,0</td><td>610,3</td><td>21,0</td><td>631,3</td><td>31.410,6</td><td>0,02</td></tr><tr><td>19</td><td>VNM</td><td>0,0</td><td>405,6</td><td>0,0</td><td>405,6</td><td>7.258,5</td><td>0,06</td></tr><tr><td>20</td><td>VRE</td><td>0,0</td><td>388,4</td><td>0,0</td><td>388,4</td><td>13.387,0</td><td>0,03</td></tr><tr><td>21</td><td>CTD</td><td>377,3</td><td>0,0</td><td>0,0</td><td>377,3</td><td>661,8</td><td>0,57</td></tr><tr><td>22</td><td>OCB</td><td>356,2</td><td>0,0</td><td>-9,3</td><td>346,9</td><td>2.5821</td><td>0,13</td></tr><tr><td>23</td><td>MWG</td><td>-92,2</td><td>436,2</td><td>0,0</td><td>344,0</td><td>7.210,5</td><td>0,05</td></tr><tr><td>24</td><td>STB</td><td>0,0</td><td>426,4</td><td>-127,1</td><td>299,3</td><td>19.068,8</td><td>0,02</td></tr><tr><td>25</td><td>MSN</td><td>0,0</td><td>240,7</td><td>0,0</td><td>240,7</td><td>6.683,7</td><td>0,04</td></tr><tr><td>26</td><td>VCB</td><td>0,0</td><td>215,9</td><td>-26,3</td><td>189,6</td><td>12.003,8</td><td>0,02</td></tr><tr><td>27</td><td>VIX</td><td>0,0</td><td>0,0</td><td>187,3</td><td>187,3</td><td>51.358,2</td><td>0,00</td></tr><tr><td>28</td><td>PLX</td><td>0,0</td><td>176,2</td><td>0,0</td><td>176,2</td><td>8.339,9</td><td>0,02</td></tr><tr><td>29</td><td>BID</td><td>0,0</td><td>184,0</td><td>-8,8</td><td>175,2</td><td>10.437,5</td><td>0,02</td></tr><tr><td>30</td><td>DGC</td><td>0,0</td><td>146,9</td><td>0,0</td><td>146,9</td><td>6.461,6</td><td>0,02</td></tr><tr><td>31</td><td>GAS</td><td>0,0</td><td>125,0</td><td>0,0</td><td>125,0</td><td>3.882,8</td><td>0,03</td></tr><tr><td>32</td><td>SAB</td><td>0,0</td><td>74,1</td><td>0,0</td><td>74,1</td><td>2.150,2</td><td>0,03</td></tr><tr><td>33</td><td>VJUC</td><td>0,0</td><td>45,1</td><td>0,0</td><td>45,1</td><td>1.821,7</td><td>0,02</td></tr><tr><td>34</td><td>GVR</td><td>0,0</td><td>17,3</td><td>0,0</td><td>17,3</td><td>6.388,3</td><td>0,00</td></tr><tr><td>35</td><td>VCI</td><td>0,0</td><td>0,0</td><td>11,3</td><td>11,3</td><td>10.380,0</td><td>0,00</td></tr><tr><td>36</td><td>HCM</td><td>0,0</td><td>0,0</td><td>-1,3</td><td>-1,3</td><td>19.668,6</td><td>0,00</td></tr><tr><td>37</td><td>VND</td><td>0,0</td><td>0,0</td><td>-5,0</td><td>-5,0</td><td>18.871,1</td><td>0,00</td></tr><tr><td>38</td><td>NAB</td><td>0,0</td><td>0,0</td><td>-6,8</td><td>-6,8</td><td>1.439,5</td><td>0,00</td></tr><tr><td>39</td><td>SSB</td><td>0,0</td><td>-34,4</td><td>-20,6</td><td>-54,9</td><td>2.325,2</td><td>0,02</td></tr><tr><td>40</td><td>BMP</td><td>-57,8</td><td>0,0</td><td>0,0</td><td>-57,8</td><td>170,6</td><td>0,34</td></tr><tr><td>41</td><td>EIB</td><td>0,0</td><td>0,0</td><td>-109,6</td><td>-109,6</td><td>9.542,5</td><td>0,01</td></tr><tr><td>42</td><td>BCM</td><td>0,0</td><td>-416,1</td><td>0,0</td><td>-416,1</td><td>1.257,1</td><td>0,33</td></tr><tr><td>43</td><td>VHM</td><td>0,0</td><td>-640,1</td><td>0,0</td><td>-640,1</td><td>9.547,7</td><td>0,07</td></tr><tr><td>44</td><td>VIC</td><td>0,0</td><td>-2.541,1</td><td>0,0</td><td>-2.541,1</td><td>6.783,8</td><td>0,37</td></tr><tr><td>45</td><td>FPT</td><td>-3.415,6</td><td>-640,7</td><td>0,0</td><td>-4.056,2</td><td>8.910,1</td><td>0,46</td></tr><tr><td>46</td><td>KDH</td><td>-8.119,8</td><td>0,0</td><td>0,0</td><td>-8.119,8</td><td>9.445,3</td><td>1,49</td></tr></tbody></table>",
+   "text": "Số lượng CP mua/bán ('000 cổ phiếu) STT Mã CP Các quỹ ETF mô phỏng VNDiamond Các quỹ ETF mô phỏng VN30 SSIAM VNFIN Lead ETF TỔNG ('000 cổ phiếu) KLGD TB 1 tháng ('000 cổ phiếu) Số phiên GD tương đương 1 HDB 5.198,4 2.824,8 150,5 8.173,7 24.018,5 0,34 2 TCB 1.683,9 1.113,3 38,5 2.835,6 15.426,1 0,18 3 VPB 1.263,2 1.304,2 122,7 2.690,0 28.503,3 0,09 4 ACB 1.582,5 1.135,7 -149,9 2.568,4 13.180,3 0,19 5 MBB 1.426,4 1.013,9 10,9 2.451,3 33.605,5 0,07 6 MSB 2.392,5 0,0 -49,0 2.343,5 7.633,4 0,31 7 SHB 0,0 1.795,4 518,5 2.313,9 75.943,4 0,03 8 GMD 1.660,6 0,0 0,0 1.660,6 1.477,7 1,12 9 HPG 0,0 1.370,4 0,0 1.370,4 43.914,5 0,03 10 PNJ 1.150,2 0,0 0,0 1.150,2 1.144,6 1,00 11 NLG 1.084,1 0,0 0,0 1.084,1 2.835,5 0,38 12 VIB 0,0 1.141,1 -60,4 1.080,7 8.246,0 0,13 13 CTG 674,2 265,1 -11,5 927,8 19.092,8 0,05 14 VPL 0,0 797,4 0,0 797,4 1.223,2 0,65 15 LPB 0,0 831,9 -70,7 761,2 2.726,5 0,28 16 REE 738,2 0,0 0,0 738,2 594,5 1,24 17 TPB 597,3 141,6 -83,8 655,2 13.485,3 0,05 18 SSI 0,0 610,3 21,0 631,3 31.410,6 0,02 19 VNM 0,0 405,6 0,0 405,6 7.258,5 0,06 20 VRE 0,0 388,4 0,0 388,4 13.387,0 0,03 21 CTD 377,3 0,0 0,0 377,3 661,8 0,57 22 OCB 356,2 0,0 -9,3 346,9 2.582,1 0,13 23 MWG -92,2 436,2 0,0 344,0 7.210,5 0,05 24 STB 0,0 426,4 -127,1 299,3 19.068,8 0,02 25 MSN 0,0 240,7 0,0 240,7 6.683,7 0,04 26 VCB 0,0 215,9 -26,3 189,6 12.003,8 0,02 27 VIX 0,0 0,0 187,3 187,3 51.358,2 0,00 28 PLX 0,0 176,2 0,0 176,2 8.339,9 0,02 29 BID 0,0 184,0 -8,8 175,2 10.437,5 0,02 30 DGC 0,0 146,9 0,0 146,9 6.461,6 0,02 31 GAS 0,0 125,0 0,0 125,0 3.882,8 0,03 32 SAB 0,0 74,1 0,0 74,1 2.150,2 0,03 33 VJC 0,0 45,1 0,0 45,1 1.821,7 0,02 34 GVR 0,0 17,3 0,0 17,3 6.388,3 0,00 35 VCI 0,0 0,0 11,3 11,3 10.380,0 0,00 36 HCM 0,0 0,0 -1,3 -1,3 19.668,6 0,00 37 VND 0,0 0,0 -5,0 -5,0 18.871,1 0,00 38 NAB 0,0 0,0 -6,8 -6,8 1.439,5 0,00 39 SSB 0,0 -34,4 -20,6 -54,9 2.325,2 0,02 40 BMP -57,8 0,0 0,0 -57,8 170,6 0,34 41 EIB 0,0 0,0 -109,6 -109,6 9.542,5 0,01 42 BCM 0,0 -416,1 0,0 -416,1 1.257,1 0,33 43 VHM 0,0 -640,1 0,0 -640,1 9.547,7 0,07 44 VIC 0,0 -2.541,1 0,0 -2.541,1 6.783,8 0,37 45 FPT -3.415,6 -640,7 0,0 -4.056,2 8.910,1 0,46 46 KDH -8.119,8 0,0 0,0 -8.119,8 5.445,3 1,49"
+  },
+  {
+   "kind": "narrative",
+   "page": 5,
+   "text": "Nguồn: SSI Research"
+  },
+  {
+   "kind": "narrative",
+   "page": 5,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 5,
+   "text": "Trang 5"
+  },
+  {
+   "kind": "header",
+   "page": 6,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "title",
+   "page": 6,
+   "text": "CAM KẾT PHÂN TÍCH"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Chuyên viên phân tích trong báo cáo này này cam kết rằng (1) quan điểm thể hiện trong báo cáo phân tích này phản ánh chính xác quan điểm cá nhân đối với chứng khoán và/hoặc tổ chức phát hành và (2) chuyên viên phân tích đã/ đang/sẽ được miễn trách nhiệm bồi thường trực tiếp hoặc gián tiếp liên quan đến khuyến nghị cụ thể hoặc quan điểm trong báo cáo phân tích này."
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "KHUYẾN NGHỊ"
+  },
+  {
+   "kind": "title",
+   "page": 6,
+   "text": "KHUYẾN NGHỊ"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Mua: Ước tính tiềm năng tăng giá lớn hơn hoặc bằng 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Khả quan: Ước tính tiềm năng tăng giá dưới 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Trung lập: Ước tính tiềm năng tăng giá tương đương so với mức tăng chung của thị trường trong 12 tháng tới. Kém khả quan: Ước tính tiềm năng giảm giá dưới 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Bán: Ước tính tiềm năng giảm giá lớn hơn hoặc bằng 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Trong một số trường hợp, khuyến nghị dựa trên tiềm năng tăng giá 1 năm có thể được điều chỉnh lại theo ý kiến của chuyên viên phân tích sau khi cân nhắc một số yếu tố thị trường có thể làm ảnh hưởng đến giá cổ phiếu trong ngắn hạn và trung hạn."
+  },
+  {
+   "kind": "title",
+   "page": 6,
+   "text": "TUYÊN BỐ MIỄN TRỪ"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Các thông tin, tuyên bố, dự báo và dự đoán trong báo cáo này, bao gồm cả các ý kiến đã thể hiện, được dựa trên các nguồn thông tin mà SSI cho là đáng tin cậy, tuy nhiên SSI không đảm bảo sự chính xác và đầy đủ của các thông tin này. Báo cáo không có bất kỳ thông tin nhạy cảm về giá chưa công bố nào. Các ý kiến thể hiện trong báo cáo này được đưa ra sau khi đã được xem xét kỹ càng và cẩn thận và dựa trên thông tin tốt nhất chúng tôi được biết, và theo ý kiến cá nhân của chúng tôi là hợp lý trong các trường hợp tại thời điểm đưa ra báo cáo. Các ý kiến thể hiện trong báo cáo này có thể thay đổi bất kì lúc nào mà không cần thông báo. Báo cáo này không và không nên được giải thích như một lời đề nghị hay lời kéo đề nghị mua hay bán bất cứ chứng khoán nào. SSI và các công ty con và/ hoặc các chuyên viên, giám đốc, nhân viên của SSI và công ty con có thể có vị thế hoặc có thể ảnh hưởng đến giao dịch chứng khoán của các công ty được đề cập trong báo cáo này và có thể cung cấp dịch vụ hoặc tìm kiếm để cung cấp dịch vụ ngân hàng đầu tư cho các công ty đó."
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Báo cáo này không được sử dụng dưới bất kỳ mục đích thương mại nào, và không được công bố công khai trên báo chí hay bất kỳ phương tiện"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "nào khác nếu không được sự đồng ý của SSI. Người dùng có thể trích dẫn hoặc trình chiếu báo cáo cho các mục đích phi thương mại. SSI có thể có thỏa thuận cho phép sử dụng cho mục đích thương mại hoặc phân phối lại báo cáo với điều kiện người dùng trả phí cho SSI. SSI không chịu trách nhiệm đối với bất kỳ thiệt hại trực tiếp hay thiệt hại do hậu quả phát sinh từ việc sử dụng báo cáo này hay nội dung báo cáo này. Việc sử dụng bất kỳ thông tin, tuyên bố, dự báo, và dự đoán nào trong báo cáo này sẽ do người dùng tự quyết định và tự chịu rủi ro."
+  },
+  {
+   "kind": "title",
+   "page": 6,
+   "text": "THÔNG TIN LIÊN HỆ"
+  },
+  {
+   "kind": "title",
+   "page": 6,
+   "text": "Trung tâm phân tích và tư vấn đầu tư"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Phân tích cổ phiếu"
+  },
+  {
+   "kind": "title",
+   "page": 6,
+   "text": "Phân tích cổ phiếu"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Dữ liệu"
+  },
+  {
+   "kind": "title",
+   "page": 6,
+   "text": "Dữ liệu"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Phạm Lưu Hưng"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Giám đốc Trung tâm phân tích và tư vấn đầu tư hungpl@ssi.com.vn SĐT: (+84 – 24) 3936 6321 ext. 8711"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Nguyễn Thu Hà, CFA"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Giám đốc Phân tích cổ phiếu hant4@ssi.com.vn SĐT: (+84 – 24) 3936 6321"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Nguyễn Thị Anh Thư"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Chuyên viên hỗ trợ thunta2@ssi.com.vn SĐT: (+84 – 24) 3936 6321"
+  },
+  {
+   "kind": "title",
+   "page": 6,
+   "text": "Chiến lược thị trường"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Đào Minh Châu, CFA"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Phó giám đốc Trung tâm phân tích và tư vấn đầu tư chaudm@ssi.com.vn SĐT: (+84 – 28) 3636 3688"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 6,
+   "text": "Trang 6"
+  }
+ ]
+}

@@ -1,0 +1,957 @@
+% !TeX program = xelatex
+% Bien dich:  tectonic --reruns 2 slides/dual_granularity_rag.tex
+%
+% Trinh bay bai bao "Dual-granularity chunking and dynamic context augmentation"
+% va cach ap dung vao phan ky thuat cua do an (unstructured + row-JSON).
+%
+% Ban nay viet lai tu BAN GOC tieng Anh:
+%   data/references/1-s2.0-S0957417426024553-main.pdf  (13 trang)
+% Moi con so, ten bang va cong thuc deu trich tu dung file do.
+% Ky hieu dung xuyen suot:
+%   L = khoc lon (large chunk)  -> dua cho LLM de SINH
+%   S = khoc nho (small chunk)  -> dua vao CHI MUC de TIM
+%   Q = cau hoi nguoi dung
+\documentclass[aspectratio=169,10pt]{beamer}
+
+% ---- Font: uu tien font Windows, tu lui ve font TeX mac dinh ----
+% -> cung bien dich duoc tren Windows, Overleaf va Docker
+\usepackage{fontspec}
+\IfFontExistsTF{Arial}
+  {\setsansfont{Arial}}
+  {\IfFontExistsTF{TeX Gyre Heros}
+     {\setsansfont{TeX Gyre Heros}}
+     {\setsansfont{Latin Modern Sans}}}
+\IfFontExistsTF{Times New Roman}
+  {\setmainfont{Times New Roman}}
+  {\IfFontExistsTF{TeX Gyre Termes}
+     {\setmainfont{TeX Gyre Termes}}
+     {\setmainfont{Latin Modern Roman}}}
+\IfFontExistsTF{Consolas}
+  {\setmonofont{Consolas}}
+  {\IfFontExistsTF{DejaVu Sans Mono}
+     {\setmonofont{DejaVu Sans Mono}}
+     {\setmonofont{Latin Modern Mono}}}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+
+\usetheme{Madrid}
+\usecolortheme{beaver}
+% ``beaver'' khong phai ten mau cua xcolor (Beamer chi khai bao noi bo),
+% nen phai tu dinh nghia de dung duoc trong TikZ va \color.
+\definecolor{brand}{HTML}{7B4B2A}
+\setbeamercolor{structure}{fg=brand}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{brand!80!black}$\bullet$}
+
+\newcommand{\src}[1]{{\footnotesize\ttfamily #1}}
+% Khung "y chinh" dung chung: mot cau ket luận ngan can nho
+\newcommand{\keyidea}[1]{%
+  \begin{center}\begin{block}{\small Y chinh}\centering #1\end{block}\end{center}}
+
+\title[Dual-Granularity Chunking cho RAG]{Dual-Granularity Chunking \& Dynamic Context Augmentation}
+\subtitle[Đọc bài báo gốc và liên hệ với pipeline báo cáo ETF]{Peng \& Luo (2027), \emph{Expert Systems with Applications}}
+\author{}
+\date{}
+
+\begin{document}
+
+% =============================================================
+\begin{frame}
+  \titlepage
+  \vspace{-1.4em}
+  {\footnotesize
+  Peng, Q., \& Luo, X. (2027).\quad
+  \emph{Dual-granularity chunking and dynamic context augmentation: An optimization
+  method for retrieval-augmented generation.}\quad
+  \emph{Expert Systems with Applications}, 332, 133546.\quad
+  DOI: 10.1016/j.eswa.2026.133546\\
+  Nhận bài 15/05/2025 $\cdot$ bản sửa 17/06/2026 $\cdot$ chấp nhận 03/07/2026 $\cdot$ online 10/07/2026}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Câu hỏi}
+  \begin{center}
+  {\large\itshape ``Làm sao để hệ thống biết \textbf{chính xác chỗ nào} cần tìm,\\
+  mà vẫn đưa cho LLM \textbf{đủ ngữ cảnh} để trả lời?''}\\[0.6em]
+  {\normalsize Câu trả lời của bài báo: \textbf{dùng hai cấp độ đo đơn vị khác nhau.}}
+  \end{center}
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Khối nhỏ $S$ --- \emph{đơn vị tìm kiếm}}
+        \begin{itemize}\footnotesize
+          \item ngắn, cụ thể $\rightarrow$ \textbf{khớp câu hỏi chính xác}
+          \item đưa vào chỉ mục để so khớp
+          \item chỉ dùng để \emph{chọn} đoạn cần đọc, \emph{không} dùng để sinh
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Khối lớn $L$ --- \emph{đơn vị sinh nội dung}}
+        \begin{itemize}\footnotesize
+          \item dài, đủ ngữ cảnh $\rightarrow$ \textbf{giải thích được câu hỏi}
+          \item đưa vào prompt cho LLM đọc
+          \item mỗi khối nhỏ \textbf{luôn trỏ về} đúng khối lớn cha của nó
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \begin{alertblock}{\small Câu hỏi mà cả bài báo tập trung trả lời}
+    Làm sao xây được cả hai loại đơn vị đó một cách \emph{tự động}, từ tài liệu thô?
+  \end{alertblock}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Một ví dụ để thấy ngay vấn đề}
+  {\footnotesize Câu hỏi: \textbf{``Cấp độ A bị loại khi nào?''} --- chỉ nói về điều kiện 2, nhưng đoạn gốc có ba điều kiện.}
+  \begin{block}{\small Khối lớn $L$ --- cả đoạn, đưa cho LLM đọc}
+    \footnotesize
+    \fbox{\strut ĐK1: thành phần hóa học đúng theo bảng 3.}\\[1pt]
+    \fbox{\strut ĐK2: không được có vết nứt hay vết lõm trên bề mặt.}\\[1pt]
+    \fbox{\strut ĐK3: siêu âm không phát hiện khuyết tật bên trong.}
+  \end{block}
+  \begin{block}{\small Ba khối nhỏ --- đưa vào chỉ mục để tìm}
+    \centering\footnotesize
+    \fbox{\strut $S_1$: hóa học} \quad
+    \textbf{\fbox{\strut $S_2$: vết nứt, vết lõm trên bề mặt}} \quad
+    \fbox{\strut $S_3$: khuyết tật bên trong}
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Không tìm bằng $L$}
+        \footnotesize $L$ chứa cả 3 điều kiện $\rightarrow$ \textbf{2/3 là nhiễu}, điểm khớp giảm.
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Không sinh bằng $S$}
+        \footnotesize $S_2$ đúng ý nhưng quá ngắn, không giải thích được vì sao
+        $\rightarrow$ LLM \textbf{cụt hoặc bịa}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{\texttt{small2big}: cứ theo dòng mà cắt}
+  {\footnotesize \texttt{small2big} (Gao et al., 2023) là \emph{nền tảng} mà bài báo này
+  dựng lên. Nguyên tắc duy nhất của nó rất đơn giản:}
+  \begin{center}\textbf{\large 1 dòng văn bản $\;=\;$ 1 khối nhỏ}\end{center}
+  \begin{center}
+  \begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,
+      src/.style={anchor=west, inner sep=1pt, font=\footnotesize},
+      ck/.style={draw=brand!70!black, fill=brand!14, rounded corners=2pt,
+                 inner xsep=4pt, inner ysep=2.5pt, font=\scriptsize\bfseries},
+      arr/.style={-{Stealth[length=2mm]}, thick, brand!80!black}]
+    \node[font=\scriptsize\bfseries, text=brand!80!black, anchor=west] at (0,0.34)
+      {Tài liệu gốc --- một đoạn văn 5 dòng};
+    \node[font=\scriptsize\bfseries, text=brand!80!black, anchor=west] at (7.4,0.34)
+      {\small 5 khối nhỏ đưa vào chỉ mục để tìm};
+
+    \node[src] (t1) at (0,0) {Quy trình tạo phôi.};
+    \node[src] (t2) at (0,-0.52) {Đặc tính kỹ thuật như sau:};
+    \node[src] (t3) at (0,-1.04) {(1) Thiết bị đơn giản.};
+    \node[src] (t4) at (0,-1.56) {(2) Dùng được cho tấm đặc không đều.};
+    \node[src] (t5) at (0,-2.08) {(3) Tận dụng vật liệu tốt hơn.};
+
+    \node[ck] (s1) at (7.4,0) {$s_1$};
+    \node[ck] (s2) at (7.4,-0.52) {$s_2$};
+    \node[ck] (s3) at (7.4,-1.04) {$s_3$};
+    \node[ck] (s4) at (7.4,-1.56) {$s_4$};
+    \node[ck] (s5) at (7.4,-2.08) {$s_5$};
+    \draw[arr] (t1) -- (s1);
+    \draw[arr] (t2) -- (s2);
+    \draw[arr] (t3) -- (s3);
+    \draw[arr] (t4) -- (s4);
+    \draw[arr] (t5) -- (s5);
+
+    \draw[arr] (s5.east) -- ++(0.45,0) |- (8.9,-2.75)
+      node[pos=0.28, above, font=\scriptsize, text=brand!80!black, align=center]
+      {gộp các khối liền kề\\ cho tới khi đạt 1024 ký tự};
+    \node[draw=brand, fill=brand!30, rounded corners=2pt, font=\footnotesize,
+          anchor=west, inner xsep=5pt, inner ysep=3pt] (L) at (6.0,-2.75)
+      {\textbf{\large $L$} \;=\; 1 khối lớn duy nhất (cả 5 dòng)};
+    \draw[arr] (8.9,-2.75) -- (L.east);
+  \end{tikzpicture}
+  \end{center}
+  {\footnotesize Khi người dùng hỏi, hệ thống tìm trên \emph{5 khối nhỏ}; trúng $s_i$ nào
+  thì đưa \emph{cả khối lớn} $L$ cho LLM đọc.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Nhưng đoạn trên đã bị cắt đúng một chỗ rất quan trọng}
+  {\footnotesize Cùng đoạn 5 dòng đó, hãy nhìn \textbf{hai ô đánh dấu đỏ}.}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Lỗi 1 --- tiêu đề thành một khối \emph{rỗng}}
+        \footnotesize
+        \begin{center}
+        \fcolorbox{red!70!black}{red!8}{\footnotesize\bfseries $s_2$\;=\;``Đặc tính kỹ thuật như sau:''}
+        \end{center}
+        Đây là một \textbf{tên mục}, không có nội dung nào đi kèm.
+        Người dùng gõ tìm ``đặc tính kỹ thuật'' $\rightarrow$ hệ thống trả về đúng $s_2$
+        --- \textbf{một dòng không có nội dung}. Muốn biết đặc tính gì thì phải đọc tiếp.
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Lỗi 2 --- vế (2) mất chủ ngữ}
+        \footnotesize
+        \begin{center}
+        \fcolorbox{red!70!black}{red!8}{\footnotesize\bfseries $s_4$\;=\;``(2) Dùng được cho tấm đặc không đều.''}
+        \end{center}
+        Đọc riêng $s_4$ thì \textbf{không biết}: đây là của \emph{cái gì}, là \emph{đặc tính gì}.
+        Cả hai thông tin đó đều nằm ở $s_2$ --- \emph{một dòng khác}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \keyidea{Ranh giới \emph{dòng} không phải ranh giới \emph{nghĩa}. Chỗ bài báo này sửa
+  chính là chỗ đó.}
+\end{frame}
+% =============================================================
+\begin{frame}{Kiến trúc: bốn giai đoạn}
+  \begin{center}
+  \begin{tikzpicture}[
+      node distance=0.55cm,
+      box/.style={draw=brand!70!black, fill=brand!14, rounded corners=3pt,
+                  minimum width=2.85cm, minimum height=1.5cm,
+                  align=center, font=\small},
+      arr/.style={-{Stealth[length=2.2mm]}, thick, brand!80!black}]
+    \node[box] (idx) {\textbf{1. Lập chỉ mục}\\[2pt] xây $L$ và $S$};
+    \node[box, right=of idx, fill=brand!26] (ret) {\textbf{2. Truy xuất}\\[2pt] tìm trên $S$};
+    \node[box, right=of ret] (rer) {\textbf{3. Khuếch đại}\\[2pt] xếp lại $+$ nhân bản};
+    \node[box, right=of rer] (gen) {\textbf{4. Sinh nội dung}\\[2pt] LLM đọc $L$};
+    \draw[arr] (idx) -- (ret);
+    \draw[arr] (ret) -- (rer);
+    \draw[arr] (rer) -- (gen);
+    \node[below=0.22cm of ret, align=center, font=\scriptsize, text width=2.7cm]
+      (ann) {\emph{$S_1,\dots,S_w$ được trả về,\\ kèm $L_1,\dots,L_w$ tương ứng}};
+    \draw[arr, dashed] (ret) -- (ann);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.2em}
+  \begin{itemize}\small
+    \item Kết quả truy xuất là \emph{cặp}: $(S_1,L_1), (S_2,L_2),\dots,(S_w,L_w)$, với $w=4$.
+    \item Giai đoạn 3 xử lý \textbf{trên khối lớn}, vì đó là thứ đưa vào prompt.
+    \item Toàn bộ ý tưởng chỉ là: \textbf{cùng một tài liệu, hai cách đo đơn vị}.
+  \end{itemize}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Cơ chế 1a --- Khối lớn $L$ là cái gì}
+  {\footnotesize $L$ là \textbf{một đoạn văn trọn vẹn}, gom nhiều câu có cùng chủ đề,
+  dài tối đa 1024 ký tự. Đây là thứ đưa cho LLM đọc.}
+  \begin{block}{\small Ba bước để xây một $L$}
+    \footnotesize
+    \begin{enumerate}
+      \itemsep1pt
+      \item \textbf{Tách thành đơn vị văn bản.} Một dòng \emph{kết thúc bằng dấu câu}
+            (``.'', ``!'', ``?'') mới là một đơn vị. Ngược lại, tiêu đề thường \emph{xuống dòng}
+            nhưng là đầu một chủ đề mới.
+      \item \textbf{Gộp các đơn vị thành đoạn văn bằng LLM.} Hỏi LLM ``hai đơn vị có
+            cùng một đoạn không?'' như một bài \emph{phân loại}, trả lời Có/Không.
+      \item \textbf{Gộp các đoạn thành khối lớn} nếu tổng độ dài chưa vượt trần $Y$:
+            $\text{độ dài}(L_i) + \text{độ dài}(L_{i+1}) \le Y$, với $Y = 1024$.
+    \end{enumerate}
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Kết quả trông như thế nào}
+        \footnotesize\ttfamily
+        L1 = ``Quy trình tạo phôi.''\\
+        L2 = ``Đặc tính kỹ thuật như sau: (1) Thiết bị đơn giản.\\
+        \phantom{L2 = }\phantom{``}(2) Dùng được cho tấm đặc không đều.\\
+        \phantom{L2 = }\phantom{``}(3) Tận dụng vật liệu tốt hơn.''
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small $Y$ là gì}
+        \footnotesize $Y$ là \emph{trần độ dài} của một khối lớn, tính bằng ký tự.
+        Vượt trần thì khởi đầu một $L$ mới. Không phải câu hỏi, không phải điểm số ---
+        chỉ là \textbf{độ dài}.
+      \end{block}
+      \begin{alertblock}{\small Bước đắt nhất}
+        \footnotesize Bước 2 là bước \textbf{duy nhất} phải gọi LLM, và phải gọi
+        \emph{một lần cho mỗi cặp câu liền kề}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bước 2 làm gì: ví dụ về gạch đầu dòng}
+  {\small Cùng một đoạn văn, xử lý hai cách (bảng 2 của bài báo):}
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small \emph{Không} có bước 2}
+        \small
+        \textbf{Đoạn 1.} Quy trình tạo phôi.\\
+        \textbf{Đoạn 2.} Đặc tính kỹ thuật như sau:\\
+        \textbf{Đoạn 3.} (1) Thiết bị đơn giản.\\
+        \textbf{Đoạn 4.} (2) Dùng được cho tấm đặc không đều.\\
+        \textbf{Đoạn 5.} (3) Tận dụng vật liệu tốt hơn.\\
+        \vspace{0.2em}
+        {\footnotesize $\Rightarrow$ \textbf{5 đoạn vụn}, cùng một chủ đề bị băm vỡ.}
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small \emph{Có} bước 2}
+        \small
+        \textbf{Đoạn 1.} Quy trình tạo phôi.\\
+        \textbf{Đoạn 2.} Đặc tính kỹ thuật như sau:\\
+        \textbf{Đoạn 3.} (1) Thiết bị đơn giản, tải trọng nhỏ.
+        (2) Dùng được cho tấm đặc không đều.
+        (3) Tận dụng vật liệu tốt hơn.\\
+        \vspace{0.2em}
+        {\footnotesize $\Rightarrow$ \textbf{3 đoạn trọn vẹn}, chủ đề giữ nguyên.}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.3em}
+  \begin{alertblock}{\small Vì sao lại hợp lý}
+    LLM được dạy bằng tiền đề (prompt learning) và ví dụ mẫu (few-shot) để biết
+    khi nào hai mục \emph{cùng một đoạn} --- mà quy tắc cú pháp không bắt được điều đó.
+  \end{alertblock}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bước 2 gọi LLM bằng cách nào --- lời nhắc và ví dụ mẫu}
+  {\footnotesize Không huấn luyện lại LLM. Chỉ \textbf{gửi kèm một đoạn hướng dẫn}
+  (lời nhắc, \emph{prompt}) rồi hỏi. Ở đây câu hỏi được \emph{gộp sẵn}:}
+  \begin{center}
+  \scriptsize\itshape
+  \fbox{\begin{minipage}{0.92\textwidth}
+    \textbf{[Hướng dẫn]} Hai mục dưới đây có thuộc cùng một đoạn văn không?
+    Trả lời đúng \texttt{Yes} hoặc \texttt{No}, không giải thích thêm.\\[-2pt]
+    \textbf{[Ví dụ 1]} Đầu mục ``3.2 Thiết bị'' $+$ mục ``3.2.1 Đầu lò thảo'' $\rightarrow$ \texttt{Yes}\\[-2pt]
+    \textbf{[Ví dụ 2]} Mục ``1. Giới thiệu'' $+$ mục ``2. Điều lệ'' $\rightarrow$ \texttt{No}\\[-2pt]
+    \textbf{[Cần phân loại]} ``2. Đặc tính kỹ thuật'' $+$ ``(1) Thiết bị đơn giản'' $\rightarrow$ \texttt{?}
+    \end{minipage}}
+  \end{center}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small $n = 10$ nghĩa là gì}
+        \footnotesize \textbf{Không} phải 10 lần gọi. Đó là \textbf{10 cặp ví dụ có sẵn}
+        như Ví dụ 1 và Ví dụ 2 --- nằm \emph{trong} lời nhắn để LLM biết ``cùng một đoạn''
+        trông như thế nào. Bài báo dùng $n = 10$.
+        {\footnotesize\itshape Mục 4.7.3 sẽ thử các giá trị $n$ khác.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Quy tắc: \texttt{Yes} khi \emph{cả ba} điều kiện đúng}
+        \footnotesize
+        \begin{enumerate}
+          \itemsep1pt
+          \item cùng là \emph{danh sách có số thứ tự}, hoặc một bên là danh sách ngầm kiểu
+                ``có ba loại: A, B và C'';
+          \item tiêu đề cha \emph{giống hệt} cả chữ và cấp (3.2 so với 3.2.1);
+          \item cùng một \emph{chiều} (cùng nói về phân loại, cùng nói về tiêu chuẩn, \ldots).
+        \end{enumerate}
+      \end{alertblock}
+      \begin{block}{\small Quy tắc: \texttt{No} khi}
+        \footnotesize khác cấp tiêu đề (2 so với 2.1); liên quan chéo mục; hoặc lệch chiều mô
+        tả --- một bên nói về phương pháp tẩy, bên kia nói về tác động môi trường.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Cơ chế 1b --- Khối nhỏ $S$ là cái gì}
+  {\footnotesize $S$ là \textbf{một hoặc vài câu có nghĩa trọn vẹn}, tách ra từ chính
+  khối lớn $L$. Đây là thứ đưa vào chỉ mục để tìm.}
+  \begin{enumerate}\footnotesize
+    \item \textbf{Tách $L$ thành câu} theo dấu câu (``.'', ``?'', ``!'').
+    \item \textbf{Gộp hai câu liền kề} nếu chúng cùng nói một ý:
+  \end{enumerate}
+  \begin{equation*}
+    c = s_l \oplus s_{l+1}
+    \quad\text{nếu}\quad
+    \cos(s_l, s_{l+1}) \ge \theta,
+    \qquad \theta = 0{,}9
+  \end{equation*}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small Kết quả trên cùng ví dụ}
+        \footnotesize
+        \begin{tabular}{@{}ll@{}}
+          $S_1$ & ``Đặc tính kỹ thuật như sau:''\\
+          $S_2$ & ``(1) Thiết bị đơn giản, tải trọng nhỏ.''\\
+          $S_3$ & ``(2) Dùng được cho tấm đặc không đều.''\\
+          $S_4$ & ``(3) Tận dụng vật liệu tốt hơn.''
+        \end{tabular}
+        \vspace{0.2em}
+        {\footnotesize\itshape $S_1 \dots S_4$ \emph{đều thuộc về} cùng một khối lớn $L_2$.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Vì sao \emph{gộp} mà không cứ tách câu làm khối nhỏ?}
+        \footnotesize Khối nhỏ phải \emph{đủ nghĩa để trả lời được một câu hỏi}.
+        Một câu nói ``Điều kiện đó là \ldots'' thì không đứng được một mình.
+      \end{block}
+      \begin{block}{\small $\cos$ và $\theta$}
+        \footnotesize $\cos(a,b) \in [-1; 1]$ là \emph{độ giống nhau} giữa hai câu,
+        đo bằng mô hình nhúng \src{bge-large-zh-v1.5}.
+        $\theta = 0{,}9$ là \textbf{ngưỡng chặt}: chỉ gộp khi hai câu gần như nói cùng một việc.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Cơ chế 2a --- Xếp hạng lại trên cả hai cấp độ}
+  \begin{alertblock}{\small Vấn đề}
+    Thứ hạng sau giai đoạn 2 mới tính từ $\cos(Q, S_i)$. Mà $S_i$ rất ngắn, nên nó chưa
+    nói hết ý $\rightarrow$ thứ hạng có thể \textbf{sai}.
+  \end{alertblock}
+  \begin{equation*}
+    S_i^{\,\prime} \;=\; \frac{1}{2}\Bigl(\cos(Q, S_i) \;+\; \cos(Q, L_i)\Bigr)
+  \end{equation*}
+  \vspace{0.1em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Vì sao trung bình lại hợp lý}
+        \begin{itemize}\footnotesize
+          \item $\cos(Q,S_i)$ bắt được \textbf{chi tiết} nào khớp câu hỏi.
+          \item $\cos(Q,L_i)$ bắt được \textbf{ý nghĩa chung} của đoạn.
+          \item Trung bình $\rightarrow$ đoạn nào vừa khớp chi tiết vừa đúng ngữ cảnh
+                thì lên đầu bảng xếp hạng.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Lưu ý khi đọc kết quả}
+        \small Ở nhóm thí nghiệm chỉ dùng \texttt{small2big}, \emph{chỉ khối lớn} đôi khi
+        còn tốt hơn trung bình ở ROUGE-1/ROUGE-L. Chỉ khi dùng đồng thời cả cơ chế 1
+        thì phép trung bình mới thắng trên \textbf{cả bốn chỉ số} (xem slide sau).
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Cơ chế 2b --- Nhân bản ngữ cảnh: in lại khối đứng đầu}
+  \begin{alertblock}{\small Vấn đề}
+    \footnotesize LLM đọc prompt \emph{theo thứ tự}. Đoạn nào nằm \textbf{sát đầu} và
+    \textbf{lặp lại} thì dễ được chú ý hơn --- đặc biệt khi đoạn đó đúng là đoạn
+    khớp câu hỏi nhất.
+  \end{alertblock}
+  \begin{center}
+  \footnotesize
+  \begin{tabular}{@{}p{2.3cm}p{7.6cm}@{}}
+    \toprule
+    \textbf{Khối lớn} & \textbf{Điểm sau xếp lại $S_i^{\,\prime}$} \\
+    \midrule
+    $L_1$ & \textbf{0{,}71} $\leftarrow$ đứng đầu \\
+    $L_2$ & 0{,}63 \\
+    $L_3$ & 0{,}58 \\
+    $L_4$ & 0{,}55 \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Không nhân bản}
+        \footnotesize\itshape
+        \fbox{\parbox{0.9\linewidth}{\textbf{L1} --- 0,71. \quad LLM chỉ nhìn nó một lần.}}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Có nhân bản}
+        \footnotesize\itshape
+        \fbox{\parbox{0.9\linewidth}{\textbf{L1} --- 0,71. \quad \textbf{L1} --- 0,71. \quad LLM chỉ nhìn nó hai lần.}}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.2em}
+  {\footnotesize\itshape Không đổi nội dung LLM đọc --- chỉ đổi \emph{mức độ chú ý}.
+  Nó là một mẹo (heuristic) rẻ, không cần huấn luyện gì thêm.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Khi nào thì nhân bản --- ba cách chọn, và $\tau$ là gì}
+  {\footnotesize Cả ba cách đều trả lời cùng một câu: \emph{mục đầu bảng xếp hạng có
+  đáng được nhấn mạnh không?}}
+  \begin{columns}[T]
+    \begin{column}{0.315\textwidth}
+      \begin{block}{\small (1) Theo ngưỡng $\tau$}
+        \footnotesize Điểm của mục đầu $> \tau$ thì nhân bản.
+        \vspace{0.25em}
+        {\footnotesize Nếu không có mục nào đủ điểm thì \emph{không} nhân bản.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.315\textwidth}
+      \begin{block}{\small (2) Theo độ lệch chuẩn}
+        \footnotesize Tính trung bình $\mu$ và độ lệch chuẩn $\sigma$ của \emph{tất cả} điểm.
+        Nhân bản nếu điểm mục đầu $> \mu + \sigma$.
+        \vspace{0.25em}
+        {\footnotesize Tự thích nghi theo bộ kết quả, không cần chọn ngưỡng.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.315\textwidth}
+      \begin{block}{\small (3) Theo độ khác biệt}
+        \footnotesize Với mọi $L_j$, tính $D(L_j) = $ trung bình $\cos(L_j, L_k)$, $k \neq j$.
+        Chọn 2 khối có $D$ thấp nhất. Mục đầu nằm trong đó $\rightarrow$ nhân bản.
+        \vspace{0.25em}
+        {\footnotesize Đo tính \emph{độc đáo}, không đo điểm.}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \begin{alertblock}{\small $\tau$ (tau) là cái gì}
+    \footnotesize $\tau$ là \textbf{một con số ngưỡng}, không phải tên hàm. Giá trị mặc định
+    của bài báo là $\tau = 0{,}4$, trên thang điểm $\cos$ trong khoảng $[-1; 1]$ ---
+    tức ``chỉ nhân bản khi đoạn đó khớp mạnh''. Nhỏ hơn thì nhân dễ hơn, lớn hơn thì nhân ít hơn.
+    Tác giả cũng nói $\tau$ \textbf{cần chỉnh theo từng tập dữ liệu}.
+  \end{alertblock}
+  \begin{block}{\small Nguồn cảm hứng: pseudo-labelling (Arazo et al., 2020)}
+    \footnotesize Không hề huấn luyện gì thêm --- chỉ mượn ý tưởng \emph{dùng chính tín hiệu của
+    hệ thống làm chỉ báo để điều chỉnh đầu vào}.
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bối cảnh thí nghiệm}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Dữ liệu}
+        \begin{itemize}\footnotesize
+          \item Tài liệu nội bộ của một công ty thương mại điện tử về thép.
+          \item Chuyên gia lĩnh vực tự tay soạn và kiểm tra \textbf{500 cặp hỏi--đáp}.
+          \item Nội dung: thành phần, tính chất, ứng dụng, nguyên nhân khuyết tật.
+        \end{itemize}
+      \end{block}
+      \begin{block}{\small Thiết bị}
+        \begin{itemize}\footnotesize
+          \item FlashRAG, một GPU RTX 6000 24\,GB.
+          \item Thí nghiệm chính dùng \textbf{giải mã tham lam} --- tất định với đầu vào cố định.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Hai bộ sinh}
+        \begin{itemize}\footnotesize
+          \item LLaMA-3-Chinese-8B-Instruct
+          \item Qwen2.5-7B-Instruct
+        \end{itemize}
+      \end{block}
+      \begin{block}{\small Bốn chỉ số}
+        \begin{itemize}\footnotesize
+          \item ROUGE-1, ROUGE-2, ROUGE-L --- báo cáo dạng \textbf{F1}.
+          \item BLEU-4, với $w_1=\dots=w_4=0{,}25$.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bốn chỉ số đo bằng cách nào --- ROUGE và BLEU}
+  {\footnotesize Bài này là QA \emph{có đáp án tham khảu chuẩn}, nên cách đo là:
+  \textbf{lấy câu trả lời của hệ thống, so với đáp án chuẩn, đếm phần trùng lặp}.\\[2pt]
+  Đáp án chuẩn: \texttt{\textbf{Ve} số liệu tăng \textbf{trong} quý II}\qquad
+  Câu trả lời: \texttt{\textbf{Ve} số liệu quý II \textbf{tăng} mạnh}}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{block}{\small ROUGE --- trùng lặp \emph{trong câu trả lời}}
+        \footnotesize
+        \begin{tabular}{@{}ll@{}}
+          \textbf{ROUGE-1} & trùng \textbf{từ đơn} (không quan tâm thứ tự) \\
+          \textbf{ROUGE-2} & trùng \textbf{cặp từ liền nhau} (giữ thứ tự) \\
+          \textbf{ROUGE-L} & trùng \textbf{cụm từ chung} dài nhất (LCS)
+        \end{tabular}
+        \vspace{0.2em}
+        {\footnotesize\itshape Với ví dụ trên: R-1 khớp \texttt{Ve}, \texttt{số}, \texttt{liệu},
+        \texttt{II}; R-2 và R-L khớp \texttt{số liệu} $\to$ \texttt{II}.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{block}{\small BLEU-4 --- trùng \emph{cụm 4 từ}, có phạt độ dài}
+        \footnotesize Giống ROUGE-2 nhưng nhìn \textbf{cụm 4 từ}, và \emph{phạt} nếu câu trả
+        lời quá ngắn so với đáp án chuẩn ($w_1 = \dots = w_4 = 0{,}25$).
+        Thường \emph{thấp hơn} ROUGE và nghiêng về độ dài.
+      \end{block}
+      \begin{alertblock}{\small Điểm cần nói thẳng}
+        \footnotesize Cả bốn chỉ số \textbf{chỉ đo trùng lặp từ ngữ}, không hiểu nghĩa.
+        Điểm cao \emph{không kéo theo} câu trả lời đúng --- và ngược lại, câu trả lời đúng
+        nhưng diễn đạt khác vẫn bị trừ điểm. Bài báo báo cáo ROUGE dạng F1.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Tham số thí nghiệm}
+  \begin{center}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}p{2.4cm}p{2.7cm}p{5.0cm}@{}}
+    \toprule
+    \textbf{Ký hiệu} & \textbf{Giá trị} & \textbf{Ý nghĩa} \\
+    \midrule
+    mô hình nhúng & \src{bge-large-zh-v1.5} & đo độ tương đồng và truy xuất vector \\
+    $Y$ & 1024 & ngưỡng gộp hai đoạn thành khối lớn (3.3.1) \\
+    $\theta$ & 0{,}9 & ngưỡng cosine để gộp hai câu thành khối nhỏ (3.3.2) \\
+    $w$ & 4 & số cặp $(S,L)$ được trả về (3.4) \\
+    $n$ & 10 & số ví dụ mẫu trong lời nhắc; giữ cố định trừ thí nghiệm riêng \\
+    độ dài đầu ra & 512 & độ dài tối đa LLM được sinh \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{0.1em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Chi phí lập chỉ mục}
+        \small Mỗi cặp đơn vị liền kề phải gọi LLM một lần $\rightarrow$ \emph{chi phí
+        lập chỉ mục cao hơn hẳn} cách chia theo quy tắc.
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Phạm vi}
+        \small Mô hình nhúng \emph{tiếng Trung}; bài không đề cập đa ngôn ngữ. Miền dữ liệu
+        chỉ có thép. Hai điểm này giới hạn khả năng khái quát hoá.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả 1 --- So với các phương pháp RAG khác}
+  {\small LLaMA-3-Chinese-8B-Instruct làm bộ sinh (bảng 4). Rút gọn các dòng tiêu biểu:}
+  \begin{center}
+  \scriptsize
+  \setlength{\aboverulesep}{0.3ex}\setlength{\belowrulesep}{0.3ex}
+  \begin{tabular}{lrrrr}
+    \toprule
+    \textbf{Phương pháp} & \textbf{R-1} & \textbf{R-2} & \textbf{R-L} & \textbf{BLEU-4} \\
+    \midrule
+    Không truy xuất (chỉ LLM) & 31{,}15 & 11{,}32 & 23{,}46 & 6{,}38 \\
+    REPLUG & 53{,}33 & 35{,}00 & 44{,}85 & 23{,}21 \\
+    Selective Context & 59{,}38 & 44{,}82 & 52{,}33 & 31{,}37 \\
+    IRCoT & 61{,}62 & 47{,}25 & 52{,}91 & 36{,}60 \\
+    FLARE & 61{,}22 & 46{,}20 & 53{,}88 & 35{,}33 \\
+    SKR & 66{,}82 & 52{,}10 & 59{,}53 & 41{,}38 \\
+    RAG tiêu chuẩn (\texttt{small2big}) & 67{,}41 & 52{,}80 & 60{,}09 & 42{,}01 \\
+    ITER-RETGEN \emph{(mạnh nhất nhóm cơ sở)} & 67{,}60 & 53{,}73 & 60{,}59 & 42{,}73 \\
+    \midrule
+    \textbf{Bài báo (ngưỡng)} & \textbf{68{,}93} & \textbf{54{,}99} & \textbf{61{,}75} & \textbf{43{,}97} \\
+    Bài báo (độ lệch chuẩn) & 68{,}89 & 54{,}99 & 61{,}61 & 43{,}98 \\
+    Bài báo (khác biệt khối) & 68{,}88 & 54{,}87 & 61{,}53 & 43{,}80 \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  {\footnotesize\itshape So với ITER-RETGEN: $+1{,}33$ / $+1{,}26$ / $+1{,}16$ / $+1{,}24$ điểm.
+  Cải thiện nhỏ, nhưng đồng bộ trên cả bốn chỉ số và cả hai bộ sinh.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả 2 --- Vì sao phải đổi cách chia khối}
+  {\small Bảng 8: giữ nguyên khung RAG tiêu chuẩn, \emph{chỉ thay đổi cách chia khối}.}
+  \begin{center}
+  \small
+  \begin{tabular}{p{5.6cm}rrrr}
+    \toprule
+    \textbf{Cách chia khối} & \textbf{R-1} & \textbf{R-2} & \textbf{R-L} & \textbf{BLEU-4} \\
+    \midrule
+    Cố định 512 ký tự & 61{,}36 & 45{,}41 & 53{,}49 & 34{,}85 \\
+    Cửa sổ trượt (chồng 256) & 64{,}97 & 50{,}57 & 57{,}93 & 40{,}02 \\
+    Đoạn văn (theo xuống dòng) & 59{,}98 & 46{,}43 & 53{,}24 & 32{,}94 \\
+    Gộp đoạn có giới hạn 512 & 63{,}75 & 48{,}99 & 56{,}27 & 37{,}00 \\
+    \texttt{small2big} & 67{,}41 & 52{,}80 & 60{,}09 & 42{,}01 \\
+    \textbf{Của bài (hai cấp)} & \textbf{68{,}53} & \textbf{54{,}54} & \textbf{61{,}39} & \textbf{43{,}06} \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Đọc bảng này thế nào}
+        \small Chênh lệch giữa cách tệ nhất và tốt nhất lên tới \textbf{8{,}55 điểm ROUGE-1}.
+        Cách chia khối quan trọng ngang với việc dùng mô hình nào.
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Nhưng phần cải thiện nhỏ}
+        \small So với \texttt{small2big}, bài chỉ thắng \textbf{1{,}12 điểm ROUGE-1}.
+        Phần lớn khoảng cách đã có sẵn từ \texttt{small2big}.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả 3 --- Phân rã từng thành phần}
+  {\small Bảng 6: cộng dồn từng cơ chế vào RAG tiêu chuẩn. Số trong ngoặc là mức tăng so với dòng 1.}
+  \begin{center}
+  \footnotesize
+  \begin{tabular}{clrrrr}
+    \toprule
+    \textbf{\#} & \textbf{Cấu hình} & \textbf{R-1} & \textbf{R-2} & \textbf{R-L} & \textbf{BLEU-4} \\
+    \midrule
+    1 & RAG tiêu chuẩn (\texttt{small2big}) & 67{,}41 & 52{,}80 & 60{,}09 & 42{,}01 \\
+    2 & $+$ xây khối lớn mới & 68{,}40 \;(+0{,}99) & 54{,}39 \;(+1{,}59) & 61{,}24 \;(+1{,}15) & 43{,}01 \;(+1{,}00) \\
+    3 & $+$ xây khối nhỏ mới & 67{,}59 \;(+0{,}18) & 53{,}13 \;(+0{,}33) & 60{,}30 \;(+0{,}21) & 42{,}37 \;(+0{,}36) \\
+    4 & $+$ chia hai cấp (2 $+$ 3) & 68{,}53 \;(+1{,}12) & 54{,}54 \;(+1{,}74) & 61{,}39 \;(+1{,}30) & 43{,}06 \;(+1{,}05) \\
+    \midrule
+    5 & $+$ xếp hạng lại hai cấp & 67{,}97 \;(+0{,}56) & 53{,}66 \;(+0{,}86) & 60{,}57 \;(+0{,}48) & 42{,}96 \;(+0{,}95) \\
+    6 & $+$ nhân bản ngữ cảnh & 67{,}89 \;(+0{,}48) & 53{,}74 \;(+0{,}94) & 60{,}67 \;(+0{,}58) & 43{,}15 \;(+1{,}14) \\
+    7 & $+$ mở rộng ngữ cảnh (5 $+$ 6) & 67{,}93 \;(+0{,}52) & 53{,}91 \;(+1{,}11) & 60{,}78 \;(+0{,}69) & 43{,}30 \;(+1{,}29) \\
+    8 & \textbf{Đầy đủ (4 $+$ 7)} & \textbf{68{,}89}\;(+1{,}48) & \textbf{54{,}99}\;(+2{,}19) & \textbf{61{,}61}\;(+1{,}52) & \textbf{43{,}98}\;(+1{,}97) \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{0.25em}
+  {\footnotesize\itshape Cột \textbf{R-L}: dòng 3 chỉ $+0{,}21$ --- đóng góp của
+  \emph{xây khối nhỏ} khi đứng một mình là rất nhỏ. Phần lớn cải thiện đến từ
+  \emph{xây khối lớn} ($+1{,}15$). Đây là điểm cần nói thẳng khi bảo vệ luận văn.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả 4 --- Phép trung bình có thật sự tốt không}
+  {\small Bảng 9: so ba cách xếp hạng. Nhóm trên chỉ dùng \texttt{small2big};
+  nhóm dưới dùng kèm chia hai cấp.}
+  \begin{center}
+  \footnotesize
+  \begin{tabular}{clrrrr}
+    \toprule
+    \textbf{\#} & \textbf{Cách xếp hạng} & \textbf{R-1} & \textbf{R-2} & \textbf{R-L} & \textbf{BLEU-4} \\
+    \midrule
+    \multicolumn{6}{@{}l}{\emph{Nhóm trên --- khung chỉ có \texttt{small2big}}} \\
+    1 & không xếp lại (chỉ $S$) & 67{,}41 & 52{,}80 & 60{,}09 & 42{,}01 \\
+    2 & chỉ dùng $L$ & \textbf{67{,}88} & 53{,}70 & \textbf{60{,}77} & 42{,}74 \\
+    3 & trung bình $S$ và $L$ & 67{,}97 & \textbf{53{,}66} & 60{,}57 & \textbf{42{,}96} \\
+    \midrule
+    \multicolumn{6}{@{}l}{\emph{Nhóm dưới --- đã có chia hai cấp}} \\
+    4 & không xếp lại + nhân bản & 68{,}58 & 54{,}58 & 61{,}09 & 43{,}46 \\
+    5 & chỉ dùng $L$ + nhân bản & 68{,}73 & 54{,}89 & 61{,}44 & 43{,}68 \\
+    6 & \textbf{trung bình $S$ và $L$ + nhân bản} & \textbf{68{,}89} & \textbf{54{,}99} & \textbf{61{,}61} & \textbf{43{,}98} \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{0.25em}
+  \begin{alertblock}{\small Nhận xét phê bình --- nói thẳng}
+    \footnotesize Ở nhóm trên, phép trung bình \emph{không} thắng ở ROUGE-1 và ROUGE-L. Chỉ khi
+    có cơ chế 1 thì trung bình mới thắng trên \emph{cả bốn} chỉ số. Nói khác: \textbf{phép
+    trung bình chỉ hữu ích khi $S$ và $L$ thực sự bổ sung cho nhau} --- phần đóng góp
+    lớn nhất vẫn thuộc về cơ chế chia hai cấp độ.
+  \end{alertblock}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả 5 --- Hai tham số nhạy cảm}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{block}{\small Số ví dụ mẫu $n$ (0 đến 12)}
+        \begin{itemize}\footnotesize
+          \item $n = 0$ (không ví dụ) vẫn đạt kết quả khá $\Rightarrow$ lời nhắc tự nó
+                đã đủ hướng dẫn.
+          \item Xu hướng \textbf{rơi $\rightarrow$ tăng $\rightarrow$ rơi}.
+          \item Ít ví dụ: LLM bám quá ví dụ. Nhiều ví dụ: ví dụ thừa gây nhiễu.
+        \end{itemize}
+        \vspace{0.2em}
+        {\footnotesize\itshape Đây là điểm có lợi cho đề tài: bước đắt nhất vẫn cho kết quả
+        tử tế khi bỏ hẳn.}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Ngưỡng $\tau$ của cách (1) (0 đến 0{,}9)}
+        \begin{itemize}\footnotesize
+          \item $\tau \in [0; 0{,}5]$: bốn chỉ số ổn định, gần tốt nhất.
+          \item $\tau > 0{,}6$: giảm rõ, rõ nhất ở $\tau = 0{,}7$ và $0{,}8$.
+          \item $\tau = 0$ tức \emph{luôn} nhân bản --- vẫn tốt.
+        \end{itemize}
+        \vspace{0.2em}
+        {\footnotesize\itshape Ngưỡng quá chặt $\rightarrow$ nhân quá ít $\rightarrow$ mất tác dụng.
+        Tác giả tự nhận điều này giới hạn khả năng khái quát.}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Nhận xét phê bình về bài báo}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Điểm mạnh}
+        \begin{itemize}\footnotesize
+          \item Cơ chế xếp hạng lại có lý lẽ rõ, giải đúng mâu thuẫn nhỏ--lớn.
+          \item Phân rã thành phần \emph{kỹ}, kết quả trong bảng 6 đọc được ngay.
+          \item Thử trên hai bộ sinh $\rightarrow$ không phải hiệu ứng của một model.
+          \item Báo cáo độ lệch chuẩn $\rightarrow$ chứng minh kết quả ổn định.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Hạn chế}
+        \begin{itemize}\footnotesize
+          \item Một miền duy nhất (thép), 500 cặp, không kiểm tra miền khác.
+          \item Mỗi cặp đơn vị liền kề gọi LLM $\rightarrow$ \textbf{chi phí lập chỉ mục cao}.
+          \item Mô hình nhúng tiếng Trung $\rightarrow$ không nói gì về đa ngôn ngữ.
+          \item Biên độ cải thiện chỉ $\approx 1{,}5$ ROUGE-L.
+          \item Ngưỡng $\tau$ cần chỉnh theo từng tập dữ liệu.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.4em}
+  \begin{center}
+    \begin{alertblock}{\small Cơ hội cho đề tài}
+      \small Hai hạn chế đầu --- \textbf{miền dữ liệu} và \textbf{chi phí lập chỉ mục} ---
+      đều là thứ pipeline hiện tại đang ở vị thế khác.
+    \end{alertblock}
+  \end{center}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Áp dụng vào đồ án --- cặp $S/L$ cho bảng}
+  {\footnotesize Bối cảnh: trả lời câu hỏi tài chính trên \textbf{báo cáo phân tích ETF
+  tiếng Việt}, nội dung chính là \textbf{bảng số liệu không có đường viền} (borderless).}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Khối lớn $L$ --- ngữ cảnh đưa cho LLM đọc}
+        \footnotesize
+        \begin{itemize}\scriptsize
+          \itemsep1pt
+          \item Bảng/card: caption $+$ toàn bộ nhãn cột $+$ các dòng.
+          \item Prose gộp tới $\gamma=1.024$ ký tự; \texttt{Title}/\texttt{Table} là ranh giới cứng.
+          \item Khi trả về: chunk lớn hoặc bảng chứa dòng đúng.
+        \end{itemize}
+      \end{block}
+      \begin{block}{\small Khối nhỏ $S$ --- đơn vị đưa vào chỉ mục để tìm}
+        \footnotesize
+        \begin{itemize}\scriptsize
+          \itemsep1pt
+          \item \texttt{row\_json}: \emph{mỗi dòng bảng một JSON} (file, page, caption, cột $\to$ giá trị).
+          \item Với prose: câu, gộp cặp câu liền kề nếu $\cos \ge \theta = 0.9$.
+          \item \texttt{dual\_small}: xếp hạng $S$, trả $S$; \texttt{dual}: rerank rồi trả $L$.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Vì sao ánh xạ được như thế}
+        \footnotesize
+        \begin{enumerate}\scriptsize
+          \itemsep1pt
+          \item \textbf{Gộp đoạn không gọi LLM.} Dùng quy tắc cấu trúc (bảng có hàng, có cột,
+                có nhãn) thay cho phân loại ``Có/Không'' $\to$ \emph{rẻ hơn nhiều},
+                tất định, tái lập được.
+          \item \textbf{Ranh giới khối nhỏ là một dòng bảng, không phải một câu.} Trong bảng
+                tài chính không thể tách đơn vị bằng dấu câu --- một ô là một số.
+          \item \textbf{Hai cấp độ có sẵn quan hệ cha--con.} Dòng $\to$ bảng; mở rộng
+                ngữ cảnh bằng \texttt{parent} khi cần sinh.
+        \end{enumerate}
+      \end{block}
+      \begin{keyidea}{\footnotesize Trong bảng tài chính, \textbf{đơn vị ngữ nghĩa nhỏ nhất
+        không phải câu, mà là một dòng bảng có nhãn}. Số không tách khỏi cột mà vẫn giữ nghĩa.}
+      \end{keyidea}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả đo trên corpus tiếng Việt}
+  \centering\footnotesize
+  \begin{tabular}{@{}l r rr rr@{}}
+    \toprule
+    \textbf{Chiến lược} & \textbf{\#chunk} &
+    \textbf{R@1 chunk} & \textbf{MRR} &
+    \textbf{R@1 page} & \textbf{MRR} \\
+    \midrule
+    \texttt{row\_json} (chỉ dòng) & 332 & \textbf{81,5\%} & \textbf{0,850} & \textbf{90,0\%} & \textbf{0,950} \\
+    \texttt{dual\_small} (chỉ $S$) & 935 & 66,1\% & 0,723 & 73,9\% & 0,844 \\
+    \texttt{dual} (rerank $S+L$, trả $L$) & 935 & 50,0\% & 0,583 & 56,1\% & 0,751 \\
+    \texttt{dual\_dense} (e5-small) & 935 & 31,5\% & 0,441 & 44,6\% & 0,700 \\
+    \texttt{chipper} (cả bảng) & 136 & 27,7\% & 0,475 & 36,1\% & 0,618 \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.5em}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Điều đúng}
+        \texttt{dual\_small} (66,1\%) vượt Chipper (27,7\%) nhờ khối nhỏ là
+        \emph{một dòng} thay vì cả bảng.
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small Điều ngược kỳ vọng}
+        Rerank bằng khối lớn làm R@1 giảm \textbf{66,1\% $\to$ 50,0\%}; dense
+        e5-small còn 31,5\%. Với câu hỏi ô số, BM25 trên dòng là đủ.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+% =============================================================
+\begin{frame}{Kết luận}
+  \begin{enumerate}\small
+    \item Bài báo cho một câu trả lời gọn: \textbf{tách bạch đơn vị truy xuất và đơn vị sinh}.
+    \item Và hiện thực nó bằng cặp $S$ (tìm) / $L$ (sinh), với $S$ luôn trỏ về $L$.
+    \item Cách xây $L$: gọi LLM hỏi Có/Không để gộp đơn vị thành đoạn văn trọn vẹn,
+          rồi gộp đoạn dưới ngưỡng $Y$.
+    \item Cách xây $S$: tách câu rồi gộp cặp câu liền kề có $\cos \ge \theta$.
+    \item Cách dùng: xếp hạng lại bằng trung bình hai cấp, rồi có thể nhân bản khối lớn đứng đầu.
+    \item Kết quả: đồng bộ cải thiện trên bốn chỉ số và cả hai bộ sinh, biên độ nhỏ
+          ($\approx 1{,}5$ ROUGE-L) nhưng lặp lại được.
+  \end{enumerate}
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Học được}
+        \small \textbf{Tách bạch đơn vị truy xuất và đơn vị sinh nội dung} --- một ý
+        có thể dùng cho mọi miền.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Đóng góp của đồ án}
+        \small \textbf{Định nghĩa lại cặp đơn vị đó cho bảng tài chính không viền},
+        bằng quy tắc cấu trúc thay vì gọi LLM.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Việc cần làm tiếp --- theo thứ tự ưu tiên}
+  \begin{enumerate}
+    \item \textbf{Giữ row-JSON làm index chính} cho câu hỏi ô số; không rerank
+          bằng cả bảng.
+    \item \textbf{Đặt dual ở index riêng} (small2big) cho câu hỏi cần ngữ cảnh,
+          rồi hợp nhất bằng RRF có trọng số thay vì trộn thô.
+    \item \textbf{Đo generation} trên cặp $(S,L)$: chunk nhỏ để tìm, bảng lớn để sinh.
+    \item \textbf{Thử nhân bản ngữ cảnh} theo $\tau$ --- chỉ có ý nghĩa khi lớp
+          sinh đã ổn định.
+  \end{enumerate}
+  \vspace{0.4em}
+  \begin{alertblock}{\small Ranh giới của những gì bài báo \emph{chưa} giải quyết}
+    \small Bài báo \emph{không} xử lý bảng, \emph{không} nói đến đa ngôn ngữ, và
+    \emph{công nhận} ngưỡng $\tau$ cần chỉnh theo từng tập dữ liệu. Ba điểm này là
+    khoảng trống hợp lệ cho phần đóng góp của đồ án.
+  \end{alertblock}
+\end{frame}
+
+% =============================================================
+\begin{frame}[fragile]{Tài liệu tham khảo}
+  \footnotesize
+  \begin{thebibliography}{9}
+    \bibitem{peng2027}
+    Peng, Q., \& Luo, X. (2027).
+    \newblock Dual-granularity chunking and dynamic context augmentation: An optimization method for retrieval-augmented generation.
+    \newblock \emph{Expert Systems with Applications}, 332, 133546.
+    \newblock \url{https://doi.org/10.1016/j.eswa.2026.133546}
+
+    \bibitem{gao2023}
+    Gao, Y., et al. (2023).
+    \newblock Enhancing document understanding with a two-level RAG-like framework for retrieval-augmented generation.
+    \newblock \emph{Expert Systems with Applications}, 261, 114963.
+
+    \bibitem{arazo2020}
+    Arazo, E., Ortego, D., Albert, P., O'Connor, N. E., \& McGuinness, K. (2020).
+    \newblock Pseudo-labelling and confirmation bias in deep semi-supervised learning.
+    \newblock In \emph{ICNN}.
+
+    \bibitem{jin2025}
+    Jin, C., et al. (2025).
+    \newblock FlashRAG: A fast and lightweight framework for retrieval-augmented generation.
+  \end{thebibliography}
+\end{frame}
+
+\end{document}

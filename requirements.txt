@@ -1,9 +1,11 @@
 # Cai dat nhanh:  pip install -r requirements.txt
-pymupdf>=1.24
 numpy>=1.26
 
 # Phase 1 (hybrid retrieval): bo comment 2 dong duoi neu can vector search
 # sentence-transformers>=3.0
+
+# Danh gia ColPali / tao gold page can render PDF
+# pymupdf>=1.24
 
 # Dev
 pytest>=8.0

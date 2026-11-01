@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from etflab.chunking import (
+from etflab_geometric.chunking import (
     ChunkConfig,
     build_chunks,
     header_paths,
@@ -10,9 +10,9 @@ from etflab.chunking import (
     short_caption,
     table_card,
 )
-from etflab.geometry import Line, Word
-from etflab.pipeline import DocumentResult, PageText
-from etflab.tables import Table
+from etflab_geometric.geometry import Line, Word
+from etflab_geometric.pipeline import DocumentResult, PageText
+from etflab_geometric.tables import Table
 
 SRC = "test.pdf"
 

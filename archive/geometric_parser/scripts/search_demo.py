@@ -13,15 +13,22 @@ import argparse
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+ROOT = Path(__file__).resolve().parents[3]
+ARCHIVE = Path(__file__).resolve().parents[1]
+for _p in (ROOT, ARCHIVE):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-from etflab import IngestConfig, build_chunks, process_pdf
-from etflab.retrieval import DocFilter, HybridIndex, RetrievalConfig, infer_doc_filter
+from etflab_geometric import IngestConfig, build_chunks, process_pdf
+from etflab_geometric.retrieval import (
+    DocFilter,
+    HybridIndex,
+    RetrievalConfig,
+    infer_doc_filter,
+)
 
 DEFAULT_QUERIES = [
     "tỷ trọng mới của BSR",

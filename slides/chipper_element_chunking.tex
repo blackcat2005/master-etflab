@@ -1,0 +1,657 @@
+% !TeX program = xelatex
+% Bien dich:  tectonic --reruns 2 slides/chipper_element_chunking.tex
+%
+% Trinh bay paper Chipper (element-type chunking, arXiv:2402.05131) va
+% phuong phap danh gia no tren corpus tieng Viet cua do an.
+%
+% Nguon so lieu (hai phan rieng biet, khong tron):
+%   * Phan "paper"  -> docs/Co_che_Chipper_Financial_Report_Chunking.md
+%                      (doc tu ban goc arXiv, trich bang so lieu day du).
+%   * Phan "danh gia" -> do thuc chay duoc tu scripts/eval/eval_three_methods.py
+%                      va scripts/eval/colpali_retrieval.py tren data/eval/.
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ---- Font: uu tien font Windows, tu lui ve font TeX mac dinh ----
+% -> cung bien dich duoc tren Windows, Overleaf va Docker
+\usepackage{fontspec}
+\IfFontExistsTF{Arial}
+  {\setsansfont{Arial}}
+  {\IfFontExistsTF{TeX Gyre Heros}
+     {\setsansfont{TeX Gyre Heros}}
+     {\setsansfont{Latin Modern Sans}}}
+\IfFontExistsTF{Times New Roman}
+  {\setmainfont{Times New Roman}}
+  {\IfFontExistsTF{TeX Gyre Termes}
+     {\setmainfont{TeX Gyre Termes}}
+     {\setmainfont{Latin Modern Roman}}}
+\IfFontExistsTF{Consolas}
+  {\setmonofont{Consolas}}
+  {\IfFontExistsTF{DejaVu Sans Mono}
+     {\setmonofont{DejaVu Sans Mono}}
+     {\setmonofont{Latin Modern Mono}}}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+
+\usetheme{Madrid}
+\usecolortheme{beaver}
+% ``beaver'' khong ten mau cua xcolor (Beamer chi khai bao noi bo),
+% nen phai tu dinh nghia de dung duoc trong TikZ va \color.
+\definecolor{brand}{HTML}{7B4B2A}
+\setbeamercolor{structure}{fg=brand}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{brand!80!black}$\bullet$}
+
+\newcommand{\src}[1]{{\footnotesize\ttfamily #1}}
+\newcommand{\keyidea}[1]{%
+  \begin{center}\begin{block}{\small Y chinh}\centering #1\end{block}\end{center}}
+
+\title[Paper Chipper \& cách đánh giá]{Paper Chipper: element-type chunking}
+\subtitle[Đọc cơ chế và đo trên corpus tiếng Việt]{arXiv:2402.05131 $\rightarrow$ thiết kế đánh giá riêng}
+\author{}
+\date{}
+
+\begin{document}
+
+% =============================================================
+\begin{frame}
+  \titlepage
+  \vspace{-1.4em}
+  {\footnotesize
+  Jimeno Yepes, A., You, Y., Milczek, J., Laverde, S., \& Li, R. (2024).\quad
+  \emph{Financial Report Chunking for Effective Retrieval Augmented Generation.}\quad
+  arXiv:2402.05131.\quad Mức tin cậy nguồn: \textbf{B} (preprint, chưa tra được venue).\\
+  Phần sau của slide là \emph{đo thật} trên \src{data/raw} của đồ án, chạy bằng
+  \src{scripts/eval/} — không phải số liệu trích từ paper.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Paper này là gì: cẩn thận về tên}
+  \begin{alertblock}{\small Hai thứ hay bị nhầm vào một}
+    \textbf{Chipper} là \emph{tên model nhận diện bố cục} (vision encoder-decoder
+    kiểu Donut) của Unstructured.\quad
+    \textbf{Phương pháp} được paper gọi là \textbf{element-based chunking}.
+  \end{alertblock}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Paper}
+        \begin{description}\small
+          \item[Đơn vị] chunk theo \textbf{loại phần tử cấu trúc}: Title, Table,
+            NarrativeText, ListItem\ldots
+          \item[Điểm nhấn] ``best chunk size \emph{without tuning}'' — đổi đơn vị
+            phân mảnh thay vì tuning độ dài.
+          \item[Trạng thái] preprint $\rightarrow$ mức \textbf{B}.
+        \end{description}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Vì sao đọc nó}
+        \begin{itemize}\small
+          \item Là \textbf{baseline đối chiếu} cho tầng chunking.
+          \item Là mức ``cấu trúc hóa'' giữa \emph{fixed-size} và
+            \emph{structural tất định}.
+          \item Paper Peng (dual-granularity) là mức tiếp theo.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Vấn đề paper đặt ra: fixed-size mất cấu trúc}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{alertblock}{\small Ba hạn chế của RAG truyền thống}
+        \begin{enumerate}\small
+          \item Coi mọi văn bản \textbf{bình đẳng} $\rightarrow$ bỏ thông tin nằm
+            trong \emph{cấu trúc} (tiêu đề, bảng).
+          \item Bảng bị \textbf{cắt ngang} $\rightarrow$ mất liên kết hàng--cột.
+          \item Phải \textbf{tinh chỉnh \texttt{chunk size}} thủ công; kích thước
+            tối ưu đổi theo loại dữ liệu.
+        \end{enumerate}
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{block}{\small Baseline của paper}
+        \begin{itemize}\small
+          \item Fixed-size: $n \in \{128, 256, 512\}$ token.
+          \item \textbf{Aggregation}: chạy nhiều cấu hình song song rồi gộp
+            \emph{kết quả truy xuất}.
+        \end{itemize}
+      \end{block}
+      \begin{block}{\small Cách phản biện}
+        Paper \emph{không} cải tiến fixed-size mà \textbf{đổi đơn vị phân mảnh}
+        $\rightarrow$ khối có kích thước \emph{tự thích ứng}, không cần tuning.
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.2em}
+  \begin{block}{\small Thiết kế thực nghiệm \emph{sạch} (single-variable)}
+    \footnotesize Toàn bộ pipeline RAG giữ nguyên, \textbf{chỉ bước chunking đổi}:
+    PDF $\rightarrow$ \textbf{[1] chunking} $\rightarrow$ [2] indexing (Weaviate, \texttt{multi-qa-mpnet-base-dot-v1})
+    $\rightarrow$ [3] retrieval top-10 $\rightarrow$ [4] generation (GPT-4).
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Trái tim: thuật toán 4 bước}
+  {\small Từ JSON phần tử do Chipper xuất (mỗi phần tử có \texttt{type},
+  \texttt{bbox}, \texttt{text}), khối được sinh theo \textbf{bốn quy tắc}:}
+  \vspace{0.2em}
+  \begin{block}{}
+    \begin{enumerate}\small
+      \item Nếu độ dài \texttt{text} của phần tử $\mathbf{< 2.048}$ ký tự
+        $\rightarrow$ thử \textbf{gộp} với phần tử kế tiếp.
+      \item Lặp lại đến khi đạt độ dài mong muốn
+        $\rightarrow$ \textbf{nhưng không bao giờ cắt vỡ một phần tử}.
+      \item Gặp phần tử \textbf{TITLE} $\rightarrow$ \textbf{bắt đầu chunk mới}.
+      \item Gặp phần tử \textbf{TABLE} $\rightarrow$ bắt đầu chunk mới và
+        \textbf{giữ nguyên toàn bộ bảng}.
+    \end{enumerate}
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small Hai điểm cần nhớ}
+        \begin{itemize}\small
+          \item \texttt{2.048} là \textbf{ngưỡng để \emph{coi là} chunk}, không
+            phải độ dài cố định.
+          \item Title \& Table \textbf{buộc mở chunk mới} $\rightarrow$ ranh giới
+            chunk trùng ranh giới \emph{ngữ nghĩa}.
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small ``Không cần tuning''}
+        \textbf{Không có tham số nào ngoài một ngưỡng độ dài.} Đây chính là luận
+        điểm trong abstract — và cũng là điểm yếu bị phản biện ở slide sau.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Metadata làm giàu khối: ba loại}
+  {\small Sau khi có chunk, paper sinh thêm metadata để hỗ trợ truy xuất:}
+  \vspace{0.2em}
+  \centering\footnotesize
+  \begin{tabular}{@{}cl l@{}}
+    \toprule
+    \textbf{\#} & \textbf{Loại} & \textbf{Cách sinh} \\
+    \midrule
+    1 & Keywords & GPT-4, prompt template $\rightarrow$ tối đa \textbf{6 từ khóa} \\
+    2 & Summary & GPT-4, prompt template $\rightarrow$ đoạn tóm tắt \\
+    3 & Prefix \& Table Desc. & \textbf{2 câu đầu} của khối; với bảng $\rightarrow$ \textbf{caption} \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.5em}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Loại 3 là loại \emph{đáng lấy}}
+        \begin{itemize}\small
+          \item \textbf{Rẻ nhất, tất định nhất} — không cần LLM.
+          \item Cho \textbf{BLEU cao nhất} (0,400) trong ba loại đơn lẻ.
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small Gợi ý trực tiếp cho pipeline hiện tại}
+        \textbf{Caption bảng là tín hiệu truy xuất mạnh.} Row-JSON lặp caption
+        trong \emph{mọi} dòng; \texttt{chipper\_prefix} thêm caption vào chunk.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Dữ liệu đánh giá: FinanceBench}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{\small Corpus}
+        \begin{description}\small
+          \item[Bộ] FinanceBench — open-book QA trên báo cáo \textbf{SEC}
+            10-K/10-Q/8-K \textbf{tiếng Anh}.
+          \item[Dùng được] \textbf{141 câu hỏi / 80 tài liệu}
+            (150/84 $\rightarrow$ mất 4 báo cáo không tải được).
+          \item[Trang] tổng \textbf{11.787} trang; TB \textbf{147,34} trang/tài liệu
+            (min 4, max 549).
+          \item[Token] TB \textbf{102.444} token/tài liệu.
+          \item[Bằng chứng] trang TB \textbf{54,58} (trải 1$\rightarrow$304).
+        \end{description}
+      \end{block}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \begin{block}{\small Chipper phân bố phần tử (tổng 146.921)}
+        \centering\footnotesize
+        \begin{tabular}{@{}lr@{\quad}lr@{}}
+          \toprule
+          \textbf{Loại} & \textbf{SL} & \textbf{Loại} & \textbf{SL} \\
+          \midrule
+          NarrativeText & 61.780 & \textbf{Table} & \textbf{7.700} \\
+          ListItem & 33.054 & Header & 3.959 \\
+          Title & 29.664 & Footer & 1.026 \\
+          Uncategorized & 9.400 & Khác & 334 \\
+          \bottomrule
+        \end{tabular}
+      \end{block}
+      \begin{alertblock}{\small Lưu ý khi so với corpus của đồ án}
+        Bằng chứng nằm ở \textbf{trang TB 54} của tài liệu \textbf{147 trang} —
+        bài toán ở paper là \emph{tìm đúng trang}, còn đồ án là bảng \textbf{3--6
+        trang}. Hai miền hoàn toàn khác nhau.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả paper (1): độ hiệu quả phân mảnh}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{\small Số chunk}
+        \centering\footnotesize
+        \begin{tabular}{@{}lrr@{}}
+          \toprule
+          \textbf{Chiến lược} & \textbf{Tổng} & \textbf{Chunk/tài liệu} \\
+          \midrule
+          Base 128 & 64.058 & 800,73 \\
+          Base 256 & 32.051 & 400,64 \\
+          Base 512 & 16.046 & 200,58 \\
+          \textbf{Chipper} & \textbf{20.843} & \textbf{260,57} \\
+          \bottomrule
+        \end{tabular}
+      \end{block}
+      \begin{block}{\small Đọc}
+        Chipper \textbf{gần Base 512} về số lượng $\rightarrow$ cùng chi phí index,
+        nhưng \textbf{ranh giới có ý nghĩa ngữ nghĩa}.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{\small Hiệu quả chi phí}
+        \texttt{Chipper Aggregation} đạt điểm cao nhất chỉ với
+        \textbf{62.529 chunk} — bằng \textbf{$\approx$ một nửa}
+        Base Aggregation (112.155).
+      \end{alertblock}
+      \begin{block}{\small Nhưng\ldots}
+        \small Paper \emph{không đo} TEDS hay chất lượng khôi phục cấu trúc bảng —
+        nên \textbf{không biết bảng có bị méo không}, chỉ biết giữ ``nguyên''.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả paper (2): truy xuất}
+  \centering\footnotesize
+  \begin{tabular}{@{}lrrrr@{}}
+    \toprule
+    \textbf{Chiến lược} & \textbf{\#chunk} & \textbf{Page Acc} & \textbf{ROUGE} & \textbf{BLEU} \\
+    \midrule
+    Base 128 & 64.058 & 72,34 & 0,383 & 0,181 \\
+    Base 256 & 32.051 & 73,05 & 0,433 & 0,231 \\
+    Base 512 & 16.046 & 68,09 & 0,455 & 0,250 \\
+    Base Aggregation & 112.155 & 83,69 & 0,536 & 0,277 \\
+    Keywords Chipper & 20.843 & 46,10 & 0,444 & 0,315 \\
+    Summary Chipper & 20.843 & 62,41 & 0,473 & 0,350 \\
+    Prefix \& Table Desc.\ Chipper & 20.843 & 67,38 & 0,514 & \textbf{0,400} \\
+    \midrule
+    \textbf{Chipper Aggregation} & 62.529 & \textbf{84,40} & \textbf{0,568} & \textbf{0,452} \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.4em}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Nghịch lý page-level}
+        Fixed-size \textbf{thắng} ở page-level (72--73\%) nhưng \textbf{thua} ở
+        paragraph-level $\rightarrow$ ``trúng trang nhưng \emph{lệch đoạn}''. Chipper
+        \textbf{nhất quán} giữa hai mức.
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small Aggregation}
+        Đỉnh cả ba chỉ số, \textbf{nhưng} paper tự thừa nhận nó \textbf{hại Q\&A}
+        do prompt vượt giới hạn token của GPT-4 $\rightarrow$ \textbf{không bê về}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả paper (3): Q\&A accuracy}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \centering\footnotesize
+      \begin{tabular}{@{}lrrr@{}}
+        \toprule
+        \textbf{Chiến lược} & \textbf{No answer} & \textbf{GPT-4} & \textbf{Manual} \\
+        \midrule
+        Base 128 & 35,46 & 29,08 & 35,46 \\
+        Base 256 & 25,53 & 32,62 & 36,88 \\
+        Base 512 & 24,82 & 41,84 & 48,23 \\
+        \textbf{Keywords Chipper} & 22,70 & 43,97 & \textbf{53,19} \\
+        Summary Chipper & \textbf{17,73} & 43,97 & 51,77 \\
+        Prefix \& Table Desc. & 20,57 & 41,13 & \textbf{53,19} \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.3em}
+      \begin{block}{\small Tuyên bố của paper}
+        \textbf{53,19\%} = SOTA trên FinanceBench tại thời điểm công bố
+        (so với $\approx$50\% của baseline).
+      \end{block}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{alertblock}{\small Đọc ``No answer''}
+        Thấp nhất (17,73\%) thuộc Summary Chipper $\rightarrow$ chunk theo phần tử
+        \textbf{giữ ngữ cảnh đủ} để trả lời.
+      \end{alertblock}
+      \begin{alertblock}{\small Chênh lệch GPT-4 vs người chấm}
+        \textbf{Có hệ thống}, đặc biệt với câu kèm \emph{tính toán}: đáp án đúng
+        \texttt{39,7\%} nhưng model trả \texttt{39,73\%} kèm lời giải
+        $\rightarrow$ GPT-4 judge chấm \textbf{sai}.\\
+        $\Rightarrow$ Phải chấm tay; ROUGE/BLEU \textbf{chỉ để đối chiếu}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Phản biện: điểm yếu của paper}
+  \centering\footnotesize
+  \begin{tabular}{@{}p{0.30\textwidth} p{0.62\textwidth}@{}}
+    \toprule
+    \textbf{Điểm yếu} & \textbf{Chi tiết} \\
+    \midrule
+    Phụ thuộc model nhận diện & Toàn bộ chất lượng chunk nằm ở \textbf{Chipper}. Chưa có checkpoint $\rightarrow$ không chạy được. \\
+    Miền Anh / có text layer & Corpus là SEC \textbf{tiếng Anh}; \emph{không} kiểm chứng trên bảng \textbf{không viền tiếng Việt}. \\
+    Ngưỡng 2.048 còn cứng & Paper gọi là ``desired length'' nhưng \textbf{không phân tích độ nhạy}. \\
+    Không đo cấu trúc bảng & Giữ nguyên cả bảng nhưng \textbf{không đo TEDS}. \\
+    Không có venue & Bản arXiv, chưa rõ phản biện kín $\rightarrow$ mức \textbf{B}. \\
+    Q\&A $\approx$ 53\% & Vẫn nửa sai; câu \emph{suy luận tính toán} là điểm yếu. \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.3em}
+  \begin{alertblock}{\small Điều trở thành ``cửa'' cho đồ án}
+    Ba điểm \emph{trung tâm} nhất — phụ thuộc model, chỉ kiểm chứng trên Anh/PDF
+    có text layer, và không đo cấu trúc bảng — đều \textbf{chưa chạm tới} bảng
+    không viền tiếng Việt.
+  \end{alertblock}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Định vị: ba chiến lược chunking cạnh tranh}
+  \centering\footnotesize
+  \begin{tabular}{@{}l p{0.25\textwidth} p{0.25\textwidth} p{0.25\textwidth}@{}}
+    & \textbf{Chipper} & \textbf{Peng et al.} & \textbf{Row-JSON} \\
+    \midrule
+    \textbf{Đơn vị} & Phần tử bố cục & Đoạn văn (LLM gộp) & Một dòng bảng \\
+    \textbf{Nguồn cấu trúc} & \emph{học} từ ảnh trang & \emph{suy} ra bằng LLM & \emph{khôi phục} từ HTML bảng \\
+    \textbf{Cần model?} & \textbf{Có} (Chipper) & \textbf{Có} (LLM) & \textbf{Không} — tất định sau parse \\
+    \textbf{Cần tuning?} & ngưỡng 2.048 & $\gamma{=}1024$, $\theta{=}0.9$ & không \\
+    \textbf{Bảng} & giữ \emph{cả} bảng & cắt theo câu & header lặp trong \emph{từng} dòng \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.4em}
+  \keyidea{Row-JSON là biến thể \textbf{tất định, kiểm thử được} của cùng
+  nguyên lý \emph{structure-aware chunking} — áp cho \textbf{bảng không viền tiếng
+  Việt}, thứ cả Chipper lẫn Peng đều \textbf{chưa chạm tới}.}
+  \vspace{0.2em}
+  {\footnotesize Nguồn: \src{docs/Co\_che\_Chipper\ldots.md} mục 9.1--9.2.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Đi sang phần đánh giá: tách biến}
+  \begin{block}{\small Không có model Chipper $\rightarrow$ phải tách biến}
+    \footnotesize Mục tiêu chỉ là \emph{thuật toán chunking}, không phải model nhận
+    diện. Cách làm (đúng như paper tự làm):
+    \begin{enumerate}\small
+      \item \textbf{Bỏ} model Chipper; thay phần tử bằng output \texttt{unstructured}:
+        caption $\rightarrow$ Title, bảng HTML $\rightarrow$ Table, đoạn $\rightarrow$ NarrativeText.
+      \item \textbf{Áp} đúng 4 quy tắc của paper $\rightarrow$ chiến lược \textbf{element}.
+      \item \textbf{Giữ cố định} corpus, BM25, bộ câu hỏi $\rightarrow$ chênh lệch
+        quy được về \emph{đơn vị phân mảnh}.
+    \end{enumerate}
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Được phép tuyên bố}
+        ``\emph{Thuật toán chunking 4 quy tắc} của paper có tốt trên bảng tiếng
+        Việt không\,?''
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small \emph{Không} được tuyên bố}
+        ``Chipper (toàn pipeline) tốt/hỏng trên corpus này'' — vì mô hình nhận diện
+        bố cục \textbf{chưa hề chạy}.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bốn chiến lược trên cùng một parser}
+  \centering\footnotesize
+  \begin{tabular}{@{}cl p{0.43\textwidth} r@{}}
+    \toprule
+    & \textbf{Chiến lược} & \textbf{Nguyên tắc} & \textbf{\#chunk} \\
+    \midrule
+    C & \texttt{chipper} & \textbf{4 quy tắc Chipper} trên element \texttt{unstructured} & 136 \\
+    D & \texttt{chipper\_prefix} & C + caption / 2 câu đầu làm tiền tố & 136 \\
+    E & \texttt{dual\_small} & hai tầng: câu/dòng + đoạn lớn; trả chunk nhỏ & 935 \\
+    F & \texttt{row\_json} & mỗi dòng bảng = một JSON tự chứa & 332 \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.5em}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Thang ``cấu trúc hóa''}
+        \begin{itemize}\small
+          \item C/D: cấu trúc \emph{nhận diện} (phần tử, cả bảng).
+          \item E: cấu trúc \emph{hai tầng} (câu/dòng $\rightarrow$ đoạn).
+          \item F: cấu trúc \emph{ô} (mỗi dòng = một object).
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small Một quan sát cần chú ý}
+        \texttt{chipper} chỉ sinh \textbf{136 chunk} cho 7 tài liệu vì ngưỡng
+        2.048 ký tự ``nuốt'' gần trọn mỗi báo cáo 3--6 trang; row-JSON tách
+        thành \textbf{332} đơn vị nhỏ hơn.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Bộ câu hỏi vàng: sinh tự động, không viết tay}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small \src{gen\_gold\_qa.py}}
+        \begin{enumerate}\small
+          \item Với từng bảng $\rightarrow$ tự nhận \textbf{cột entity} (mã CK) và
+            loại \textbf{cột STT}.
+          \item Với từng ô số ở cột trả lời $\rightarrow$ sinh 1 fact
+            $(\text{entity},\ \text{cột},\ \text{giá trị})$.
+          \item Sinh câu hỏi tiếng Việt theo template, kèm \textbf{kỳ + chỉ số}
+            lấy từ tên file (Q2 2026, VN30\ldots).
+        \end{enumerate}
+        \vspace{0.2em}
+        \centering \textbf{130 câu} / 7 tài liệu / 10 bảng\\
+        {\footnotesize \src{data/eval/gold\_qa.jsonl}}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small Quan trọng: gold \emph{không} gắn vào chunk}
+        Gold được định nghĩa ở mức \textbf{sự kiện} (file, bảng, dòng, cột) —
+        \emph{không} gắn \texttt{chunk\_id}.
+      \end{alertblock}
+      \begin{block}{\small Vì sao}
+        Mỗi chiến lược sinh \texttt{chunk\_id} \emph{khác nhau}. Nếu gold gắn
+        \texttt{chunk\_id} thì \textbf{chỉ đánh giá được đúng chiến lược đã sinh ra
+        gold} — không so sánh được.
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.05em}
+  \begin{block}{\small Ví dụ câu sinh được}
+    \small \emph{``Tỷ trọng mới của BSR kỳ Q2 2026 chỉ số VN30''}
+    $\rightarrow$ gold: \texttt{value\_raw = 0,87\%}, \texttt{value\_norm = 0.87},
+    trang 2.
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Thế nào là ``trả lời đúng'' với từng chiến lược}
+  \small
+  \begin{block}{\small Quy tắc liên quan \emph{dựa trên nội dung} — không dùng \texttt{chunk\_id}}
+    Một chunk là \textbf{liên quan} với fact $(e, v)$ khi nó chứa \emph{cả hai}:
+    \begin{center}
+      entity $e \in \text{text(chunk)}$ \quad\textbf{và}\quad
+      giá trị $v \in \text{numbers}\bigl(\text{text(chunk)}\bigr)$
+    \end{center}
+    \footnotesize Số đọc theo quy tắc tiếng Việt (\src{parse\_number}): chấm = nghìn, phay = thập phân.
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small Ngụ ý của quy tắc này}
+        Nếu fixed-size \textbf{cắt đứt} ranh giới giữa \texttt{BSR} và
+        \texttt{0,87\%} $\rightarrow$ \textbf{không chunk nào đúng} $\rightarrow$
+        recall giảm. Đúng cái \emph{mình muốn đo}.
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{block}{\small Metric}
+        \begin{itemize}\small
+          \item \textbf{Recall@k}: trong top-$k$ có chunk đúng không.
+          \item \textbf{MRR}: nghịch đảo vị trí của chunk đúng \emph{đầu tiên}.
+          \item BM25 thuần, \textbf{cùng tokenization} cho cả 4 chiến lược.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Kết quả đo thật trên corpus tiếng Việt}
+  \centering
+  \footnotesize
+  \begin{tabular}{@{}l rrrrrr@{}}
+    \toprule
+    \textbf{Chiến lược} & \textbf{\#chunk} & \textbf{R@1} & \textbf{R@3} & \textbf{R@5} & \textbf{R@10} & \textbf{MRR} \\
+    \midrule
+    \texttt{chipper} (C)        & 136 & 27,7\% & 63,8\% & 76,9\% & 89,2\% & 0,475 \\
+    \texttt{chipper\_prefix} (D) & 136 & 36,9\% & 67,7\% & 77,7\% & 89,2\% & 0,535 \\
+    \texttt{dual\_small} (E)    & 935 & 66,1\% & 75,4\% & 78,5\% & 86,2\% & 0,723 \\
+    \texttt{row\_json} (F)      & 332 & \textbf{81,5\%} & \textbf{90,0\%} & \textbf{90,0\%} & \textbf{90,0\%} & \textbf{0,850} \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.4em}
+  {\footnotesize 130 câu vàng $\cdot$ 7 tài liệu $\cdot$ BM25 thuần $\cdot$
+  \src{python scripts/eval/eval\_three\_methods.py}}
+  \vspace{0.5em}
+
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      \begin{block}{\small 1. Paper đúng}
+        Chunk theo cấu trúc \textbf{vượt fixed-size} (paper); trên corpus này,
+        \texttt{chipper} đạt R@5 76,9\% nhờ giữ nguyên bảng.
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{\small 2. Granularity thô}
+        Giữ \emph{cả bảng} vào 1 chunk $\rightarrow$ R@5 cao nhưng R@1 chỉ 27,7\%:
+        nhiều giá trị nằm chung, \emph{khó biết ô nào đúng}.
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{\small 3. Row-JSON thắng ở precision}
+        1 chunk = 1 dòng bảng = 1 sự kiện $\rightarrow$ BM25 đưa đúng ô lên
+        \textbf{\#1}: R@1 \textbf{81,5\%}, MRR 0,850.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Đọc kết quả và những gì \emph{không} nên tuyên bố}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{\small Kết luận có thể giữ}
+        \begin{enumerate}\small
+          \item Nguyên lý cốt lõi của paper — \textbf{chunk theo cấu trúc} —
+            \textbf{đúng} trên bảng không viền tiếng Việt.
+          \item Ngược lại, \textbf{granularity quá thô} (cả bảng 1 chunk) làm giảm
+            độ chính xác \emph{top-1} cho câu hỏi trích ô.
+          \item Row-JSON sửa đúng điểm đó: \textbf{mỗi dòng = một chunk}.
+        \end{enumerate}
+      \end{block}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \begin{alertblock}{\small Ba hạn chế phải ghi rõ}
+        \begin{enumerate}\small
+          \item C dùng \textbf{phần tử \texttt{unstructured}}, không chạy model Chipper.
+          \item Gold \textbf{sinh tự động} từ ô bảng của parser cũ $\rightarrow$
+            có lợi cho cấu trúc; cần $\approx$20 câu viết tay.
+          \item Chỉ đo \textbf{truy xuất} (BM25), \textbf{không đo} sinh câu trả
+            lời; coverage parser 96,9\%.
+        \end{enumerate}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \vspace{0.1em}
+  {\footnotesize \textbf{Lưu ý:} không dùng ROUGE/BLEU làm chỉ số chính — paper
+  cho thấy GPT-4 judge lệch hẳn so với người chấm.}
+\end{frame}
+
+% =============================================================
+\begin{frame}{Các bước tiếp theo đề xuất}
+  \begin{enumerate}\small
+    \item \textbf{Viết $\approx$20 câu vàng thủ công} để giảm bias của gold tự sinh —
+      đây là việc cần người, không tự động được.
+    \item \textbf{Thêm dense (vector search)} để xem thứ hạng có đổi không — hiện
+      \texttt{HybridIndex} đã có, chỉ chưa đưa vào eval.
+    \item \textbf{Đo consistency hai tầng} (page-level và paragraph-level cùng lúc)
+      — bài học trực tiếp từ paper; hiện đã có cả hai bảng.
+    \item \textbf{Đưa caption bảng vào} \src{sparse\_text} để BM25 khớp — khoản
+      ``nên làm'' từ việc học từ Chipper.
+    \item \textbf{Chấm câu sinh trả lời} (cần lớp PoT/tool-calling) — cả ba chiến
+      lược vẫn $\approx$53\% ở paper.
+  \end{enumerate}
+  \vspace{0.4em}
+  \begin{block}{\small Cách chạy lại (không cần GPU, không tốn API)}
+    \small
+    \texttt{python scripts/ingest/parse\_unstructured.py}\\
+    \texttt{python scripts/eval/eval\_three\_methods.py --no-dense}
+  \end{block}
+\end{frame}
+
+% =============================================================
+\begin{frame}[fragile]{Tài liệu tham khảo}
+  \footnotesize
+  \begin{thebibliography}{9}
+    \bibitem{chipper2024}
+    Jimeno Yepes, A., You, Y., Milczek, J., Laverde, S., \& Li, R. (2024).
+    \newblock Financial report chunking for effective retrieval augmented generation.
+    \newblock \emph{arXiv preprint} arXiv:2402.05131.
+    \newblock \url{https://arxiv.org/abs/2402.05131}
+
+    \bibitem{financebench2023}
+    Islam, P., et al. (2023).
+    \newblock FinanceBench: A new benchmark for financial question answering.
+    \newblock \emph{arXiv preprint} arXiv:2311.11944.
+
+    \bibitem{donut2021}
+    Kim, G., et al. (2021).
+    \newblock Donut: Document understanding transformer without OCR.
+    \newblock \emph{arXiv preprint} arXiv:2111.15664.
+
+    \bibitem{peng2027}
+    Peng, Q., \& Luo, X. (2027).
+    \newblock Dual-granularity chunking and dynamic context augmentation.
+    \newblock \emph{Expert Systems with Applications}, 332, 133546.
+  \end{thebibliography}
+  \vspace{0.3em}
+  {\footnotesize Nguồn số liệu paper: \src{docs/Co\_che\_Chipper\_Financial\_Report\_Chunking.md}
+  $\cdot$ Nguồn số liệu đo: \src{data/eval/} + \src{scripts/eval/}}
+\end{frame}
+
+\end{document}

@@ -1,13 +1,19 @@
-# Các kỹ thuật đã sử dụng trong `etflab`
+# Hướng dẫn kỹ thuật — code `etflab` đang chạy thế nào
+
+> **Cập nhật 2026-10:** parser bảng bằng hình học (`geometry.py`, `tables.py`,
+> `pipeline.py`, `chunking.py`) đã được **lưu trữ** tại
+> `archive/geometric_parser/` và không còn là pipeline chính. Pipeline hiện tại
+> dùng `unstructured` (`hi_res` + Table Transformer): xem `etflab/uelements.py`,
+> `etflab/chunking_methods.py` và `scripts/ingest/parse_unstructured.py`.
+> Các mục dưới đây mô tả parser cũ để tra cứu lịch sử; đọc kèm
+> `archive/geometric_parser/README.md`.
 
 Tài liệu này ghi lại **kỹ thuật đã cài đặt thật trong code**, kèm vị trí cụ thể để tra cứu được,
-và ghi rõ hạn chế đã biết của từng kỹ thuật. Danh mục bài báo đi kèm nằm ở
-[`Ky_thuat_va_Tham_khao.md`](./Ky_thuat_va_Tham_khao.md).
+và ghi rõ hạn chế đã biết của từng kỹ thuật. Trả lời câu hỏi **"code này làm gì, ở dòng nào"**.
 
-> Khi cần viết phần "phương pháp" trong luận văn, dùng
-> [`Ky_thuat_va_Tham_khao.md`](./Ky_thuat_va_Tham_khao.md) — file đó đối chiếu **từng kỹ
-> thuật** với nguồn học thuật, phân mức độ tin cậy (A/B/C) và chỉ rõ phần nào là **đóng góp
-> riêng** của dự án.
+> **Phân biệt với [`Tham_khao_va_nguon.md`](./Tham_khao_va_nguon.md):** file đó trả lời
+> **"việc này dựa trên bài báo nào, mức tin cậy ra sao"** — dùng khi viết phần "phương pháp"
+> trong luận văn.
 
 > Phạm vi: bảng tài chính trong PDF tiếng Việt, **không có đường viền** (borderless).
 > Corpus mục tiêu: báo cáo phân tích ETF, bản tin ETF, tài liệu quy chế.

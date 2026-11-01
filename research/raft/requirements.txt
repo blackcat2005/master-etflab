@@ -1,0 +1,6 @@
+# RAFT — base requirements (offline demo + test + sinh data SFT, đã verify trên Python 3.13 / win32)
+# Cài: pip install -r research/raft/requirements.txt
+torch==2.14.0                # backend của sentence-transformers
+sentence-transformers==6.1.0 # scoring relevance + trích quote — dùng ở inference.py
+numpy==2.5.3                 # scoring, argmax — dùng ở inference.py
+pytest==9.1.1                # chạy test_raft.py

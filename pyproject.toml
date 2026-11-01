@@ -9,7 +9,6 @@ description = "PDF -> JSON -> chunks -> hybrid retrieval cho bao cao tai chinh E
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "pymupdf>=1.24",
     "numpy>=1.26",
 ]
 
@@ -18,13 +17,14 @@ dependencies = [
 retrieval = [
     "sentence-transformers>=3.0",
 ]
+# Script danh gia ColPali can render PDF; parser hinh hoc da luu tru.
+eval = [
+    "pymupdf>=1.24",
+]
 dev = [
     "pytest>=8.0",
     "ruff>=0.6",
 ]
-
-[project.scripts]
-etflab = "etflab.cli:main"
 
 [tool.setuptools]
 packages = ["etflab"]

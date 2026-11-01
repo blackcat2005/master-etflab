@@ -12,7 +12,18 @@ venv/
 # Output sinh ra tu PDF — khong commit
 data/processed/
 data/chunks/
+data/eval/
 *.index/
+
+# Build artifact cua slide Beamer (tectonic/XeLaTeX)
+*.aux
+*.log
+*.nav
+*.snm
+*.toc
+*.out
+*.xdv
+*.synctex.gz
 
 # PDF va JSON la tai lieu/du lieu nguon, khong dua vao repo
 data/raw/**/*.pdf

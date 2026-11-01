@@ -1,0 +1,308 @@
+{
+ "source_file": "Thay_doi_thanh_phan_chi_so_VN30_Q2_2026.pdf",
+ "parser": "unstructured hi_res + infer_table_structure",
+ "n_pages": 3,
+ "n_tables": 2,
+ "seconds": 64.7,
+ "elements": [
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "| SSI|"
+  },
+  {
+   "kind": "header",
+   "page": 1,
+   "text": "SSI"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Ngày 8/5/2026"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Bản tin ETF"
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Thay đổi thành phần chỉ số VN30 trong kỳ Q2/2026"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Ngày 7/5/2026, Sở Giao dịch Chứng khoán Thành phố Hồ Chí Minh (HOSE) công bố trường hợp loại bỏ và thay thế cổ phiếu của Bộ chỉ số HOSE-Index (tại đây). Theo đó, DGC sẽ chính thức bị loại khỏi chỉ số VN30 và được thay thế bởi cổ phiếu có thứ tự xếp hạng cao nhất trong danh sách cổ phiếu dự phòng – BSR – ngày có hiệu lực là 13/5/2026."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Trước đó, ngày 6/5/2026, HOSE đã có Quyết định về việc chuyển cổ phiếu DGC từ diện cảnh báo sang diện kiểm soát (tại"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "đây). Theo quy tắc bộ chỉ số HOSE Index, cổ phiếu rơi vào diện bị kiểm soát sẽ bị loại khỏi danh mục cổ phiếu thành phần của chỉ số vào ngày hiệu lực."
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Với thông báo này, tất cả các quỹ ETF mô phỏng VN30 dự kiến sẽ hoàn tất việc tái cơ cấu danh mục vào ngày 12/5/2026. Do thay đổi thành phần giữa kỳ, tỷ trọng của các cổ phiếu thành phần còn lại cũng sẽ được điều chỉnh. Chúng tôi đã tổng hợp ước tính tái cơ cấu như dưới đây."
+  },
+  {
+   "kind": "title",
+   "page": 1,
+   "text": "Dự báo tái cơ cấu ETF"
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "Cổ phiếu mua nhiều nhất: BSR (~3,3 triệu cổ phiếu), HPG (~1,3 triệu cổ phiếu), ACB (~0,6 triệu cổ phiếu)."
+  },
+  {
+   "kind": "list",
+   "page": 1,
+   "text": "Cổ phiếu bán nhiều nhất: DGC (~1,8 triệu cổ phiếu), VIC (~1,2 triệu cổ phiếu), VHM (~0,3 triệu cổ phiếu)."
+  },
+  {
+   "kind": "caption",
+   "page": 1,
+   "text": "Bảng: Ước tính thay đổi về số lượng cổ phiếu mua bán của các quỹ mô phỏng chỉ số VN30 – dữ liệu tại ngày 6/5/2026"
+  },
+  {
+   "kind": "table",
+   "page": 1,
+   "table_id": "Thay_doi_thanh_phan_chi_so_VN30_Q2_2026#ut1",
+   "html": "<table><thead><tr><th>Mã CK</th><th>Tỷ trọng mới</th><th>Tỷ trọng hiện tại</th><th>% Thay đổi</th><th>Thay đổi số lượng CP</th><th>KLGD trung bình 20 phiên</th><th>Số ngày giao dịch</th></tr></thead><tbody><tr><td>BSR</td><td>0,87%</td><td>0,00%</td><td>0,87%</td><td>3.274.147</td><td>12.930.183</td><td>0,25</td></tr><tr><td>HPG</td><td>9,43%</td><td>9,08%</td><td>0,35%</td><td>1.289.707</td><td>35.428.055</td><td>0,04</td></tr><tr><td>ACB</td><td>3,55%</td><td>3,41%</td><td>0,14%</td><td>626.936</td><td>11.652.776</td><td>0,05</td></tr><tr><td>VPB</td><td>4,31%</td><td>4,13%</td><td>0,17%</td><td>626.577</td><td>14.770.810</td><td>0,04</td></tr><tr><td>MBB</td><td>3,70%</td><td>3,55%</td><td>0,15%</td><td>578.308</td><td>14.868.669</td><td>0,04</td></tr><tr><td>HDB</td><td>3,75%</td><td>3,60%</td><td>0,15%</td><td>574.966</td><td>11.828.639</td><td>0,05</td></tr><tr><td>SHB</td><td>1,96%</td><td>1,88%</td><td>0,08%</td><td>565.716</td><td>72.241.541</td><td>0,01</td></tr><tr><td>TCB</td><td>4,66%</td><td>4,47%</td><td>0,19%</td><td>559.632</td><td>14.649.649</td><td>0,04</td></tr><tr><td>FPT</td><td>8,50%</td><td>8,27%</td><td>0,32%</td><td>442.371</td><td>8.769.009</td><td>0,05</td></tr><tr><td>LPB</td><td>4,94%</td><td>4,74%</td><td>0,20%</td><td>407.496</td><td>1.493.728</td><td>0/27</td></tr><tr><td>MWG</td><td>7,66%</td><td>7,38%</td><td>0,29%</td><td>336.462</td><td>6.380.936</td><td>0,05</td></tr><tr><td>VIB</td><td>1,26%</td><td>1/21%</td><td>0,05%</td><td>317.708</td><td>6.675.765</td><td>0,05</td></tr><tr><td>VRE</td><td>2,69%</td><td>2,59%</td><td>0,10%</td><td>277.685</td><td>9.365.312</td><td>0,03</td></tr><tr><td>MSN</td><td>5,50%</td><td>5,30%</td><td>0,21%</td><td>265.044</td><td>5.863.138</td><td>0,05</td></tr><tr><td>STB</td><td>4,35%</td><td>4,17%</td><td>0,18%</td><td>257.163</td><td>6.506.124</td><td>0,04</td></tr><tr><td>VNM</td><td>4,16%</td><td>4,01%</td><td>0,16%</td><td>255.400</td><td>3.658.425</td><td>0,07</td></tr><tr><td>SSI</td><td>1,75%</td><td>1,68%</td><td>0,07%</td><td>250.388</td><td>22.023.592</td><td>0,01</td></tr><tr><td>TPB</td><td>0,87%</td><td>0,84%</td><td>0,04%</td><td>219.079</td><td>7.404.382</td><td>0,03</td></tr><tr><td>SSB</td><td>0,84%</td><td>0,81%</td><td>0,03%</td><td>204.257</td><td>1.963.074</td><td>0,10</td></tr></tbody></table>",
+   "text": "Mã CK Tỷ trọng mới Tỷ trọng hiện tại % Thay đổi Thay đổi số lượng CP KLGD trung bình 20 phiên Số ngày giao dịch BSR 0,87% 0,00% 0,87% 3.274.147 12.930.183 0,25 HPG 9,43% 9,08% 0,35% 1.289.707 35.428.055 0,04 ACB 3,55% 3,41% 0,14% 626.936 11.652.776 0,05 VPB 4,31% 4,13% 0,17% 626.577 14.770.810 0,04 MBB 3,70% 3,55% 0,15% 578.308 14.868.669 0,04 HDB 3,75% 3,60% 0,15% 574.966 11.828.639 0,05 SHB 1,96% 1,88% 0,08% 565.716 72.241.541 0,01 TCB 4,66% 4,47% 0,19% 559.632 14.649.649 0,04 FPT 8,59% 8,27% 0,32% 442.371 8.769.009 0,05 LPB 4,94% 4,74% 0,20% 407.496 1.493.728 0,27 MWG 7,66% 7,38% 0,29% 336.462 6.380.936 0,05 VIB 1,26% 1,21% 0,05% 317.708 6.675.765 0,05 VRE 2,69% 2,59% 0,10% 277.685 9.365.312 0,03 MSN 5,50% 5,30% 0,21% 265.044 5.863.138 0,05 STB 4,35% 4,17% 0,18% 257.163 6.506.124 0,04 VNM 4,16% 4,01% 0,16% 255.400 3.658.425 0,07 SSI 1,75% 1,68% 0,07% 250.388 22.023.592 0,01 TPB 0,87% 0,84% 0,04% 219.079 7.404.382 0,03 SSB 0,84% 0,81% 0,03% 204.257 1.963.074 0,10 CTG 1,46% 1,40% 0,06% 167.288 7.286.596 0,02"
+  },
+  {
+   "kind": "caption",
+   "page": 1,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "header",
+   "page": 1,
+   "text": "ETF"
+  },
+  {
+   "kind": "narrative",
+   "page": 1,
+   "text": "Trang 1"
+  },
+  {
+   "kind": "header",
+   "page": 2,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Bảng: Ước tính thay đổi về số lượng cổ phiếu mua bán của các quỹ mô phỏng chỉ số VN30 (tiếp theo)"
+  },
+  {
+   "kind": "table",
+   "page": 2,
+   "table_id": "Thay_doi_thanh_phan_chi_so_VN30_Q2_2026#ut2",
+   "html": "<table><thead><tr><th>Mã CK</th><th>Tỷ trọng mới</th><th>Tỷ trọng hiện tại</th><th>% Thay đổi</th><th>Thay đổi số lượng CP</th><th>KLGD trung bình 20 phiên</th><th>Số ngày giao dịch</th></tr></thead><tbody><tr><td>VCB</td><td>1,96%</td><td>1,88%</td><td>0,08%</td><td>131.977</td><td>8.235.552</td><td>0,02</td></tr><tr><td>VJC</td><td>3,91%</td><td>3,76%</td><td>0,15%</td><td>81.334</td><td>1.381.391</td><td>0,06</td></tr><tr><td>BID</td><td>0,63%</td><td>0,60%</td><td>0,03%</td><td>62.721</td><td>7.302.441</td><td>0,01</td></tr><tr><td>GVR</td><td>0,46%</td><td>0,45%</td><td>0,02%</td><td>48.881</td><td>3.608.014</td><td>0,01</td></tr><tr><td>SAB</td><td>0,55%</td><td>0,53%</td><td>0,02%</td><td>43.102</td><td>821.040</td><td>0,05</td></tr><tr><td>PLX</td><td>0,40%</td><td>0,39%</td><td>0,01%</td><td>38.818</td><td>3.472.759</td><td>0,01</td></tr><tr><td>GAS</td><td>0,77%</td><td>0,74%</td><td>0,03%</td><td>36.859</td><td>1.447.654</td><td>0,03</td></tr><tr><td>VPL</td><td>0,58%</td><td>0,64%</td><td>-0,06%</td><td>(69.559)</td><td>957.519</td><td>0,07</td></tr><tr><td>VHM</td><td>4,42%</td><td>4,90%</td><td>-0,48%</td><td>(318.637)</td><td>6.156.451</td><td>0,05</td></tr><tr><td>VIC</td><td>10,00%</td><td>12,60%</td><td>-2,60%</td><td>(1.196.224)</td><td>4.430.214</td><td>0,27</td></tr><tr><td>DGC</td><td>0,00%</td><td>0,99%</td><td>-0,99%</td><td>(1.792.841)</td><td>2.901.135</td><td>0,62</td></tr></tbody></table>",
+   "text": "Mã CK Tỷ trọng mới Tỷ trọng hiện tại % Thay đổi Thay đổi số lượng CP KLGD trung bình 20 phiên Số ngày giao dịch VCB 1,96% 1,88% 0,08% 131.977 8.235.552 0,02 VJC 3,91% 3,76% 0,15% 81.334 1.381.391 0,06 BID 0,63% 0,60% 0,03% 62.721 7.302.441 0,01 GVR 0,46% 0,45% 0,02% 48.881 3.608.014 0,01 SAB 0,55% 0,53% 0,02% 43.102 821.040 0,05 PLX 0,40% 0,39% 0,01% 38.818 3.472.759 0,01 GAS 0,77% 0,74% 0,03% 36.859 1.447.654 0,03 VPL 0,58% 0,64% -0,06% (69.559) 957.519 0,07 VHM 4,42% 4,90% -0,48% (318.637) 6.156.451 0,05 VIC 10,00% 12,60% -2,60% (1.196.224) 4.430.214 0,27 DGC 0,00% 0,99% -0,99% (1.792.841) 2.901.135 0,62"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Nguồn: SSI Research"
+  },
+  {
+   "kind": "title",
+   "page": 2,
+   "text": "CAM KẾT PHÂN TÍCH"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Chuyên viên phân tích trong báo cáo này này cam kết rằng (1) quan điểm thể hiện trong báo cáo phân tích này phản ánh chính xác quan điểm cá nhân đối với chứng khoán và/hoặc tổ chức phát hành và (2) chuyên viên phân tích đã/ đang/sẽ được miễn trách nhiệm bồi thường trực tiếp hoặc gián tiếp liên quan đến khuyến nghị cụ thể hoặc quan điểm trong báo cáo phân tích này."
+  },
+  {
+   "kind": "title",
+   "page": 2,
+   "text": "KHUYẾN NGHỊ"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Mua: Ước tính tiềm năng tăng giá lớn hơn hoặc bằng 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Khả quan: Ước tính tiềm năng tăng giá dưới 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Trung lập: Ước tính tiềm năng tăng giá tương đương so với mức tăng chung của thị trường trong 12 tháng tới. Kém khả quan: Ước tính tiềm năng giảm giá dưới 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Bán: Ước tính tiềm năng giảm giá lớn hơn hoặc bằng 10 điểm phần trăm so với mức tăng chung của thị trường trong 12 tháng tới. Trong một số trường hợp, khuyến nghị dựa trên tiềm năng tăng giá 1 năm có thể được điều chỉnh lại theo ý kiến của chuyên viên phân tích sau khi cân nhắc một số yếu tố thị trường có thể làm ảnh hưởng đến giá cổ phiếu trong ngắn hạn và trung hạn."
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 2,
+   "text": "Trang 2"
+  },
+  {
+   "kind": "header",
+   "page": 3,
+   "text": "SSI - TRUNG TÂM PHÂN TÍCH & TƯ VẤN ĐẦU TƯ"
+  },
+  {
+   "kind": "title",
+   "page": 3,
+   "text": "TUYÊN BỐ MIỄN TRỪ"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Các thông tin, tuyên bố, dự báo và dự đoán trong báo cáo này, bao gồm cả các ý kiến đã thể hiện, được dựa trên các nguồn thông tin mà SSI cho là đáng tin cậy, tuy nhiên SSI không đảm bảo sự chính xác và đầy đủ của các thông tin này. Báo cáo không có bất kỳ thông tin nhạy cảm về giá chưa công bố nào. Các ý kiến thể hiện trong báo cáo này được đưa ra sau khi đã được xem xét kỹ càng và cẩn thận và dựa trên thông tin tốt nhất chúng tôi được biết, và theo ý kiến cá nhân của chúng tôi là hợp lý trong các trường hợp tại thời điểm đưa ra báo cáo. Các ý kiến thể hiện trong báo cáo này có thể thay đổi bất kì lúc nào mà không cần thông báo. Báo cáo này không và không nên được giải thích như một lời đề nghị hay lời kéo đề nghị mua hay bán bất cứ chứng khoán nào. SSI và các công ty con và/ hoặc các chuyên viên, giám đốc, nhân viên của SSI và công ty con có thể có vị thế hoặc có thể ảnh hưởng đến giao dịch chứng khoán của các công ty được đề cập trong báo cáo này và có thể cung cấp dịch vụ hoặc tìm kiếm để cung cấp dịch vụ ngân hàng đầu tư cho các công ty đó."
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Báo cáo này không được sử dụng dưới bất kỳ mục đích thương mại nào, và không được công bố công khai trên báo chí hay bất kỳ phương tiện nào khác nếu không được sự đồng ý của SSI. Người dùng có thể trích dẫn hoặc trình chiếu báo cáo cho các mục đích phi thương mại. SSI có thể có thỏa thuận cho phép sử dụng cho mục đích thương mại hoặc phân phối lại báo cáo với điều kiện người dùng trả phí cho SSI. SSI không chịu trách nhiệm đối với bất kỳ thiệt hại trực tiếp hay thiệt hại do hậu quả phát sinh từ việc sử dụng báo cáo này hay nội dung báo cáo này. Việc sử dụng bất kỳ thông tin, tuyên bố, dự báo, và dự đoán nào trong báo cáo này sẽ do người dùng tự quyết định và tự chịu rủi ro."
+  },
+  {
+   "kind": "title",
+   "page": 3,
+   "text": "THÔNG TIN LIÊN HỆ"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Trung tâm phân tích và tư vấn đầu tư"
+  },
+  {
+   "kind": "title",
+   "page": 3,
+   "text": "Trung tâm phân tích và tư vấn đầu tư"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Phân tích cổ phiếu"
+  },
+  {
+   "kind": "title",
+   "page": 3,
+   "text": "Phân tích cổ phiếu"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Dữ liệu"
+  },
+  {
+   "kind": "title",
+   "page": 3,
+   "text": "Dữ liệu"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Phạm Lưu Hưng"
+  },
+  {
+   "kind": "title",
+   "page": 3,
+   "text": "Phạm Lưu Hưng"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Giám đốc Trung tâm phân tích và tư vấn đầu"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Nguyễn Thu Hà, CFA"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Giám đốc Phân tích cổ phiếu"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Nguyễn Thị Anh Thư"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Chuyên viên hỗ trợ"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "tư"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "hungpl@ssi.com.vn"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "SĐT: (+84 – 24) 3936 6321 ext. 8711"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "hant4@ssi.com.vn SĐT: (+84 – 24) 3936 6321"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "thunta2@ssi.com.vn"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "SĐT: (+84 – 24) 3936 6321"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Chiến lược thị trường"
+  },
+  {
+   "kind": "title",
+   "page": 3,
+   "text": "Chiến lược thị trường"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Đào Minh Châu, CFA"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Phó giám đốc Trung tâm phân tích và tư vấn đầu tư"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "chaudm@ssi.com.vn"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "SĐT: (+84 – 28) 3636 3688"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Visit SSI Research on Bloomberg at DS <GO> | SSI Research Web Portal: https://www.ssi.com.vn/khach-hang-ca-nhan/ban-tin-etf"
+  },
+  {
+   "kind": "narrative",
+   "page": 3,
+   "text": "Trang 3"
+  }
+ ]
+}

@@ -24,7 +24,7 @@ from typing import Any
 
 import numpy as np
 
-from .chunking import Chunk
+from .chunk import Chunk
 from .docmeta import DocMeta
 from .vnnum import is_number, parse_number, strip_accents
 

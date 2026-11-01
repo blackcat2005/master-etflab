@@ -1,0 +1,4 @@
+# Self-RAG — optional (chỉ cài khi cần, không bắt buộc cho demo/test)
+# Cài: pip install -r research/self_rag/requirements-optional.txt
+transformers==5.17.0 # LlmGenerator / LlmCritic với model local (thay heuristic offline)
+openai>=1.0          # LlmGenerator / LlmCritic với API (GPT-4, đúng kiểu distill của paper)

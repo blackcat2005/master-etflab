@@ -1,11 +1,18 @@
-# etflab — PDF → JSON → chunks → hybrid retrieval
+# etflab — chunking & retrieval cho báo cáo tài chính ETF Việt Nam
 
-Pipeline xử lý báo cáo tài chính ETF Việt Nam: đọc PDF **không có đường viền
-bảng**, dựng lại bảng thành JSON có cấu trúc, cắt thành đơn vị truy hồi, rồi
-trả lời truy vấn bằng **BM25 + vector search** hợp nhất bằng RRF.
+Pipeline xử lý báo cáo/phân tích ETF tiếng Việt: parse PDF bằng **`unstructured`**
+(`hi_res` + Table Transformer), cắt thành đơn vị truy hồi theo cấu trúc bảng, rồi
+trả lời truy vấn bằng **BM25 + vector (RRF)**.
 
-Mục tiêu: câu hỏi dạng *"tỷ trọng mới của BSR là bao nhiêu?"* phải trả lời
-đúng **từng ô**, không phải đoạn văn bị cắt vụn.
+Mục tiêu: câu hỏi dạng *"tỷ trọng mới của BSR là bao nhiêu?"* phải trả lời đúng
+**từng ô**, không phải đoạn văn bị cắt vụn.
+
+> **Lưu trữ 2026-10:** parser bảng bằng hình học cũ (`geometry.py`, `tables.py`,
+> `pipeline.py`, `chunking.py`, CLI) đã được chuyển vào
+> [`archive/geometric_parser/`](archive/geometric_parser/README.md). Nó **không
+> còn** nằm trong pipeline đánh giá; mọi kết quả dưới đây chạy trên `unstructured`.
+> Gold QA 130 câu vẫn giữ nguyên để so sánh lịch sử; 4/130 giá trị bị
+> `unstructured` làm mất được báo cáo riêng (coverage 96,9%).
 
 ---
 
@@ -14,12 +21,8 @@ Mục tiêu: câu hỏi dạng *"tỷ trọng mới của BSR là bao nhiêu?"* 
 Yêu cầu: **Python ≥ 3.11**.
 
 ```bash
-pip install -r requirements.txt
-```
-
-Hoặc cài dạng package (tạo lệnh `etflab`):
-
-```bash
+pip install -r requirements.txt      # numpy + dev tools
+# hoặc
 pip install -e .
 ```
 
@@ -29,6 +32,20 @@ Vector search cần thêm (mặc định **tắt**, BM25 vẫn chạy độc l�
 pip install -e ".[retrieval]"
 ```
 
+Parser `unstructured` chạy trong **venv riêng** (torch + layout/table model,
+~2–3 GB):
+
+```bash
+C:/_venvs/unstr/Scripts/python.exe -m pip install "unstructured[pdf]" torch
+```
+
+Đánh giá ColPali cần `pymupdf` (có trong `.[eval]`) và `colpali-engine`:
+
+```bash
+pip install -e ".[eval]"
+pip install colpali-engine
+```
+
 > Windows: nếu PowerShell hiện lỗi Unicode khi in bảng tiếng Việt, chạy
 > `chcp 65001` hoặc đặt `PYTHONIOENCODING=utf-8`.
 
@@ -36,89 +53,116 @@ pip install -e ".[retrieval]"
 
 ## 2. Chạy thử
 
-### 2.1 Ingest — PDF sang JSON
+### 2.1 Parse PDF → element + bảng
 
 ```bash
-# Toàn bộ data/raw/ (mặc định)
-python -m etflab
-
-# Một file cụ thể
-python -m etflab "data/raw/ssi_review_announcements/Thay_doi_thanh_phan_chi_so_VN30_Q2_2026.pdf"
-
-# Ghi ra chỗ khác, không in chi tiết
-python -m etflab data/raw -o /tmp/out --quiet
-
-# Khi đã cài package
-etflab data/raw
+# 7 PDF của bộ đánh giá; cache vào data/processed_unstructured/
+C:/_venvs/unstr/Scripts/python.exe scripts/ingest/parse_unstructured.py --force
 ```
 
-Kết quả in ra dạng:
+Mỗi file cache là JSON gồm element (title, narrative, list, table…) và bảng đã
+chuẩn hoá từ `metadata.text_as_html` của Table Transformer. Không dùng toạ độ
+chữ hay dò đường kẻ.
 
-```
-[+] data
-aw\ssi_review_announcements\Thay_doi_thanh_phan_chi_so_VN30_Q2_2026.pdf: 3 trang, 1 bang, 24 khoi van ban
-      bao_cao_phan_tich_ssi_etf_vn30__t01  p[1, 2]  31x7
-        cols=['Mã CK', 'Tỷ trọng mới', 'Tỷ trọng hiện tại', '% Thay đổi', ...]
-```
-
-JSON được ghi vào `data/processed/<tên file>.json`.
-
-### 2.2 Truy vấn — demo hybrid search
+### 2.2 Chunking + đánh giá
 
 ```bash
-# Bốn câu hỏi mẫu
-python scripts/search_demo.py
+# 6 chiến lược: chipper, chipper_prefix, row_json, dual, dual_small, dual_dense
+# (dense cần torch; --no-dense chạy được bằng python thường)
+C:/_venvs/colpali/Scripts/python.exe scripts/eval/eval_three_methods.py
+C:/_venvs/colpali/Scripts/python.exe scripts/eval/eval_three_methods.py --no-dense
 
-# Câu hỏi riêng
-python scripts/search_demo.py --query "số phiên giao dịch tương đương của MCH"
+# Đo khoảng cách trích xuất của unstructured so với gold (4 câu bị mất giá trị)
+C:/_venvs/colpali/Scripts/python.exe scripts/eval/diagnose_unstructured.py
 
-# Thêm vector search (lần đầu sẽ tải model, khá lâu)
-python scripts/search_demo.py --dense
-```
-
-Đầu ra:
-
-```
->>> tỷ trọng mới của BSR
-  1. [table_row] score=0.0164  (trang 1 | bao_cao_phan_tich_ssi_etf_vn30__t01)
-     ... Mã CK: BSR; Tỷ trọng mới: 0,87%; Tỷ trọng hiện tại: 0,00%; ...
-     [cha] Bảng: Ước tính thay đổi về số lượng cổ phiếu mua bán ...
+# Trang vàng độc lập parser + ColPali/ColSmol (CPU)
+C:/_venvs/colpali/Scripts/python.exe scripts/eval/build_gold_pages.py
+C:/_venvs/colpali/Scripts/python.exe scripts/eval/colpali_retrieval.py
 ```
 
 ### 2.3 Test và lint
 
 ```bash
-python -m pytest        # 187 test, tat ca pass
+python -m pytest        # 107 test
 python -m ruff check .
 ```
 
 ---
 
-## 3. Dùng như thư viện
+## 3. Kết quả (130 câu vàng / 7 PDF / 27 trang)
+
+Cùng một gold, cùng BM25; chỉ đổi **đơn vị phân mảnh**. `coverage` = tỷ lệ câu
+có ít nhất một chunk chứa đáp án (trần của recall, phản ánh parser/OCR).
+
+### 3.1 Chunk-level (xếp hạng trong file)
+
+| Chiến lược | #chunk | avg chars | coverage | R@1 | R@3 | R@5 | R@10 | MRR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `row_json` (1 dòng = 1 JSON) | 332 | 491 | 93,8% | **81,5%** | **90,0%** | **90,0%** | **90,0%** | **0,850** |
+| `dual_small` | 935 | 228 | 93,8% | 66,1% | 75,4% | 78,5% | 86,2% | 0,723 |
+| `dual` | 935 | 228 | 93,8% | 50,0% | 66,9% | 68,5% | 68,5% | 0,583 |
+| `chipper_prefix` | 136 | 662 | 93,8% | 36,9% | 67,7% | 77,7% | 89,2% | 0,535 |
+| `chipper` | 136 | 557 | 93,8% | 27,7% | 63,8% | 76,9% | 89,2% | 0,475 |
+| `dual_dense` (e5-small) | 935 | 228 | 93,8% | 31,5% | 53,1% | 63,8% | 70,8% | 0,441 |
+
+### 3.2 Page-level (max-pool điểm chunk lên trang, xếp hạng 27 trang)
+
+| Chiến lược | R@1 | R@3 | R@5 | R@10 | MRR |
+|---|---:|---:|---:|---:|---:|
+| `row_json` | **90,0%** | **100%** | **100%** | **100%** | **0,950** |
+| `dual_small` | 73,9% | 96,2% | 100% | 100% | 0,844 |
+| `dual` | 56,1% | 94,6% | 100% | 100% | 0,751 |
+| `chipper_prefix` | 45,4% | 89,2% | 99,2% | 100% | 0,665 |
+| `chipper` | 36,1% | 88,5% | 99,2% | 100% | 0,618 |
+| `dual_dense` | 44,6% | 94,6% | 100% | 100% | 0,700 |
+
+### 3.3 So với ColPali / BM25 trang
+
+| Hệ | R@1 corpus | R@3 | R@5 | R@10 | MRR |
+|---|---:|---:|---:|---:|---:|
+| `row_json` (page) | **90,0%** | **100%** | **100%** | **100%** | **0,950** |
+| `dual_small` (page) | 73,9% | 96,2% | 100% | 100% | 0,844 |
+| `chipper_prefix` (page) | 45,4% | 89,2% | 99,2% | 100% | 0,665 |
+| `colpali:colSmol-256M` | 13,8% | 26,9% | 36,2% | 74,6% | 0,288 |
+| `bm25_page` (unstructured text) | 4,6% | 22,3% | 41,5% | 75,4% | 0,227 |
+
+ColSmol-256M là **surrogate CPU** của ColPali-3B, không phải kết luận về bản
+gốc. Chi tiết: `docs/ColPali_Thuc_nghiem_Tieng_Viet.md`.
+
+Kết quả thô: `data/eval/three_methods.json`, `data/eval/colpali_results.json`,
+`data/eval/extraction_gap.json`, `data/eval/gold_pages.json`.
+Tổng hợp + khuyến nghị: `docs/Tong_hop_3_phuong_phap_Chunking_va_ColPali.md`.
+
+---
+
+## 4. Dùng như thư viện
 
 ```python
 from pathlib import Path
-from etflab import IngestConfig, build_chunks, process_pdf
+
+from etflab.chunking_methods import row_json_chunks
 from etflab.retrieval import HybridIndex, RetrievalConfig
+from etflab.uelements import load_unstructured_doc
 
-# 1. PDF -> bang + van ban
-result = process_pdf(Path("data/raw/ssi_review_announcements/Thay_doi_thanh_phan_chi_so_VN30_Q2_2026.pdf"),
-                     IngestConfig())
-table = result.tables[0]
-print(table.n_rows, table.n_cols)          # 31 7
-print(table.columns[1])                    # 'Tỷ trọng mới'
-print(table.rows[0][4])                    # '3.274.147'
+# 1. Cache JSON do unstructured sinh ra
+doc = load_unstructured_doc(
+    Path("data/processed_unstructured/Thay_doi_thanh_phan_chi_so_VN30_Q2_2026.json")
+)
+print(doc["source_file"], len(doc["elements"]))
 
-# 2. -> don vi truy hoi (moi dong = 1 chunk)
-chunks = build_chunks(result)
-print(len(chunks), "chunks")
+# 2. Mỗi dòng bảng = 1 chunk JSON tự chứa (kèm metadata file/page/bảng)
+chunks = row_json_chunks(doc, doc["elements"])
+print(len(chunks), chunks[0].text[:120])
 
-# 3. -> hybrid search
-index = HybridIndex(chunks, RetrievalConfig(top_k=3))   # BM25 (mac dinh)
-# Them vector search: RetrievalConfig(top_k=3, use_dense=True)
+# 3. Hybrid search (BM25 mặc định; thêm dense: use_dense=True)
+index = HybridIndex(chunks, RetrievalConfig(top_k=3))
 for hit in index.search("tỷ trọng mới của BSR"):
-    print(hit.chunk_id, hit.chunk.text[:80])
+    print(hit.chunk.chunk_id, hit.chunk.text[:80])
 ```
+
+Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng file
+`etflab/chunking_methods.py`). `Chunk` là dataclass parser-independent trong
+`etflab/chunk.py`.
 
 ### Quy tắc số Việt Nam
 
@@ -134,114 +178,114 @@ for hit in index.search("tỷ trọng mới của BSR"):
 
 ---
 
-## 4. Cấu trúc project
+## 5. Cấu trúc project
 
 ```
 .
-├── README.md                  # file này
-├── pyproject.toml             # cấu hình package + ruff + pytest
-├── requirements.txt           # cài đặt nhanh
+├── README.md
+├── pyproject.toml             # package + ruff + pytest
+├── requirements.txt
 │
-├── etflab/                    # mã nguồn
-│   ├── __main__.py            # python -m etflab
-│   ├── cli.py                 # CLI Phase 0
-│   ├── vnnum.py               # Phase 0 — parse số kiểu Việt Nam
-│   ├── geometry.py            # Phase 0 — gom dòng/ô, dựng ranh giới cột
-│   ├── tables.py              # Phase 0 — phát hiện bảng, header nhiều tầng, tách bảng cạnh nhau
-│   ├── pipeline.py            # Phase 0 — điều phối, caption, gộp bảng nhiều trang, cảnh báo OCR
-│   ├── chunking.py            # Phase 1 — table_card / table_row / prose chunks
-│   ├── docmeta.py             # Phase 1 — metadata tài liệu (loại, chỉ số, kỳ, ngày)
-│   └── retrieval.py           # Phase 1 — BM25 + dense + RRF + lọc theo kỳ
+├── etflab/                    # package hiện tại (không phụ thuộc parser hình học)
+│   ├── __init__.py            # API công khai
+│   ├── chunk.py               # dataclass Chunk (dùng chung)
+│   ├── vnnum.py               # parse số kiểu Việt Nam
+│   ├── docmeta.py             # metadata tài liệu (loại, chỉ số, kỳ, ngày)
+│   ├── retrieval.py           # BM25 + dense + RRF + lọc theo kỳ
+│   ├── uelements.py           # adapter output unstructured (HTML bảng -> lưới)
+│   └── chunking_methods.py    # Chipper / dual-granularity / row-JSON
+│
+├── archive/geometric_parser/  # parser hình học cũ + script/test đi kèm
+│   ├── etflab_geometric/      # package tự chứa (geometry/tables/pipeline/chunking/CLI)
+│   ├── scripts/               # eval_chunking, eval_row_only, gen_gold_qa, ...
+│   ├── tests/                 # test parser cũ (đã đổi import)
+│   └── README.md              # vì sao lưu trữ + cách chạy lại
 │
 ├── scripts/
-│   └── search_demo.py         # chạy thử hybrid search
+│   ├── ingest/
+│   │   └── parse_unstructured.py  # PDF -> element + bảng (hi_res), cache JSON
+│   └── eval/                  # đánh giá chunking (không cần GPU/API)
+│       ├── build_gold_pages.py     # trang vàng từ text layer PyMuPDF
+│       ├── eval_three_methods.py   # Chipper / dual / row-JSON + Recall@k, MRR
+│       ├── diagnose_unstructured.py # coverage: đáp án bị mất khi đổi parser
+│       ├── metric_common.py        # token hoá + khớp số dùng chung
+│       └── colpali_retrieval.py    # retrieval mức TRANG: BM25 vs ColPali/ColSmol
 │
-├── tests/                     # 187 test, tat ca pass
+├── tests/                     # 107 test
 │   ├── conftest.py
 │   ├── test_vnnum.py
-│   ├── test_tables.py
-│   ├── test_pipeline.py       # golden test trên PDF thật
-│   ├── test_corpus.py         # hồi quy toàn corpus + các lỗi đã sửa
-│   ├── test_chunking.py
 │   ├── test_docmeta.py        # metadata tài liệu + lọc theo kỳ
-│   └── test_retrieval.py
+│   ├── test_retrieval.py      # BM25 + dense + RRF
+│   └── test_metric_matching.py # số âm kế toán, đơn vị '000
 │
 ├── data/
-│   ├── raw/                          # PDF nguồn — 3 nhóm tài liệu (không commit)
-│   │   ├── legal_charters/           # điều lệ, cáo bạch, thông báo HOSE (scan — cần OCR)
-│   │   ├── ssi_review_announcements/  # thông báo rà soát / thay đổi chỉ số
-│   │   └── broker_forecast_reports/  # báo cáo / bản tin dự báo của CTCK
-│   ├── references/                   # bài báo khoa học tham khảo (không ingest)
-│   └── processed/                    # JSON đầu ra (không commit)
+│   ├── raw/                          # PDF nguồn (không commit)
+│   ├── references/                   # bài báo khoa học tham khảo
+│   ├── eval/                         # gold QA + kết quả đánh giá (không commit)
+│   ├── processed/                    # JSON của parser cũ (giữ làm dữ liệu lịch sử)
+│   └── processed_unstructured/       # cache element + bảng của unstructured
 │
-└── docs/
-    ├── RAG Bảng Biểu Tài Chính.md
-    ├── Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md
-    ├── De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md
-    ├── Ky_thuat_da_su_dung.md
-    ├── Ky_thuat_va_Tham_khao.md     # đối chiếu từng kỹ thuật với bài báo (A/B/C) + danh mục đầy đủ
+├── docs/
+│   ├── Tong_hop_3_phuong_phap_Chunking_va_ColPali.md  # kết quả + khuyến nghị
+│   ├── ColPali_Thuc_nghiem_Tieng_Viet.md
+│   ├── Co_che_Chipper_Financial_Report_Chunking.md
+│   ├── Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md
+│   ├── So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md
+│   ├── De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md
+│   ├── Huong_dan_ky_thuat.md      # (parser cũ — đã có banner lưu trữ)
+│   └── Tham_khao_va_nguon.md
+│
+└── slides/
+    ├── tong_quan_phuong_phap.tex       # slide Beamer (EN): methods overview + deep dive
+    ├── dual_granularity_rag.tex        # slide Beamer: dual-granularity
+    ├── chipper_element_chunking.tex    # slide Beamer: Chipper + thực nghiệm
+    └── colpali_deep_dive.tex           # slide Beamer: ColPali + thực nghiệm
 ```
 
----
-
-## 5. Giai đoạn đã hoàn thành
-
-### Phase 0 — PDF → JSON
-
-Không dùng `pymupdf.find_tables()` vì bảng trong báo cáo tài chính **không có
-đường viền**. Pipeline tự dựng lại:
-
-- Gom từ thành dòng → ô, đo bề rộng ký tự để ước lượng ngưỡng;
-- Dựng ranh giới cột bằng khe trống dọc, siết lại để header căn giữa khớp dữ liệu;
-- Nhận diện vùng bảng bằng mật độ ô số, loại văn bản justify;
-- **Giữ dòng có ô rỗng** — dòng thiếu số vẫn là dòng dữ liệu hợp lệ;
-- Dựng header nhiều tầng, ghép tên cột qua các tầng (`header_levels`);
-- Tách **bảng cạnh nhau** thành hai bảng riêng;
-- Gộp bảng **nối trang** theo chữ ký cột + khoảng ngang;
-- Bắt caption (`Bảng 2`, `Table 2`), loại running header/footer;
-- Cảnh báo PDF scan thay vì trả về kết quả rỗng.
-
-Đối chiếu với dữ liệu thật:
-
-| PDF | Kỳ vọng | Kết quả |
-|---|---|---|
-| `ssi_review_announcements/Thay_doi_thanh_phan_chi_so_VN30_Q2_2026.pdf` | 1 bảng, trang 1–2, 31×7, dòng đầu `BSR`, cuối `DGC` | ✅ |
-| `broker_forecast_reports/Du_bao_thay_doi_danh_muc_chi_so_VN30_VNFINLEAD_Q3_2026.pdf` | 2 bảng cạnh nhau, trang 2–3, 41×6 và 41×5 | ✅ |
-| `broker_forecast_reports/Du_bao_thay_doi_danh_muc_chi_so_VN30_VNFINLEAD_Q1_2026.pdf` | 2 bảng cạnh nhau (khe chỉ 12pt), trang 3, 40×6 và 40×5 | ✅ |
-
-### Phase 1 — chunks + hybrid retrieval
-
-- **`table_row`** — mỗi dòng dữ liệu là một chunk, kèm nhãn dòng (`Mã CK = BSR`),
-  giá trị đã chuẩn hóa và ô rỗng được giữ là `null` (không đoán bừa).
-- **`table_card`** — chunk cha mô tả bảng, dùng làm context khi sinh câu trả lời
-  và cho câu hỏi mức tổng quan.
-- **`prose`** — văn bản ngoài bảng, tách theo câu có overlap.
-- Mỗi chunk có **hai bản text**: `text` đầy đủ cho embedding, `sparse_text` rút
-  gọn cho BM25 — cùng một chunk nhưng hai cách nhìn (dual granularity).
-- **BM25 tự hiện thực**, tối ưu cho tiếng Việt tài chính: bỏ dấu, `đ→d`, và
-  chuẩn hóa số sao cho hỏi `2976,9` vẫn khớp `2.976,9`.
-- **RRF** hợp nhất BM25 + vector, không cần chuẩn hóa thang đo hai bên.
+> **Biên dịch slide:** cần XeLaTeX (fontspec + font có dấu tiếng Việt).
+> ```bash
+> tectonic --reruns 2 slides/tong_quan_phuong_phap.tex
+> ```
 
 ---
 
-## 6. Giới hạn đã biết
+## 6. Phương pháp trong một đoạn
 
-| Vấn đề | Trạng thái |
-|---|---|
-| PDF scan (điều lệ quỹ, 95 trang BCB) | Chỉ phát cảnh báo **cần OCR**; chưa tích hợp OCR |
-| Bài báo tiếng Anh | Tên cột bảng kém chất lượng, tách thành nhiều mảnh; ngoài corpus mục tiêu |
-| Ô trộn nhiều tầng lền nhau | Giới hạn ở 2 bảng cạnh nhau (`max_cols_single_table = 8`) |
-| Bảng có đường viền | Chưa tận dụng `find_tables()`; hiện vẫn parse hình học |
-| Bảng cạnh nhau có khe hẹp hơn khe trong bảng | Đã sửa: dòng tiêu đề nhóm `Kịch bản 1/2` trong header làm bằng chứng, không phụ thuộc độ rộng khe |
-| Hỏi bản Q2 lại ra bản Q3 | Đã sửa: chunk mang metadata kỳ, lọc cứng qua `infer_doc_filter` |
-| Chưa đo Recall@k | Chưa có bộ câu hỏi vàng |
+- **Parser**: `unstructured` `hi_res` (YOLOX layout + Table Transformer). Bảng
+  lấy từ HTML do Table Transformer sinh, `colspan`/`rowspan` được trải thành
+  lưới chữ nhật. Không dùng toạ độ chữ hay đường kẻ.
+- **Chipper**: 4 quy tắc paper — Title mở chunk, Table giữ nguyên, gộp đoạn
+  ngắn < 2048 ký tự, không cắt qua bảng.
+- **Dual-granularity**: chunk lớn ~1024 ký tự + chunk nhỏ (câu) ~cửa sổ; truy
+  hồi bằng chunk nhỏ, xếp hạng lại bằng trung bình small + large (bản `dual`),
+  hoặc chỉ small (`dual_small`), hoặc dense rerank (`dual_dense`).
+- **Row-JSON**: mỗi dòng bảng là một JSON tự chứa `{file, page, table, columns,
+  row}` — mạnh nhất cho câu hỏi trích ô.
+- **Retrieval**: BM25 (mặc định) hoặc hybrid BM25 + dense e5-small, gộp bằng
+  RRF; lọc metadata theo kỳ/chỉ số.
 
 ---
 
-## 7. Định hướng tiếp theo
+## 7. Hạn chế đã biết
 
-1. **OCR** cho PDF scan (điều lệ quỹ) — mở rộng corpus.
-2. **PoT (Program-of-Thought)**: sinh SQL/Python trên `Chunk.cells` để trả lời
-   câu hỏi so sánh/lọc (*"quỹ nào bán mạnh nhất?"*).
-3. **Reranker** (cross-encoder) sau khi RRF.
-4. **Đánh giá**: bộ câu hỏi vàng + đo Recall@k / MRR trên cả hai PDF mục tiêu.
+1. **Gold QA sinh từ parser cũ** (130 câu). `unstructured` giữ được 126/130
+   giá trị (96,9%); 4 câu `value_missing` được ghi trong
+   `data/eval/extraction_gap.json`, không bị loại khỏi mẫu.
+2. **Corpus nhỏ**: 7 PDF / 27 trang / 10 bảng. Chỉ nên đọc như pilot.
+3. **Row-JSON thắng lớn nhưng phụ thuộc parser**: nếu Table Transformer sai
+   hàng/cột, JSON sai theo. Coverage 93,8% ở chunk-level là trần thực tế.
+4. **Dual rerank bằng dense e5-small làm giảm R@1** (66,1% → 50,0%); giá trị
+   của dual nằm ở ngữ cảnh small→large cho generation, không phải precision.
+5. **ColPali mới chạy ColSmol-256M zero-shot trên CPU** — là sàn, không phải
+   kết luận về ColPali-3B / fine-tune.
+6. **Chưa đo generation**: mới đo retrieval (Recall@k / MRR), chưa đo câu trả
+   lời end-to-end.
+
+---
+
+## 8. Định hướng
+
+- Viết thêm ~20 câu vàng thủ công để giảm bias gold tự sinh.
+- Đo generation (PoT/tool-calling) trên chunk row-JSON.
+- Thử ColPali-v1.2 / ColQwen2 trên GPU, fine-tune LoRA tiếng Việt.
+- Hybrid 2 tầng: visual lấy trang → row-JSON lấy ô.

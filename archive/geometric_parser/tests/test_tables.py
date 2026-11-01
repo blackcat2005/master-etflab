@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from etflab.geometry import Word
-from etflab.tables import TableConfig, TableExtractor, normalize_key
+from etflab_geometric.geometry import Word
+from etflab_geometric.tables import TableConfig, TableExtractor, normalize_key
 
 CHAR_W = 4.0
 LINE_H = 9.0

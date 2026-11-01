@@ -1,15 +1,24 @@
-# Tài liệu kỹ thuật `etflab` và đối chiếu tài liệu tham khảo
+# Đối chiếu kỹ thuật với nguồn học thuật
+
+> **Cập nhật 2026-10:** phần parser bảng bằng hình học trong tài liệu này đã
+> được lưu trữ (`archive/geometric_parser/`). Pipeline đánh giá hiện tại dùng
+> `unstructured` + Table Transformer; các đối chiếu học thuật về chunking,
+> retrieval và ColPali vẫn giữ nguyên giá trị.
 
 Ngày lập: 2026-10-04. Phạm vi: **toàn bộ kỹ thuật đã hiện thực** trong `etflab/`, kèm nguồn
 học thuật của từng kỹ thuật và mức độ tin cậy của nguồn đó.
 
-Tài liệu này **gộp cả bảng đối chiếu kỹ thuật lẫn danh mục tham khảo** — là nguồn tham khảo
-duy nhất, không còn file danh mục riêng.
+Tài liệu này gộp cả bảng đối chiếu kỹ thuật lẫn danh mục tham khảo — là nguồn tham khảo
+duy nhất, không còn file danh mục riêng. Trả lời câu hỏi **"việc này dựa trên bài báo nào,
+mức độ tin cậy ra sao"**. Dùng khi viết phần "phương pháp" trong luận văn.
+
+> **Phân biệt với [`Huong_dan_ky_thuat.md`](./Huong_dan_ky_thuat.md):** file đó mô tả **code
+> đang chạy thế nào**, dùng khi sửa code.
 
 | File | Vai trò |
 |---|---|
-| `docs/Ky_thuat_da_su_dung.md` | Mô tả **cách code đang chạy** (đọc khi sửa code) |
-| **`docs/Ky_thuat_va_Tham_khao.md` (file này)** | **Bảng đối chiếu kỹ thuật ↔ nguồn gốc** + **danh mục tham khảo**, để viết phần "phương pháp" trong luận văn |
+| `docs/Huong_dan_ky_thuat.md` | Mô tả **cách code đang chạy** (đọc khi sửa code) |
+| **`docs/Tham_khao_va_nguon.md` (file này)** | **Bảng đối chiếu kỹ thuật ↔ nguồn gốc** + **danh mục tham khảo**, để viết phần "phương pháp" trong luận văn |
 
 **Cấu trúc file:**
 
@@ -193,7 +202,7 @@ Không dùng mô hình. Một dòng được coi là "dòng bảng" khi **đồn
 | Phân loại ô "số" nhị phân đáng tin cậy | **C** | Tự viết; mọi heuristic khác phụ thuộc vào nó |
 | Nới rộng có ràng buộc lưới cột | **C** | Quyết định thiết kế riêng, phát sinh từ lỗi quan sát thực tế |
 
-> **Phát hiện đáng lưu ý về điểm mù (đã đo, xem `Ky_thuat_da_su_dung.md` mục 15):** vì cổng
+> **Phát hiện đáng lưu ý về điểm mù (đã đo, xem `Huong_dan_ky_thuat.md` mục 15):** vì cổng
 > vào đòi `≥3 ô số`, **bảng 2 cột văn bản thuần — ví dụ bảng định nghĩa, bảng ký hiệu — bị bỏ
 > hoàn toàn**. Kiểm chứng trên PDF tổng hợp: bảng `Kỳ hạn | Định nghĩa` 5 dòng, 0 số ⇒
 > **0 bảng, rơi thành 3 khối prose rác**. Đây là hạn chế của *đặc trưng*, không phải của định
@@ -934,4 +943,4 @@ A2 trích nhóm này để bối cảnh. Không dùng trực tiếp trong `etfla
    (WACV)* vs *Zheng et al. 2021*.
 5. Thêm TEDS (mục 14.18) vào pipeline đánh giá — mục 13 khuyên dùng nhưng code chưa có.
 
-Chi tiết thiết kế và ước lượng công sức nằm ở `docs/Ky_thuat_da_su_dung.md` mục 15.
+Chi tiết thiết kế và ước lượng công sức nằm ở `docs/Huong_dan_ky_thuat.md` mục 15.

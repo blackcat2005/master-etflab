@@ -27,8 +27,7 @@ from conftest import (
     REVIEW_VND_Q2_PDF,
     SSI_REVIEWS,
 )
-
-from etflab import IngestConfig, process_pdf
+from etflab_geometric import IngestConfig, process_pdf
 
 TEXT_PDFS = sorted({*SSI_REVIEWS.glob("*.pdf"), *BROKER.glob("*.pdf")})
 SCAN_PDFS = sorted(CHARTERS.glob("*.pdf"))

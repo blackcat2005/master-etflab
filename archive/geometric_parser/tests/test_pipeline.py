@@ -6,8 +6,7 @@ import json
 
 import pytest
 from conftest import CHARTERS, NEWSLETTER_PDF, REVIEW_PDF
-
-from etflab import IngestConfig, process_pdf
+from etflab_geometric import IngestConfig, process_pdf
 
 pytestmark = pytest.mark.skipif(
     not (REVIEW_PDF.exists() and NEWSLETTER_PDF.exists()),

@@ -7,11 +7,9 @@ chua rang buoc tai lieu (ky, chi so) nhung chunk khong mang thong tin do.
 from __future__ import annotations
 
 import pytest
-from test_chunking import make_table
 
-from etflab.chunking import ChunkConfig, build_chunks
+from etflab.chunk import Chunk
 from etflab.docmeta import parse_doc_meta
-from etflab.pipeline import DocumentResult
 from etflab.retrieval import (
     DocFilter,
     HybridIndex,
@@ -122,14 +120,14 @@ def _corpus() -> list:
     chunks = []
     for quarter in ("Q2", "Q3"):
         name = f"Thay_doi_thanh_phan_chi_so_VN30_{quarter}_2026.pdf"
-        result = DocumentResult(
-            source_file=name,
-            n_pages=1,
-            tables=[make_table(source_file=name)],
-            pages_text=[],
-            warnings=[],
-        )
-        chunks.extend(build_chunks(result, ChunkConfig()))
+        meta = parse_doc_meta(name)
+        chunks.append(Chunk(
+            chunk_id=f"{name}#r0", kind="table_row",
+            label="Mã CP = BSR",
+            text=f"{meta.label}\nMã CP = BSR\nTỷ trọng mới = 0,87%",
+            sparse_text=f"{meta.label}\nMã CP BSR Tỷ trọng mới 0,87%",
+            source_file=name, page=1, doc=meta,
+        ))
     return chunks
 
 
