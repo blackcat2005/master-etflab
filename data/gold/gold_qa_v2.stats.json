@@ -1,0 +1,33 @@
+{
+  "total": 615,
+  "from_old_gold": 129,
+  "new": 486,
+  "text_layer_ok": 615,
+  "text_layer_fail": 0,
+  "by_variant": {
+    "full": 141,
+    "hard": 143,
+    "natural": 166,
+    "no_index": 165
+  },
+  "by_file": {
+    "Du_bao_thay_doi_danh_muc_chi_so_VN30_VNFINLEAD_Q1_2026.pdf": 49,
+    "Du_bao_thay_doi_danh_muc_chi_so_VN30_VNFINLEAD_Q3_2026.pdf": 48,
+    "Du_bao_thay_doi_danh_muc_chi_so_VNDiamond_Q2_2026.pdf": 65,
+    "Thay_doi_thanh_phan_chi_so_VN30_Q2_2026.pdf": 76,
+    "Thay_doi_thanh_phan_chi_so_VN30_Q3_2026.pdf": 72,
+    "Thay_doi_thanh_phan_chi_so_VNDiamond_VN30_VNFIN_Q1_2026.pdf": 227,
+    "Thay_doi_thanh_phan_chi_so_VNDiamond_VN30_VNFIN_Q2_2026.pdf": 78
+  },
+  "by_period_index": {
+    "Q1 2026|VNFINLEAD": 49,
+    "Q3 2026|VNFINLEAD": 48,
+    "Q2 2026|VNDIAMOND": 143,
+    "Q2 2026|VN30": 76,
+    "Q3 2026|VN30": 72,
+    "Q1 2026|VNDIAMOND": 227
+  },
+  "multi_period": 161,
+  "distinct_columns": 41,
+  "distinct_entities": 49
+}

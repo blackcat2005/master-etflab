@@ -376,11 +376,18 @@ def main() -> int:
     ap.add_argument("--no-dense", action="store_true")
     ap.add_argument("--threads", type=int, default=8)
     ap.add_argument("--out", default=str(OUT))
+    ap.add_argument("--gold", default=str(GOLD),
+                    help="gold jsonl (vd data/gold/gold_qa_v2.jsonl)")
+    ap.add_argument("--exclude-hard", action="store_true",
+                    help="bo cau hoi mo ho (variant=hard, khong co ky/chi so)")
     args = ap.parse_args()
     ks = sorted(set(args.topk))
 
-    gold = [json.loads(l) for l in GOLD.read_text(encoding="utf-8").splitlines()
+    gold_path = Path(args.gold)
+    gold = [json.loads(l) for l in gold_path.read_text(encoding="utf-8").splitlines()
             if l.strip()]
+    if args.exclude_hard:
+        gold = [g for g in gold if not g.get("hard")]
     if args.limit:
         gold = gold[: args.limit]
 
@@ -412,7 +419,9 @@ def main() -> int:
     if embed is not None:
         names.append("dual_dense")
 
-    if GOLD_PAGES.exists():
+    if all("gold_pages" in g for g in gold):
+        gold_pages = {g["qid"]: g["gold_pages"] for g in gold}
+    elif GOLD_PAGES.exists():
         gold_pages = json.loads(GOLD_PAGES.read_text(encoding="utf-8"))["pages"]
     else:
         gold_pages = {}

@@ -42,6 +42,7 @@ _vn = importlib.util.spec_from_file_location(
     "_vnnum", ARCHIVE / "etflab_geometric" / "vnnum.py"
 )
 _vnmod = importlib.util.module_from_spec(_vn)
+sys.modules["_vnnum"] = _vnmod  # dataclass(slots=True) can module trong sys.modules
 _vn.loader.exec_module(_vnmod)
 is_number = _vnmod.is_number
 parse_number = _vnmod.parse_number
