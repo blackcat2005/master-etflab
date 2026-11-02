@@ -195,6 +195,7 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 │   ├── uelements.py           # adapter output unstructured (HTML bảng -> lưới)
 │   └── chunking_methods.py    # Chipper / dual-granularity / row-JSON
 │
+├── archive/research/          # demo RAPTOR / Self-RAG / RAFT (ngoài pipeline ETF)
 ├── archive/geometric_parser/  # parser hình học cũ + script/test đi kèm
 │   ├── etflab_geometric/      # package tự chứa (geometry/tables/pipeline/chunking/CLI)
 │   ├── scripts/               # eval_chunking, eval_row_only, gen_gold_qa, ...

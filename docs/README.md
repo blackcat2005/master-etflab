@@ -19,4 +19,4 @@ Tài liệu nền tảng (cho phần cơ sở lý thuyết / tổng quan):
 | [`So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md`](./So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md) | So sánh với các công trình 2024–2026 |
 | [`ColPali_Thuc_nghiem_Tieng_Viet.md`](./ColPali_Thuc_nghiem_Tieng_Viet.md) | Protocol và kết quả ColPali |
 
-Đã lưu trữ: [`Huong_dan_ky_thuat.md`](../archive/geometric_parser/docs/Huong_dan_ky_thuat.md) mô tả parser hình học cũ, không còn là pipeline chính.
+Đã lưu trữ: [`Huong_dan_ky_thuat.md`](../archive/geometric_parser/docs/Huong_dan_ky_thuat.md) mô tả parser hình học cũ, không còn là pipeline chính. Cũng ở đó: [`Doi_chieu_parser_hinh_hoc.md`](../archive/geometric_parser/docs/Doi_chieu_parser_hinh_hoc.md) (các mục parser của `Tham_khao_va_nguon.md`).

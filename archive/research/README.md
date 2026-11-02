@@ -16,5 +16,5 @@ Cài 1 lần cho tất cả: `pip install -r research/requirements-all.txt` (h�
 
 - Mỗi folder có `README.md` (docs + cách chạy), `requirements.txt` (base: demo+test offline), `requirements-optional.txt` (chỉ khi cần production/GPU), `demo.py`, `test_*.py`.
 - Version trong `requirements.txt` pin `==` theo môi trường đã verify (Python 3.13, torch 2.14.0, sentence-transformers 6.1.0, numpy 2.5.3) — không dùng `>=` trôi nổi.
-- Import theo dạng `from research.<paper> import ...`, chạy demo `python -m research.<paper>.demo`.
+- Import theo dạng `from research.<paper> import ...`, chạy demo `python -m archive.research.<paper>.demo`.
 - Không để code research lẫn với code app/server chính.
