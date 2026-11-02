@@ -83,7 +83,7 @@ C:/_venvs/colpali/Scripts/python.exe scripts/eval/colpali_retrieval.py
 ### 2.3 Test và lint
 
 ```bash
-python -m pytest        # 107 test
+python -m pytest        # 74 hàm test (pytest)
 python -m ruff check .
 ```
 
@@ -198,6 +198,7 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 ├── archive/geometric_parser/  # parser hình học cũ + script/test đi kèm
 │   ├── etflab_geometric/      # package tự chứa (geometry/tables/pipeline/chunking/CLI)
 │   ├── scripts/               # eval_chunking, eval_row_only, gen_gold_qa, ...
+│   ├── docs/                  # Huong_dan_ky_thuat.md (mô tả parser cũ theo từng dòng code)
 │   ├── tests/                 # test parser cũ (đã đổi import)
 │   └── README.md              # vì sao lưu trữ + cách chạy lại
 │
@@ -211,7 +212,7 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 │       ├── metric_common.py        # token hoá + khớp số dùng chung
 │       └── colpali_retrieval.py    # retrieval mức TRANG: BM25 vs ColPali/ColSmol
 │
-├── tests/                     # 107 test
+├── tests/                     # 74 hàm test (pytest)
 │   ├── conftest.py
 │   ├── test_vnnum.py
 │   ├── test_docmeta.py        # metadata tài liệu + lọc theo kỳ
@@ -225,15 +226,17 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 │   ├── processed/                    # JSON của parser cũ (giữ làm dữ liệu lịch sử)
 │   └── processed_unstructured/       # cache element + bảng của unstructured
 │
-├── docs/
-│   ├── Tong_hop_3_phuong_phap_Chunking_va_ColPali.md  # kết quả + khuyến nghị
-│   ├── ColPali_Thuc_nghiem_Tieng_Viet.md
-│   ├── Co_che_Chipper_Financial_Report_Chunking.md
-│   ├── Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md
-│   ├── So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md
+├── docs/                      # xem docs/README.md để biết đọc theo thứ tự nào
+│   ├── README.md                      # mục lục + thứ tự đọc
+│   ├── Phat_bieu_bai_toan.md          # bài toán, input, output xuyên suốt
 │   ├── De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md
-│   ├── Huong_dan_ky_thuat.md      # (parser cũ — đã có banner lưu trữ)
-│   └── Tham_khao_va_nguon.md
+│   ├── Tong_hop_3_phuong_phap_Chunking_va_ColPali.md  # kết quả + khuyến nghị
+│   ├── Tham_khao_va_nguon.md          # đối chiếu kỹ thuật ↔ bài báo
+│   ├── Co_che_Chipper_Financial_Report_Chunking.md    # nền tảng: Chipper
+│   ├── Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md # nền tảng: dual-granularity
+│   ├── ColPali_Thuc_nghiem_Tieng_Viet.md              # nền tảng: ColPali
+│   ├── So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md
+│   └── RAG_Bang_Bieu_Tai_Chinh.md     # khảo sát RAG bảng tài chính
 │
 └── slides/
     ├── tong_quan_phuong_phap.tex       # slide Beamer (EN): methods overview + deep dive
