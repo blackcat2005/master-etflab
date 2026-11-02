@@ -127,7 +127,7 @@ Hướng truy hồi bằng ảnh (ColPali) đã được loại khỏi đồ án
 
 Kết quả thô: `data/eval/three_methods.json`,
 `data/eval/extraction_gap.json`, `data/eval/gold_pages.json`.
-Tổng hợp + khuyến nghị: `docs/Tong_hop_Phuong_phap_Chunking.md`.
+Tổng hợp + khuyến nghị: `docs/03_thuc_nghiem/Tong_hop_Phuong_phap_Chunking.md`.
 
 ---
 
@@ -136,9 +136,9 @@ Tổng hợp + khuyến nghị: `docs/Tong_hop_Phuong_phap_Chunking.md`.
 ```python
 from pathlib import Path
 
-from etflab.chunking_methods import row_json_chunks
-from etflab.retrieval import HybridIndex, RetrievalConfig
-from etflab.uelements import load_unstructured_doc
+from src.chunking_methods import row_json_chunks
+from src.retrieval import HybridIndex, RetrievalConfig
+from src.uelements import load_unstructured_doc
 
 # 1. Cache JSON do unstructured sinh ra
 doc = load_unstructured_doc(
@@ -157,8 +157,8 @@ for hit in index.search("tỷ trọng mới của BSR"):
 ```
 
 Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng file
-`etflab/chunking_methods.py`). `Chunk` là dataclass parser-independent trong
-`etflab/chunk.py`.
+`src/chunking_methods.py`). `Chunk` là dataclass parser-independent trong
+`src/chunk.py`.
 
 ### Quy tắc số Việt Nam
 
@@ -182,7 +182,7 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 ├── pyproject.toml             # package + ruff + pytest
 ├── requirements.txt
 │
-├── etflab/                    # package hiện tại (không phụ thuộc parser hình học)
+├── src/                       # package hiện tại (không phụ thuộc parser hình học)
 │   ├── __init__.py            # API công khai
 │   ├── chunk.py               # dataclass Chunk (dùng chung)
 │   ├── vnnum.py               # parse số kiểu Việt Nam
@@ -206,7 +206,8 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 │       ├── build_gold_pages.py     # trang vàng từ text layer PyMuPDF
 │       ├── eval_three_methods.py   # Chipper / dual / row-JSON + Recall@k, MRR
 │       ├── diagnose_unstructured.py # coverage: đáp án bị mất khi đổi parser
-│       ├── metric_common.py        # token hoá + khớp số dùng chung
+│       ├── enrich_gold.py          # gold QA v2: 615 câu, kiểm chứng text layer
+│       └── metric_common.py        # token hoá + khớp số dùng chung
 │
 ├── tests/                     # 74 hàm test (pytest)
 │   ├── conftest.py
@@ -216,27 +217,23 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 │   └── test_metric_matching.py # số âm kế toán, đơn vị '000
 │
 ├── data/
+│   ├── gold/                         # gold QA v2 (có version)
 │   ├── raw/                          # PDF nguồn (không commit)
 │   ├── references/                   # bài báo khoa học tham khảo
 │   ├── eval/                         # gold QA + kết quả đánh giá (không commit)
 │   ├── processed/                    # JSON của parser cũ (giữ làm dữ liệu lịch sử)
 │   └── processed_unstructured/       # cache element + bảng của unstructured
 │
-├── docs/                      # xem docs/README.md để biết đọc theo thứ tự nào
-│   ├── README.md                      # mục lục + thứ tự đọc
-│   ├── Phat_bieu_bai_toan.md          # bài toán, input, output xuyên suốt
-│   ├── De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md
-│   ├── Tong_hop_Phuong_phap_Chunking.md  # kết quả + khuyến nghị
-│   ├── Tham_khao_va_nguon.md          # đối chiếu kỹ thuật ↔ bài báo
-│   ├── Co_che_Chipper_Financial_Report_Chunking.md    # nền tảng: Chipper
-│   ├── Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md # nền tảng: dual-granularity
-│   ├── So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md
-│   └── RAG_Bang_Bieu_Tai_Chinh.md     # khảo sát RAG bảng tài chính
+├── docs/                      # xem docs/README.md
+│   ├── 01_tong_quan/                  # đề cương + phát biểu bài toán
+│   ├── 02_co_so_ly_thuyet/            # Chipper, dual-granularity, RAG bảng, so sánh 2025-2026
+│   ├── 03_thuc_nghiem/                # kết quả + khuyến nghị
+│   └── 04_tham_khao/                  # đối chiếu nguồn + danh mục tham khảo
 │
 └── slides/
     ├── tong_quan_phuong_phap.tex       # slide Beamer (EN): methods overview + deep dive
     ├── dual_granularity_rag.tex        # slide Beamer: dual-granularity
-    ├── chipper_element_chunking.tex    # slide Beamer: Chipper + thực nghiệm
+    └── chipper_element_chunking.tex    # slide Beamer: Chipper + thực nghiệm
 ```
 
 > **Biên dịch slide:** cần XeLaTeX (fontspec + font có dấu tiếng Việt).

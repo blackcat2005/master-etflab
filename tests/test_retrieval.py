@@ -5,8 +5,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from etflab.chunk import Chunk
-from etflab.retrieval import BM25, HybridIndex, RetrievalConfig, tokenize
+from src.chunk import Chunk
+from src.retrieval import BM25, HybridIndex, RetrievalConfig, tokenize
 
 
 def fake_embed(docs) -> np.ndarray:

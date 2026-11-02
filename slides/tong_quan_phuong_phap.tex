@@ -11,7 +11,7 @@
 %   data/eval/colpali_results.json
 %   data/eval/gold_pages.json
 %   data/eval/extraction_gap.json
-% Synthesis: docs/Tong_hop_Phuong_phap_Chunking.md
+% Synthesis: docs/03_thuc_nghiem/Tong_hop_Phuong_phap_Chunking.md
 \documentclass[aspectratio=169,11pt]{beamer}
 
 % ---- Fonts: prefer Windows fonts, fall back to TeX defaults ----
@@ -429,8 +429,8 @@
     \begin{column}{0.52\textwidth}
       \begin{block}{Use as a library}
         {\scriptsize\ttfamily
-        from etflab.uelements import load\_unstructured\_doc\\
-        from etflab.chunking\_methods import row\_json\_chunks\\[0.35em]
+        from src.uelements import load\_unstructured\_doc\\
+        from src.chunking\_methods import row\_json\_chunks\\[0.35em]
         doc = load\_unstructured\_doc(path)\\
         chunks = row\_json\_chunks(doc, doc["elements"])\\
         print(chunks[0].text)}

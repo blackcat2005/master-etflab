@@ -1,7 +1,7 @@
 """Ba cach phan manh tren CUNG mot dau vao ``unstructured``.
 
 Vi sao tach khoi ``chunking.py``: ``chunking.py`` gan chat voi ``Table`` do
-``etflab`` tu tach (co ``unit_notes``, ``header_levels``, ``row_index_col``).
+``src`` tu tach (co ``unit_notes``, ``header_levels``, ``row_index_col``).
 Ban thi nghiem nay co y khong dung parser hinh hoc, nen dau vao la
 ``UElement`` — chuoi phan tu theo thu tu doc do ``unstructured`` tra ve.
 

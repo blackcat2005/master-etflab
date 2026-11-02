@@ -1,6 +1,6 @@
 # Đối chiếu kỹ thuật ↔ nguồn: parser hình học cũ (lưu trữ)
 
-> Tách ra từ `docs/Tham_khao_va_nguon.md` các mục 3, 4, 5.1–5.3, 6, 7. Không còn thuộc pipeline chính; giữ để tra cứu.
+> Tách ra từ `docs/04_tham_khao/Tham_khao_va_nguon.md` các mục 3, 4, 5.1–5.3, 6, 7. Không còn thuộc pipeline chính; giữ để tra cứu.
 
 ## 3. Tầng 1 — Khôi phục hình học từ toạ độ thô
 

@@ -5,20 +5,20 @@
 > `unstructured` + Table Transformer; các đối chiếu học thuật về chunking,
 > retrieval vẫn giữ nguyên giá trị (hướng ColPali đã bị loại khỏi đồ án).
 
-Ngày lập: 2026-10-04. Phạm vi: **toàn bộ kỹ thuật đã hiện thực** trong `etflab/`, kèm nguồn
+Ngày lập: 2026-10-04. Phạm vi: **toàn bộ kỹ thuật đã hiện thực** trong `src/`, kèm nguồn
 học thuật của từng kỹ thuật và mức độ tin cậy của nguồn đó.
 
 Tài liệu này gộp cả bảng đối chiếu kỹ thuật lẫn danh mục tham khảo — là nguồn tham khảo
 duy nhất, không còn file danh mục riêng. Trả lời câu hỏi **"việc này dựa trên bài báo nào,
 mức độ tin cậy ra sao"**. Dùng khi viết phần "phương pháp" trong luận văn.
 
-> **Phân biệt với [`Huong_dan_ky_thuat.md`](../archive/geometric_parser/docs/Huong_dan_ky_thuat.md):** file đó mô tả **code
+> **Phân biệt với [`Huong_dan_ky_thuat.md`](../../archive/geometric_parser/docs/Huong_dan_ky_thuat.md):** file đó mô tả **code
 > đang chạy thế nào**, dùng khi sửa code.
 
 | File | Vai trò |
 |---|---|
 | `archive/geometric_parser/docs/Huong_dan_ky_thuat.md` | Mô tả cách **parser hình học cũ** chạy (đã lưu trữ) |
-| **`docs/Tham_khao_va_nguon.md` (file này)** | **Bảng đối chiếu kỹ thuật ↔ nguồn gốc** + **danh mục tham khảo**, để viết phần "phương pháp" trong luận văn |
+| **`docs/04_tham_khao/Tham_khao_va_nguon.md` (file này)** | **Bảng đối chiếu kỹ thuật ↔ nguồn gốc** + **danh mục tham khảo**, để viết phần "phương pháp" trong luận văn |
 
 **Cấu trúc file:**
 
@@ -134,7 +134,7 @@ Chúng tôi **không** dùng VnCoreNLP hay vnTokenizer. Lý do kỹ thuật:
 ## 3–7. Các tầng parser hình học (đã lưu trữ)
 
 > Các mục 3 (hình học), 4 (dò vùng bảng), 5.1–5.3 (header nhiều tầng), 6 (tách/ghép bảng) và 7 (điều phối tài liệu) mô tả **parser hình học cũ** và đã chuyển sang
-> [`archive/geometric_parser/docs/Doi_chieu_parser_hinh_hoc.md`](../archive/geometric_parser/docs/Doi_chieu_parser_hinh_hoc.md).
+> [`archive/geometric_parser/docs/Doi_chieu_parser_hinh_hoc.md`](../../archive/geometric_parser/docs/Doi_chieu_parser_hinh_hoc.md).
 > Giữ lại ở đây: 5.4 (quy mô dữ liệu) và 5.5 (thực nghiệm Table Transformer trên corpus), vì chúng nằm trong pipeline hiện tại.
 
 ### 5.4 Quy mô tập dữ liệu — con số đã kiểm chứng
@@ -631,7 +631,7 @@ Sắp theo mức đáng làm, đã cân nhắc chi phí và rủi ro. Xem mục 
 
 # PHẦN II — DANH MỤC MỞ RỘNG (hướng chưa làm)
 
-Phần I (mục 1–16) là phần **đã hiện thực** trong `etflab/` và là nơi trích khi viết phần
+Phần I (mục 1–16) là phần **đã hiện thực** trong `src/` và là nơi trích khi viết phần
 "phương pháp". Phần II gom những bài **chưa dùng** — giữ để biết hướng nào đã có người làm,
 và để tránh phát minh lại. Danh mục chuẩn vẫn là **mục 14**; ở đây chỉ liệt kê mục **chưa**
 nằm trong đó.

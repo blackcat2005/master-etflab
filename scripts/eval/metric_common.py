@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import re
 
-from etflab.vnnum import parse_number, strip_accents
+from src.vnnum import parse_number, strip_accents
 
 __all__ = ["matches", "numbers_in", "strip_accents", "tok"]
 

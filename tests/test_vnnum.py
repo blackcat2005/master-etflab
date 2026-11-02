@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from etflab.vnnum import is_number, normalize_text, parse_number, strip_accents
+from src.vnnum import is_number, normalize_text, parse_number, strip_accents
 
 
 @pytest.mark.parametrize(

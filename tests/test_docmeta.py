@@ -8,9 +8,9 @@ from __future__ import annotations
 
 import pytest
 
-from etflab.chunk import Chunk
-from etflab.docmeta import parse_doc_meta
-from etflab.retrieval import (
+from src.chunk import Chunk
+from src.docmeta import parse_doc_meta
+from src.retrieval import (
     DocFilter,
     HybridIndex,
     RetrievalConfig,

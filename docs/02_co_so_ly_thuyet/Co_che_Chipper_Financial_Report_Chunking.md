@@ -8,10 +8,10 @@
 
 > **Phân biệt với các file khác trong `docs/`:**
 > - File này trả lời **"paper Chipper làm gì, cơ chế ra sao"** — dùng khi viết phần "phương pháp" và để **chọn baseline đối chiếu** cho tầng chunking.
-> - [`So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md`](./So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md) — các công trình **sau** Chipper, bằng chứng "mạnh hơn/yếu hơn", và đề xuất ablation.
-> - [`Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md`](./Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md) — paper Peng et al. (chunking hai cấp theo LLM).
-> - [`Tong_hop_Phuong_phap_Chunking.md`](./Tong_hop_Phuong_phap_Chunking.md) — kết quả thực nghiệm trên corpus này.
-> - [`Tham_khao_va_nguon.md`](./Tham_khao_va_nguon.md) — đối chiếu kỹ thuật ↔ nguồn học thuật.
+> - [`So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md`](So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md) — các công trình **sau** Chipper, bằng chứng "mạnh hơn/yếu hơn", và đề xuất ablation.
+> - [`Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md`](Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md) — paper Peng et al. (chunking hai cấp theo LLM).
+> - [`Tong_hop_Phuong_phap_Chunking.md`](../03_thuc_nghiem/Tong_hop_Phuong_phap_Chunking.md) — kết quả thực nghiệm trên corpus này.
+> - [`Tham_khao_va_nguon.md`](../04_tham_khao/Tham_khao_va_nguon.md) — đối chiếu kỹ thuật ↔ nguồn học thuật.
 
 ---
 

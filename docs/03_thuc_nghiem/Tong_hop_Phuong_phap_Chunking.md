@@ -3,9 +3,9 @@
 *Tài liệu tổng hợp cho luận văn. Các phương pháp được so sánh trên **cùng một bộ dữ liệu** (7 PDF / 27 trang / 130 câu hỏi vàng) và **cùng một parser** — `unstructured` (`hi_res` + Table Transformer). Parser bảng bằng hình học cũ đã được lưu trữ tại `archive/geometric_parser/` và **không còn** là baseline trong tài liệu này.*
 
 > **Liên quan:**
-> - [`Co_che_Chipper_Financial_Report_Chunking.md`](./Co_che_Chipper_Financial_Report_Chunking.md) — cơ chế paper Chipper.
-> - [`Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md`](./Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md) — paper Peng et al.
-> - [`So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md`](./So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md) — bối cảnh học thuật 2024–2026.
+> - [`Co_che_Chipper_Financial_Report_Chunking.md`](../02_co_so_ly_thuyet/Co_che_Chipper_Financial_Report_Chunking.md) — cơ chế paper Chipper.
+> - [`Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md`](../02_co_so_ly_thuyet/Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md) — paper Peng et al.
+> - [`So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md`](../02_co_so_ly_thuyet/So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md) — bối cảnh học thuật 2024–2026.
 > - Kết quả thô: `data/eval/three_methods.json`,
 >   `data/eval/extraction_gap.json`, `data/eval/gold_pages.json`.
 
@@ -63,7 +63,7 @@ Các ứng viên đại diện cho các triết lý khác nhau:
 - **Khối nhỏ** (small chunks): câu (với văn bản) hoặc **từng dòng** (với bảng). Hai câu liền nhau được gộp nếu `cosine ≥ θ = 0.9`.
 - **Truy hồi:** xếp hạng khối nhỏ; **rerank** bằng trung bình điểm khối nhỏ và điểm khối lớn chứa nó; cuối cùng trả khối lớn (small2big).
 
-**Cách hiện thực trong đồ án** (`etflab/chunking_methods.py`):
+**Cách hiện thực trong đồ án** (`src/chunking_methods.py`):
 
 | Thành phần | Paper | Đồ án | Lý do |
 |---|---|---|---|
@@ -142,7 +142,7 @@ Gold QA sinh từ ô bảng của **parser hình học cũ** (nay lưu trữ), k
 
 ### 3.2. Parser
 
-Cả ba phương pháp text dùng **cùng một** đầu vào: `unstructured==0.27.34`, `strategy="hi_res"`, `infer_table_structure=True`, `languages=["vie"]`, `pdf_image_dpi` mặc định. Bảng lấy từ `metadata.text_as_html` của Table Transformer, parse bằng `html.parser` (stdlib) trong `etflab/uelements.py`; `colspan`/`rowspan` được trải thành lưới chữ nhật, header nhiều tầng gộp bằng `" / "`.
+Cả ba phương pháp text dùng **cùng một** đầu vào: `unstructured==0.27.34`, `strategy="hi_res"`, `infer_table_structure=True`, `languages=["vie"]`, `pdf_image_dpi` mặc định. Bảng lấy từ `metadata.text_as_html` của Table Transformer, parse bằng `html.parser` (stdlib) trong `src/uelements.py`; `colspan`/`rowspan` được trải thành lưới chữ nhật, header nhiều tầng gộp bằng `" / "`.
 
 Không có bước nào dùng toạ độ chữ, đường kẻ hay ngưỡng hình học.
 
@@ -386,8 +386,8 @@ python -m pytest tests/test_metric_matching.py tests/test_retrieval.py
 
 | File | Nội dung |
 |---|---|
-| `etflab/uelements.py` | adapter `unstructured` → `UElement`/`UTable`, parse HTML bảng |
-| `etflab/chunking_methods.py` | `chipper_chunks`, `dual_granularity_chunks`, `row_json_chunks` |
+| `src/uelements.py` | adapter `unstructured` → `UElement`/`UTable`, parse HTML bảng |
+| `src/chunking_methods.py` | `chipper_chunks`, `dual_granularity_chunks`, `row_json_chunks` |
 | `scripts/ingest/parse_unstructured.py` | ingest + cache |
 | `scripts/eval/eval_three_methods.py` | chunk-level + page-level |
 | `scripts/eval/diagnose_unstructured.py` | coverage / mất ô |

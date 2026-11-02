@@ -48,13 +48,13 @@ if hasattr(sys.stdout, "reconfigure"):
 
 import metric_common as mc
 
-from etflab.chunking_methods import (
+from src.chunking_methods import (
     MethodConfig,
     chipper_chunks,
     dual_granularity_chunks,
     row_json_chunks,
 )
-from etflab.uelements import load_unstructured_doc
+from src.uelements import load_unstructured_doc
 
 UDATA = ROOT / "data" / "processed_unstructured"
 GOLD = ROOT / "data" / "eval" / "gold_qa.jsonl"

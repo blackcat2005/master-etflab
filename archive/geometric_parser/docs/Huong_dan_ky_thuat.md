@@ -11,7 +11,7 @@
 Tài liệu này ghi lại **kỹ thuật đã cài đặt thật trong code**, kèm vị trí cụ thể để tra cứu được,
 và ghi rõ hạn chế đã biết của từng kỹ thuật. Trả lời câu hỏi **"code này làm gì, ở dòng nào"**.
 
-> **Phân biệt với [`Tham_khao_va_nguon.md`](../../../docs/Tham_khao_va_nguon.md):** file đó trả lời
+> **Phân biệt với [`Tham_khao_va_nguon.md`](../../../docs/04_tham_khao/Tham_khao_va_nguon.md):** file đó trả lời
 > **"việc này dựa trên bài báo nào, mức tin cậy ra sao"** — dùng khi viết phần "phương pháp"
 > trong luận văn.
 

@@ -1,6 +1,6 @@
 # PHÁT BIỂU BÀI TOÁN XUYÊN SUỐT: HYBRID RAG CHO PHÂN TÍCH QUỸ ETF
 
-*Dùng cho chương "Phát biểu bài toán" của luận văn. Tài liệu mô tả **toàn bộ bài toán RAG từ PDF đến câu trả lời**, rồi chỉ ra phần nào đã hiện thực và đánh giá. Số liệu thực nghiệm lấy từ [`Tong_hop_Phuong_phap_Chunking.md`](./Tong_hop_Phuong_phap_Chunking.md); đề cương gốc ở [`De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md`](./De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md).*
+*Dùng cho chương "Phát biểu bài toán" của luận văn. Tài liệu mô tả **toàn bộ bài toán RAG từ PDF đến câu trả lời**, rồi chỉ ra phần nào đã hiện thực và đánh giá. Số liệu thực nghiệm lấy từ [`Tong_hop_Phuong_phap_Chunking.md`](../03_thuc_nghiem/Tong_hop_Phuong_phap_Chunking.md); đề cương gốc ở [`De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md`](De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md).*
 
 > **Quy ước trạng thái:** ✅ đã hiện thực và đo · 🟡 có code, chưa đo riêng · ⬜ định hướng, chưa làm.
 
@@ -79,7 +79,7 @@ T1–T2 chỉ cần **truy hồi**. T3–T4 cần **truy hồi rồi tính toán
 |---|---|
 | **Input** | câu hỏi $q$ |
 | **Output** | nhãn tác vụ ∈ {T1, T2, T3, T4}; bộ lọc `DocFilter(kỳ, chỉ số)` |
-| Hiện có | `infer_doc_filter` (`etflab/retrieval.py`) suy ra kỳ và chỉ số từ câu hỏi ✅; phân loại tác vụ chưa làm ⬜ |
+| Hiện có | `infer_doc_filter` (`src/retrieval.py`) suy ra kỳ và chỉ số từ câu hỏi ✅; phân loại tác vụ chưa làm ⬜ |
 
 ### L1. Parse — PDF → element và bảng ✅
 
@@ -176,8 +176,8 @@ Một mẫu gold (`data/eval/gold_qa.jsonl`):
 |---|---|---|---|
 | L0 Router | chọn tác vụ và bộ lọc | một phần (lọc kỳ/chỉ số) | `infer_doc_filter`, `tests/test_retrieval.py` |
 | L1 Parse | PDF → bảng | ✅ | `scripts/ingest/parse_unstructured.py`, coverage 96,9% |
-| L2 Chunk | đơn vị truy hồi | ✅ | `etflab/chunking_methods.py`, 6 chiến lược |
-| L3 Truy hồi | tìm bằng chứng | ✅ | `etflab/retrieval.py`, mục 6 |
+| L2 Chunk | đơn vị truy hồi | ✅ | `src/chunking_methods.py`, 6 chiến lược |
+| L3 Truy hồi | tìm bằng chứng | ✅ | `src/retrieval.py`, mục 6 |
 | L4 Công cụ / PoT | tính toán chính xác | ⬜ | — |
 | L5 Sinh đáp án + $\kappa$ | trả lời có độ tin cậy | ⬜ | — |
 

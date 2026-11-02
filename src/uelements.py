@@ -1,6 +1,6 @@
 """Adapter cho output cua ``unstructured`` (strategy=``hi_res``).
 
-Vi sao co file nay: phuong phap tach bang hinh hoc cua ``etflab`` chi dung
+Vi sao co file nay: phuong phap tach bang hinh hoc cua ``src`` chi dung
 cho mot ho tai lieu. Ban thi nghiem nay thay no bang ``unstructured`` —
 layout model (YOLOX) + Table Transformer — de tra loi cau hoi "neu dung mot
 parser pho thong thi chunking con giu duoc loi the khong".

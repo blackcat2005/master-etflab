@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """Parse PDF bang ``unstructured`` (hi_res + Table Transformer) -> cache JSON.
 
-Chay trong venv rieng co ``unstructured`` (khong can etflab/pymupdf):
+Chay trong venv rieng co ``unstructured`` (khong can src/pymupdf):
 
     C:/_venvs/unstr/Scripts/python.exe scripts/ingest/parse_unstructured.py
     C:/_venvs/unstr/Scripts/python.exe scripts/ingest/parse_unstructured.py --only VNDiamond --force
 
 Vi sao khong parse HTML o day: buoc nay chi can layout + table structure.
-Viec chuan hoa HTML -> luoi nam trong ``etflab/uelements.py`` (stdlib), de
+Viec chuan hoa HTML -> luoi nam trong ``src/uelements.py`` (stdlib), de
 ca ba chien luoc chunking dung chung mot cach doc bang.
 """
 

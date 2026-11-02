@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import json
 
-from etflab.chunking_methods import (
+from src.chunking_methods import (
     MethodConfig,
     chipper_chunks,
     dual_granularity_chunks,
     row_json_chunks,
 )
-from etflab.uelements import UElement, UTable, parse_table_html
+from src.uelements import UElement, UTable, parse_table_html
 
 SRC = "Thay_doi_thanh_phan_chi_so_VN30_Q2_2026.pdf"
 
