@@ -1,13 +1,12 @@
-# TỔNG HỢP THỰC NGHIỆM: DUAL-GRANULARITY, CHIPPER VÀ COLPALI TRÊN BÁO CÁO TÀI CHÍNH VIỆT NAM
+# TỔNG HỢP THỰC NGHIỆM: DUAL-GRANULARITY, CHIPPER VÀ ROW-JSON TRÊN BÁO CÁO TÀI CHÍNH VIỆT NAM
 
 *Tài liệu tổng hợp cho luận văn. Các phương pháp được so sánh trên **cùng một bộ dữ liệu** (7 PDF / 27 trang / 130 câu hỏi vàng) và **cùng một parser** — `unstructured` (`hi_res` + Table Transformer). Parser bảng bằng hình học cũ đã được lưu trữ tại `archive/geometric_parser/` và **không còn** là baseline trong tài liệu này.*
 
 > **Liên quan:**
 > - [`Co_che_Chipper_Financial_Report_Chunking.md`](./Co_che_Chipper_Financial_Report_Chunking.md) — cơ chế paper Chipper.
 > - [`Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md`](./Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md) — paper Peng et al.
-> - [`ColPali_Thuc_nghiem_Tieng_Viet.md`](./ColPali_Thuc_nghiem_Tieng_Viet.md) — protocol và kết quả ColPali chi tiết.
 > - [`So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md`](./So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md) — bối cảnh học thuật 2024–2026.
-> - Kết quả thô: `data/eval/three_methods.json`, `data/eval/colpali_results.json`,
+> - Kết quả thô: `data/eval/three_methods.json`,
 >   `data/eval/extraction_gap.json`, `data/eval/gold_pages.json`.
 
 ---
@@ -25,15 +24,13 @@ Trên 130 câu hỏi vàng (7 PDF, 27 trang, 10 bảng), **đơn vị truy hồi
 | `chipper` (cả bảng 1 chunk) | 27,7% | 36,1% | 0,475 | 0,618 |
 | `dual_dense` (e5-small) | 31,5% | 44,6% | 0,441 | 0,700 |
 | BM25 page (text `unstructured`) | — | 4,6% | — | 0,227 |
-| ColSmol-256M (visual) | — | 13,8% | — | 0,288 |
 
-Năm kết luận:
+Bốn kết luận:
 
 1. **Một dòng = một chunk là đơn vị đúng** cho câu hỏi ô bảng. `row_json` đạt 81,5% R@1 (chunk) và 90,0% (page), MRR 0,850/0,950 — gấp **~3 lần** Chipper ở R@1.
 2. **Chipper không hợp bảng số**: R@1 27,7% dù R@10 89,2%; `chars@1` 2.299 so với 494 — chunk cả bảng chỉ "chứa", không "trả lời". Prefix caption chỉ +9,2 điểm.
 3. **Dual-granularity là chiến lược cho generation, không phải precision**: `dual_small` (66,1%) thua `row_json` 15,4 điểm; rerank bằng khối lớn làm giảm thêm 16,1; dense e5-small còn 31,5%. Small2big hữu ích khi LLM cần ngữ cảnh, không giúp tìm đúng ô.
-4. **ColPali zero-shot 256M vượt BM25 trang nhưng còn xa chunk có cấu trúc**: 13,8% R@1 page (BM25 4,6%), nhưng chỉ bằng **1/6,5** `row_json`. Visual là bộ chọn trang, chưa phải bộ trả lời ô.
-5. **Giới hạn parser là thật và được định lượng**: `unstructured` giữ 126/130 giá trị (96,9%) ở mức element, 122/130 (93,8%) ở mức chunk. Bốn giá trị bị mất được báo cáo riêng, không bị loại khỏi mẫu.
+4. **Giới hạn parser là thật và được định lượng**: `unstructured` giữ 126/130 giá trị (96,9%) ở mức element, 122/130 (93,8%) ở mức chunk. Bốn giá trị bị mất được báo cáo riêng, không bị loại khỏi mẫu.
 
 ---
 
@@ -47,7 +44,6 @@ Các ứng viên đại diện cho các triết lý khác nhau:
 |---|---|---|
 | Chia theo **cấu trúc tài liệu** | Chipper (arXiv:2402.05131) | phần tử (title/table/prose) gộp tới 2.048 ký tự |
 | Chia theo **hai mức ngữ nghĩa** | Dual-granularity (Peng et al., ESWA 2026) | câu / dòng (nhỏ) → đoạn (lớn) |
-| **Không chia** — truy hồi trên ảnh | ColPali (arXiv:2407.01449) | cả trang PDF |
 | **1 dòng = 1 object** (biến thể text) | Row-JSON | một dòng bảng tự chứa |
 
 **Trong phạm vi:** 7 PDF (3 báo cáo broker + 4 bản tin SSI) đã có text layer, 27 trang, 10 bảng gold.
@@ -92,15 +88,7 @@ Bốn quy tắc, không tham số:
 
 > **Điểm cần nói rõ khi bảo vệ:** Chipper giữ nguyên bảng nên chunk có thể **vượt 2.048 ký tự** rất xa (bảng 45 dòng ≈ 4–6k ký tự). Đây là hệ quả trực tiếp của quy tắc 4, không phải lỗi cài đặt.
 
-### 2.3. ColPali (arXiv:2407.01449)
-
-- Render mỗi trang PDF thành ảnh (150 DPI), cắt thành các patch 512×512 (một trang A4 → 13 crop → 875 vector 128 chiều).
-- Truy hồi bằng **late interaction / MaxSim**: mỗi token câu hỏi lấy max cosine với mọi patch, rồi cộng lại.
-- **Không cần parser, không cần OCR, không cần chunk** — nhưng đơn vị truy hồi là **cả trang**.
-
-Đồ án chạy **`vidore/colSmol-256M`** (surrogate 256M, CPU) vì ColPali-v1.2 (3B) cần GPU. Kết quả vì thế là **sàn** của họ late-interaction, không phải phán quyết về ColPali bản gốc.
-
-### 2.4. Row-JSON (biến thể của nhánh text)
+### 2.3. Row-JSON (biến thể của nhánh text)
 
 Mỗi dòng bảng → một object JSON:
 
@@ -112,10 +100,20 @@ Mỗi dòng bảng → một object JSON:
 
 Chunk tự chứa cả **ngữ cảnh** (file, trang, tên bảng) lẫn **dữ liệu** (tên cột → giá trị), nên không cần embed cả bảng. Đây là cách hiện thực hoá đề xuất "chuyển từng dòng thành JSON"; đồng thời là biến thể small-chunk của dual-granularity khi gặp bảng.
 
-### 2.5. Bảng so sánh khái niệm
+### 2.4. Bảng so sánh khái niệm
 
-| | Dual-granularity | Chipper | ColPali | Row-JSON |
-|---|---|---|---|---|
+| | Dual-granularity | Chipper | Row-JSON |
+|---|---|---|---|
+| Đơn vị truy hồi | câu / dòng | phần tử gộp 2k, cả bảng | 1 dòng |
+| Đơn vị trả về | đoạn lớn (small2big) | chunk 2k / cả bảng | 1 dòng |
+| Cần parser bảng | có | có | có |
+| Cần model khi ingest | embed câu (nhỏ) | không | không |
+| Chi phí mỗi câu hỏi | thấp | thấp | thấp |
+| Trả lời câu hỏi "ô nào" | tốt nếu small = dòng | trung bình (chunk lớn) | tốt nhất |
+| Ngữ cảnh cho LLM | 1.024 ký tự | 2.048+ ký tự | 1 dòng |
+| Phụ thuộc chất lượng parser | cao | cao | cao |
+
+---|---|---|---|
 | Đơn vị truy hồi | câu / dòng | phần tử gộp 2k, cả bảng | ảnh trang | 1 dòng |
 | Đơn vị trả về | đoạn lớn (small2big) | chunk 2k / cả bảng | cả trang | 1 dòng |
 | Cần parser bảng | có | có | **không** | có |
@@ -173,12 +171,12 @@ Metric: Recall@1/3/5/10, MRR.
 
 ### 3.4. Vì sao có hai mức đánh giá
 
-ColPali chỉ có 27 ứng viên (trang), còn chunking có hàng trăm ứng viên (dòng/chunk). Đặt chung một bảng R@1 sẽ **thiên vị hệ ít ứng viên hơn**. Vì vậy:
+Baseline BM25 trang chỉ có 27 ứng viên (trang), còn chunking có hàng trăm ứng viên (dòng/chunk). Đặt chung một bảng R@1 sẽ **thiên vị hệ ít ứng viên hơn**. Vì vậy:
 
 - Bảng **chunk-level** trả lời: "trong nhánh text, cách chia nào tốt nhất?"
 - Bảng **page-level** trả lời: "nếu mọi hệ đều chỉ được chọn 1 trang, hệ nào tốt nhất?"
 
-Không có bảng nào "công bằng tuyệt đối"; hai bảng bổ sung nhau. Page-level dùng max-pool để mọi hệ chunk có cùng đơn vị so với ColPali.
+Không có bảng nào "công bằng tuyệt đối"; hai bảng bổ sung nhau. Page-level dùng max-pool để mọi hệ chunk có cùng đơn vị so với BM25 trang.
 
 ---
 
@@ -213,15 +211,13 @@ Không có bảng nào "công bằng tuyệt đối"; hai bảng bổ sung nhau.
 | `chipper_prefix` | 45,4% | 89,2% | 99,2% | 100% | 0,665 | 4 quy tắc + caption |
 | `dual_dense` | 44,6% | 94,6% | 100% | 100% | 0,700 | e5-small dense |
 | `chipper` | 36,1% | 88,5% | 99,2% | 100% | 0,618 | 4 quy tắc |
-| `colSmol-256M` | 13,8% | 26,9% | 36,2% | 74,6% | 0,288 | visual, zero-shot |
 | `bm25_page` (text `unstructured`) | 4,6% | 22,3% | 41,5% | 75,4% | 0,227 | baseline yếu |
 
 Đọc bảng:
 
-- **`row_json` bỏ xa phần còn lại**: 90,0% R@1, gần như bão hoà ở 27 trang. Đây là mốc đúng để so với ColPali.
+- **`row_json` bỏ xa phần còn lại**: 90,0% R@1, gần như bão hoà ở 27 trang. Đây là mốc đúng để so với BM25 trang.
 - **Chipper tìm đúng trang trong top-3 (88,5%) nhưng hiếm khi top-1 (36,1%)**: chunk cả bảng là "máy dò trang", không phải "máy trả lời ô".
 - **Mọi biến thể dual thấp hơn `row_json`**: càng thêm tầng (prose, rerank, dense) càng nhiễu trên bài toán ô số.
-- **ColPali (13,8%) vượt BM25 trang (4,6%)** — tín hiệu ảnh có thật — nhưng còn cách `row_json` **6,5 lần** ở R@1. Visual là bộ chọn trang, chưa phải bộ trả lời ô.
 - Page-level dùng **trang vàng từ text layer PDF**, không dùng trang bắt đầu bảng; nhờ vậy các bảng trải 2 trang không bị phạt oan. Số page-level vì thế khác bản cũ (dùng trang bắt đầu bảng).
 
 ### 4.3. Khoảng cách trích xuất: `unstructured` giữ được bao nhiêu đáp án?
@@ -295,22 +291,7 @@ không do cách chia chunk.
 - Dense e5-small zero-shot chỉ đạt 31,5% R@1 — thấp hơn BM25 34,6 điểm; bài toán số/mã CK vẫn cần lexical.
 - Chi phí ingest cao hơn: phải embed toàn bộ câu và dòng (935 chunk vs 332 của row-JSON).
 
-### 5.3. ColPali
-
-**Ưu**
-
-- **Bỏ toàn bộ parser**: không cần tách bảng, không cần OCR, không sợ PDF lạ.
-- Xử lý được layout phức tạp, hình ảnh, biểu đồ — thứ mà text pipeline bỏ qua.
-- Là hướng "end-to-end" đang rất mạnh trong literature khi **có fine-tune**.
-
-**Nhược**
-
-- **Đơn vị truy hồi là trang**, không phải ô: trả lời "giá trị của MBB" vẫn cần bước thứ hai (đọc bảng trong trang).
-- Zero-shot trên tiếng Việt **yếu**: ColSmol-256M 13,8% R@1 corpus; chỉ hơn BM25 trang (4,6%) nhưng kém `row_json` 6,5 lần.
-- Cần GPU để chạy bản 3B; CPU 256M đã tốn ~25 s cho 130 câu (sau khi cache ảnh).
-- Cần fine-tune theo miền mới mong vượt text pipeline — nằm ngoài phạm vi đồ án.
-
-### 5.4. Row-JSON
+### 5.3. Row-JSON
 
 **Ưu**
 
@@ -325,7 +306,7 @@ không do cách chia chunk.
 - Phụ thuộc header do parser trả về; header sai (như `"lượng DCVFMVN Diamond ETF"` thiếu tiền tố) làm key JSON khó hiểu.
 - Không giải quyết câu hỏi định tính trong phần prose — cần chunk prose song song (dual làm việc này).
 
-### 5.5. Bài học cắt ngang: trộn nhiều loại chunk không miễn phí
+### 5.4. Bài học cắt ngang: trộn nhiều loại chunk không miễn phí
 
 So sánh trực tiếp trên cùng parser `unstructured`:
 
@@ -350,10 +331,9 @@ Hệ quả thiết kế:
 Kết quả **đảo ngược một giả định ban đầu** của đồ án: lợi thế lớn nhất không đến từ parser hình học, mà từ **đơn vị truy hồi "một dòng = một chunk"**.
 
 1. **Đơn vị truy hồi thắng**: `row_json` đạt 81,5% R@1 (chunk) / 90,0% (page), gấp ~3 lần Chipper và hơn `dual_small` 15,4 điểm.
-2. **Trộn chunk là bước lùi**: thêm prose/cả bảng vào cùng index làm R@1 giảm mạnh (`dual` 50,0%, `chipper` 27,7%) — xem §5.5.
+2. **Trộn chunk là bước lùi**: thêm prose/cả bảng vào cùng index làm R@1 giảm mạnh (`dual` 50,0%, `chipper` 27,7%) — xem §5.4.
 3. **Chipper không phù hợp bảng số**: chunk cả bảng 2,3k ký tự, R@1 chỉ ~1/3 row-JSON; R@5 cao là "chứa" chứ chưa chắc "trả lời".
 4. **Dual-granularity là chiến lược cho generation, không phải precision**: small2big hữu ích khi LLM cần ngữ cảnh, nhưng ở mức truy hồi ô, `dual_small` thua row-JSON và rerank bằng khối lớn còn làm giảm R@1.
-5. **ColPali zero-shot 256M chưa thay được text pipeline**: 13,8% R@1 page, hơn BM25 trang (4,6%) nhưng cách xa `row_json` (90,0%). Cần fine-tune + GPU để đánh giá đúng.
 
 Khuyến nghị theo mục tiêu:
 
@@ -363,14 +343,13 @@ Khuyến nghị theo mục tiêu:
 | Hỏi đáp cần ngữ cảnh bảng | row (small) → bảng/card (large), **hai index** hoặc RRF | giữ small2big mà không pha loãng index số |
 | Hỏi đáp định tính | prose index riêng | tránh chunk văn xuôi chen vào top-1 của câu hỏi số |
 | Baseline học thuật | Chipper (+ prefix) | không tham số, tái lập được; chỉ dùng để so sánh |
-| PDF scan / không text layer | ColPali sau fine-tune, có GPU | zero-shot 256M chưa đủ; 3B + fine-tune ngoài phạm vi |
+| PDF scan / không text layer | ngoài phạm vi hiện tại | chưa xử lý (bỏ ColPali); cần OCR nếu mở lại |
 
 **Thay đổi cụ thể cho code hiện tại:**
 
 1. Dùng `row_json_chunks` làm index chính cho câu hỏi ô số.
 2. Giữ `chipper_chunks` / `dual_granularity_chunks` cho câu hỏi cần ngữ cảnh, ở **index riêng**.
 3. Log `coverage` của parser (96,9% ở đây) như một chỉ số chất lượng ingest.
-4. Với ColPali: chỉ đầu tư nếu có GPU + dữ liệu fine-tune theo miền; nếu không, dùng nó như bộ lọc trang (R@3 26,9% — chưa đủ).
 
 ---
 
@@ -378,7 +357,6 @@ Khuyến nghị theo mục tiêu:
 
 1. **Gold do parser cũ sinh** → thiên lệch nhẹ về cách chia ô; `unstructured` chỉ khớp 96,9% ô gold (mục 4.3). Con số tuyệt đối là **cận dưới** cho `unstructured`, nhưng so sánh *giữa các cách chunking trên cùng parser* vẫn hợp lệ.
 2. **Page-level dùng trang vàng từ text layer PDF**, không phải nhãn người; 19 câu có nhiều trang đúng. Đây là protocol hợp lý nhưng vẫn có thể trùng trang do giá trị xuất hiện ở nhiều bảng.
-3. **ColPali-3B chưa chạy** (cần GPU). ColSmol-256M là surrogate; kết luận "visual thua text" chỉ đúng cho zero-shot 256M trên corpus này.
 4. **27 trang, 7 tài liệu** — nhỏ. Chênh lệch 1–2 câu có thể đảo thứ hạng; nên đọc kèm MRR và coverage.
 5. **Chưa có human-annotated gold** ở mức ô; giá trị `value_norm` do `vnnum` parse.
 6. **Chưa đánh giá generation** (ROUGE/BLEU) — có chủ ý, vì mục tiêu là retrieval và chi phí.
@@ -393,15 +371,14 @@ Khuyến nghị theo mục tiêu:
 C:/_venvs/unstr/Scripts/python.exe scripts/ingest/parse_unstructured.py --force
 
 # 2) Các cách chunking + đo (cần torch cho dense; --no-dense chỉ cần stdlib)
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/eval_three_methods.py
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/eval_three_methods.py --no-dense
+python scripts/eval/eval_three_methods.py
+python scripts/eval/eval_three_methods.py --no-dense
 
 # 3) Khoảng cách trích xuất
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/diagnose_unstructured.py
+python scripts/eval/diagnose_unstructured.py
 
-# 4) Trang vàng + ColPali / ColSmol (page-level, CPU; cần torch + transformers)
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/build_gold_pages.py
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/colpali_retrieval.py --model vidore/colSmol-256M
+# 4) Trang vàng độc lập parser (PyMuPDF)
+python scripts/eval/build_gold_pages.py
 
 # 5) Test
 python -m pytest tests/test_metric_matching.py tests/test_retrieval.py
@@ -415,9 +392,7 @@ python -m pytest tests/test_metric_matching.py tests/test_retrieval.py
 | `scripts/eval/eval_three_methods.py` | chunk-level + page-level |
 | `scripts/eval/diagnose_unstructured.py` | coverage / mất ô |
 | `scripts/eval/build_gold_pages.py` | trang vàng độc lập parser (PyMuPDF) |
-| `scripts/eval/colpali_retrieval.py` | BM25 page vs ColPali/ColSmol |
 | `tests/test_metric_matching.py` | hồi quy cách so khớp số (ngoặc, đơn vị) |
 | `data/eval/three_methods.json` | kết quả thô chunk/page |
-| `data/eval/colpali_results.json` | kết quả thô ColPali/BM25 page |
 | `data/eval/gold_pages.json` | tập trang đúng cho từng câu |
 | `data/eval/extraction_gap.json` | danh sách câu bị mất + lý do |

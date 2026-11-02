@@ -15,10 +15,10 @@ hỏi duy nhất. Script này:
    xuất hiện trên một trang. Ô không qua kiểm chứng bị gắn `text_layer_ok=false`.
 
 Ra: `data/gold/gold_qa_v2.jsonl` (+ `gold_qa_v2.stats.json`).
-Cần pymupdf, chạy bằng venv có pymupdf:
+Cần pymupdf (`pip install -e ".[eval]"`):
 
-    C:/_venvs/colpali/Scripts/python.exe scripts/eval/enrich_gold.py
-    C:/_venvs/colpali/Scripts/python.exe scripts/eval/enrich_gold.py --per-table 80
+    python scripts/eval/enrich_gold.py
+    python scripts/eval/enrich_gold.py --per-table 80
 """
 
 from __future__ import annotations

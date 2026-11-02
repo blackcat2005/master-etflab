@@ -39,11 +39,10 @@ Parser `unstructured` chạy trong **venv riêng** (torch + layout/table model,
 C:/_venvs/unstr/Scripts/python.exe -m pip install "unstructured[pdf]" torch
 ```
 
-Đánh giá ColPali cần `pymupdf` (có trong `.[eval]`) và `colpali-engine`:
+Gold/trang vàng cần `pymupdf` (có trong `.[eval]`):
 
 ```bash
 pip install -e ".[eval]"
-pip install colpali-engine
 ```
 
 > Windows: nếu PowerShell hiện lỗi Unicode khi in bảng tiếng Việt, chạy
@@ -69,15 +68,14 @@ chữ hay dò đường kẻ.
 ```bash
 # 6 chiến lược: chipper, chipper_prefix, row_json, dual, dual_small, dual_dense
 # (dense cần torch; --no-dense chạy được bằng python thường)
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/eval_three_methods.py
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/eval_three_methods.py --no-dense
+python scripts/eval/eval_three_methods.py
+python scripts/eval/eval_three_methods.py --no-dense
 
 # Đo khoảng cách trích xuất của unstructured so với gold (4 câu bị mất giá trị)
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/diagnose_unstructured.py
+python scripts/eval/diagnose_unstructured.py
 
-# Trang vàng độc lập parser + ColPali/ColSmol (CPU)
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/build_gold_pages.py
-C:/_venvs/colpali/Scripts/python.exe scripts/eval/colpali_retrieval.py
+# Trang vàng độc lập parser (text layer PyMuPDF)
+python scripts/eval/build_gold_pages.py
 ```
 
 ### 2.3 Test và lint
@@ -116,22 +114,20 @@ có ít nhất một chunk chứa đáp án (trần của recall, phản ánh pa
 | `chipper` | 36,1% | 88,5% | 99,2% | 100% | 0,618 |
 | `dual_dense` | 44,6% | 94,6% | 100% | 100% | 0,700 |
 
-### 3.3 So với ColPali / BM25 trang
+### 3.3 So với BM25 trang
 
 | Hệ | R@1 corpus | R@3 | R@5 | R@10 | MRR |
 |---|---:|---:|---:|---:|---:|
 | `row_json` (page) | **90,0%** | **100%** | **100%** | **100%** | **0,950** |
 | `dual_small` (page) | 73,9% | 96,2% | 100% | 100% | 0,844 |
 | `chipper_prefix` (page) | 45,4% | 89,2% | 99,2% | 100% | 0,665 |
-| `colpali:colSmol-256M` | 13,8% | 26,9% | 36,2% | 74,6% | 0,288 |
 | `bm25_page` (unstructured text) | 4,6% | 22,3% | 41,5% | 75,4% | 0,227 |
 
-ColSmol-256M là **surrogate CPU** của ColPali-3B, không phải kết luận về bản
-gốc. Chi tiết: `docs/ColPali_Thuc_nghiem_Tieng_Viet.md`.
+Hướng truy hồi bằng ảnh (ColPali) đã được loại khỏi đồ án.
 
-Kết quả thô: `data/eval/three_methods.json`, `data/eval/colpali_results.json`,
+Kết quả thô: `data/eval/three_methods.json`,
 `data/eval/extraction_gap.json`, `data/eval/gold_pages.json`.
-Tổng hợp + khuyến nghị: `docs/Tong_hop_3_phuong_phap_Chunking_va_ColPali.md`.
+Tổng hợp + khuyến nghị: `docs/Tong_hop_Phuong_phap_Chunking.md`.
 
 ---
 
@@ -211,7 +207,6 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 │       ├── eval_three_methods.py   # Chipper / dual / row-JSON + Recall@k, MRR
 │       ├── diagnose_unstructured.py # coverage: đáp án bị mất khi đổi parser
 │       ├── metric_common.py        # token hoá + khớp số dùng chung
-│       └── colpali_retrieval.py    # retrieval mức TRANG: BM25 vs ColPali/ColSmol
 │
 ├── tests/                     # 74 hàm test (pytest)
 │   ├── conftest.py
@@ -231,11 +226,10 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 │   ├── README.md                      # mục lục + thứ tự đọc
 │   ├── Phat_bieu_bai_toan.md          # bài toán, input, output xuyên suốt
 │   ├── De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md
-│   ├── Tong_hop_3_phuong_phap_Chunking_va_ColPali.md  # kết quả + khuyến nghị
+│   ├── Tong_hop_Phuong_phap_Chunking.md  # kết quả + khuyến nghị
 │   ├── Tham_khao_va_nguon.md          # đối chiếu kỹ thuật ↔ bài báo
 │   ├── Co_che_Chipper_Financial_Report_Chunking.md    # nền tảng: Chipper
 │   ├── Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md # nền tảng: dual-granularity
-│   ├── ColPali_Thuc_nghiem_Tieng_Viet.md              # nền tảng: ColPali
 │   ├── So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md
 │   └── RAG_Bang_Bieu_Tai_Chinh.md     # khảo sát RAG bảng tài chính
 │
@@ -243,7 +237,6 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
     ├── tong_quan_phuong_phap.tex       # slide Beamer (EN): methods overview + deep dive
     ├── dual_granularity_rag.tex        # slide Beamer: dual-granularity
     ├── chipper_element_chunking.tex    # slide Beamer: Chipper + thực nghiệm
-    └── colpali_deep_dive.tex           # slide Beamer: ColPali + thực nghiệm
 ```
 
 > **Biên dịch slide:** cần XeLaTeX (fontspec + font có dấu tiếng Việt).
@@ -280,8 +273,6 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
    hàng/cột, JSON sai theo. Coverage 93,8% ở chunk-level là trần thực tế.
 4. **Dual rerank bằng dense e5-small làm giảm R@1** (66,1% → 50,0%); giá trị
    của dual nằm ở ngữ cảnh small→large cho generation, không phải precision.
-5. **ColPali mới chạy ColSmol-256M zero-shot trên CPU** — là sàn, không phải
-   kết luận về ColPali-3B / fine-tune.
 6. **Chưa đo generation**: mới đo retrieval (Recall@k / MRR), chưa đo câu trả
    lời end-to-end.
 
@@ -291,5 +282,4 @@ Các hàm chunking khác: `chipper_chunks`, `dual_granularity_chunks` (cùng fil
 
 - Viết thêm ~20 câu vàng thủ công để giảm bias gold tự sinh.
 - Đo generation (PoT/tool-calling) trên chunk row-JSON.
-- Thử ColPali-v1.2 / ColQwen2 trên GPU, fine-tune LoRA tiếng Việt.
 - Hybrid 2 tầng: visual lấy trang → row-JSON lấy ô.

@@ -3,7 +3,7 @@
 > **Cập nhật 2026-10:** phần parser bảng bằng hình học trong tài liệu này đã
 > được lưu trữ (`archive/geometric_parser/`). Pipeline đánh giá hiện tại dùng
 > `unstructured` + Table Transformer; các đối chiếu học thuật về chunking,
-> retrieval và ColPali vẫn giữ nguyên giá trị.
+> retrieval vẫn giữ nguyên giá trị (hướng ColPali đã bị loại khỏi đồ án).
 
 Ngày lập: 2026-10-04. Phạm vi: **toàn bộ kỹ thuật đã hiện thực** trong `etflab/`, kèm nguồn
 học thuật của từng kỹ thuật và mức độ tin cậy của nguồn đó.

@@ -11,7 +11,7 @@ So sanh:
 Hai muc do:
   * CHUNK level — trong pham vi 1 file, de so cac cach chunking voi nhau.
   * PAGE level  — max-pool diem chunk len trang, xep hang 27 trang, de so
-    truc tiep voi ColPali (``colpali_retrieval.py``).
+    voi baseline BM25 theo trang.
 
 Metric chunk-level la CONTENT-BASED: chunk dung neu chua ca entity (ma CK)
 va value (so da chuan hoa) — khong phu thuoc chunk_id. Kem theo:
@@ -405,7 +405,7 @@ def main() -> int:
     if embed is not None:
         print(f"[i] embedder {embed.name} ({time.time()-t0:.1f}s)", file=sys.stderr)
 
-    # Trang corpus = 27 trang co phan tu unstructured (de so voi ColPali).
+    # Trang corpus = 27 trang co phan tu unstructured (de so voi BM25 trang).
     pages = []
     seen_pages: set[tuple[str, int]] = set()
     for d in udocs:

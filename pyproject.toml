@@ -17,7 +17,7 @@ dependencies = [
 retrieval = [
     "sentence-transformers>=3.0",
 ]
-# Script danh gia ColPali can render PDF; parser hinh hoc da luu tru.
+# Script tao gold page can doc text layer PDF; parser hinh hoc da luu tru.
 eval = [
     "pymupdf>=1.24",
 ]

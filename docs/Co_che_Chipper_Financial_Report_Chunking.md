@@ -10,7 +10,7 @@
 > - File này trả lời **"paper Chipper làm gì, cơ chế ra sao"** — dùng khi viết phần "phương pháp" và để **chọn baseline đối chiếu** cho tầng chunking.
 > - [`So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md`](./So_sanh_Chipper_va_cac_phuong_phap_Chunking_2025_2026.md) — các công trình **sau** Chipper, bằng chứng "mạnh hơn/yếu hơn", và đề xuất ablation.
 > - [`Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md`](./Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md) — paper Peng et al. (chunking hai cấp theo LLM).
-> - [`Tong_hop_3_phuong_phap_Chunking_va_ColPali.md`](./Tong_hop_3_phuong_phap_Chunking_va_ColPali.md) — kết quả thực nghiệm trên corpus này.
+> - [`Tong_hop_Phuong_phap_Chunking.md`](./Tong_hop_Phuong_phap_Chunking.md) — kết quả thực nghiệm trên corpus này.
 > - [`Tham_khao_va_nguon.md`](./Tham_khao_va_nguon.md) — đối chiếu kỹ thuật ↔ nguồn học thuật.
 
 ---
@@ -286,7 +286,7 @@ Cả ba đều đi đến kết luận **"chunk theo cấu trúc tốt hơn chun
 
 ### 9.4 Cái KHÔNG nên bê về
 
-- **Chipper model:** phụ thuộc checkpoint ảnh + huấn luyện trên tiếng Anh; rule-based + row-JSON của đồ án đạt R@1 cao hơn trên corpus này (mục 4.1, `Tong_hop_3_phuong_phap_Chunking_va_ColPali.md`).
+- **Chipper model:** phụ thuộc checkpoint ảnh + huấn luyện trên tiếng Anh; rule-based + row-JSON của đồ án đạt R@1 cao hơn trên corpus này (mục 4.1, `Tong_hop_Phuong_phap_Chunking.md`).
 - **Aggregation:** paper tự thừa nhận **hại Q&A** do tràn ngữ cảnh → không dùng.
 - **Keywords/Summary bằng GPT-4:** tốn chi phí và không tất định; Prefix & Table Description đã đủ hiệu quả (BLEU cao nhất).
 

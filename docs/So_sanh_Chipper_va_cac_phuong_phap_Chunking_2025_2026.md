@@ -6,7 +6,7 @@
 > - [`Co_che_Chipper_Financial_Report_Chunking.md`](./Co_che_Chipper_Financial_Report_Chunking.md) — cơ chế paper Chipper (baseline C của luận văn).
 > - **File này** — khảo sát các công trình *sau* Chipper, đối chiếu bằng chứng, và đề xuất strategy bổ sung cho pipeline hiện tại (`unstructured` + row-JSON).
 > - [`Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md`](./Tong_quan_va_Phuong_phap_Dual_Granularity_RAG.md) — hướng chunking hai cấp của Peng et al.
-> - [`Tong_hop_3_phuong_phap_Chunking_va_ColPali.md`](./Tong_hop_3_phuong_phap_Chunking_va_ColPali.md) — kết quả thực nghiệm trên corpus này.
+> - [`Tong_hop_Phuong_phap_Chunking.md`](./Tong_hop_Phuong_phap_Chunking.md) — kết quả thực nghiệm trên corpus này.
 
 ---
 

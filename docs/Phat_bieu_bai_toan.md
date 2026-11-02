@@ -1,6 +1,6 @@
 # PHÁT BIỂU BÀI TOÁN XUYÊN SUỐT: HYBRID RAG CHO PHÂN TÍCH QUỸ ETF
 
-*Dùng cho chương "Phát biểu bài toán" của luận văn. Tài liệu mô tả **toàn bộ bài toán RAG từ PDF đến câu trả lời**, rồi chỉ ra phần nào đã hiện thực và đánh giá. Số liệu thực nghiệm lấy từ [`Tong_hop_3_phuong_phap_Chunking_va_ColPali.md`](./Tong_hop_3_phuong_phap_Chunking_va_ColPali.md); đề cương gốc ở [`De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md`](./De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md).*
+*Dùng cho chương "Phát biểu bài toán" của luận văn. Tài liệu mô tả **toàn bộ bài toán RAG từ PDF đến câu trả lời**, rồi chỉ ra phần nào đã hiện thực và đánh giá. Số liệu thực nghiệm lấy từ [`Tong_hop_Phuong_phap_Chunking.md`](./Tong_hop_Phuong_phap_Chunking.md); đề cương gốc ở [`De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md`](./De_cuong_Luan_van_Thac_si_RAG_Phai_sinh.md).*
 
 > **Quy ước trạng thái:** ✅ đã hiện thực và đo · 🟡 có code, chưa đo riêng · ⬜ định hướng, chưa làm.
 
@@ -164,7 +164,6 @@ Một mẫu gold (`data/eval/gold_qa.jsonl`):
 | **`row_json`** | một hàng bảng | **81,5%** | **90,0%** | **0,950** |
 | `dual_small` | câu hoặc hàng | 66,1% | 73,9% | 0,844 |
 | `chipper` | cả bảng + prose, ≤ 2.048 ký tự | 27,7% | 36,1% | 0,618 |
-| ColSmol-256M | cả trang ảnh | — | 13,8% | 0,288 |
 | `bm25_page` | văn bản cả trang | — | 4,6% | 0,227 |
 
 **Kết luận.** Đơn vị truy hồi quyết định kết quả hơn thuật toán chunking; trộn nhiều loại chunk vào một index làm R@1 giảm mạnh; dual-granularity phục vụ ngữ cảnh cho sinh đáp án chứ không phục vụ độ chính xác truy hồi.
@@ -189,8 +188,7 @@ Một mẫu gold (`data/eval/gold_qa.jsonl`):
 1. **Phát biểu bài toán RAG tài chính ETF Việt Nam** dưới dạng pipeline L0–L5, tách rõ phần truy hồi (cần đúng bằng chứng) khỏi phần tính toán (cần đúng số).
 2. **Bằng chứng thực nghiệm cho L2**: một hàng = một chunk đạt R@1 81,5%, gấp khoảng 3 lần Chipper; trộn chunk làm giảm precision; dual-granularity hợp cho generation.
 3. **Định lượng giới hạn của L1**: `unstructured` giữ 96,9% giá trị, 4 giá trị mất được liệt kê.
-4. **Đối sánh với truy hồi bằng ảnh**: ColPali zero-shot 256M vượt BM25 trang nhưng kém `row_json` 6,5 lần ở R@1.
-5. **Nền cho L4–L5**: chuẩn hoá số Việt Nam (`vnnum`), metadata kỳ/chỉ số, chunk tự chứa có truy vết.
+4. **Nền cho L4–L5**: chuẩn hoá số Việt Nam (`vnnum`), metadata kỳ/chỉ số, chunk tự chứa có truy vết.
 
 ---
 
@@ -201,6 +199,5 @@ Một mẫu gold (`data/eval/gold_qa.jsonl`):
 3. **Corpus nhỏ**: 7 tài liệu, 27 trang, 10 bảng. Chênh lệch 1–2 câu có thể đảo thứ hạng.
 4. **Chưa có gold gán nhãn thủ công** ở mức ô.
 5. **Chưa có dữ liệu chuỗi thời gian** (OHLCV, NAV, dòng tiền ngoại) trong repo, dù đề cương yêu cầu.
-6. **ColSmol-256M không đại diện ColPali-3B**; kết luận "visual thua text" chỉ đúng với zero-shot 256M trên corpus này.
-7. **Phụ thuộc parser**: Table Transformer sai hàng/cột thì JSON sai theo (header nhiều tầng bị gộp, ô rỗng, cột STT bị OCR sai).
-8. **Phạm vi PDF**: chỉ PDF có text layer; PDF scan, ô merge phức tạp và câu hỏi tổng hợp nhiều bảng nằm ngoài phạm vi.
+6. **Phụ thuộc parser**: Table Transformer sai hàng/cột thì JSON sai theo (header nhiều tầng bị gộp, ô rỗng, cột STT bị OCR sai).
+7. **Phạm vi PDF**: chỉ PDF có text layer; PDF scan, ô merge phức tạp và câu hỏi tổng hợp nhiều bảng nằm ngoài phạm vi.

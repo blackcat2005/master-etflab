@@ -4,7 +4,7 @@ numpy>=1.26
 # Phase 1 (hybrid retrieval): bo comment 2 dong duoi neu can vector search
 # sentence-transformers>=3.0
 
-# Danh gia ColPali / tao gold page can render PDF
+# Tao gold page / enrich_gold can doc text layer PDF
 # pymupdf>=1.24
 
 # Dev

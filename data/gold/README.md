@@ -2,7 +2,7 @@
 
 | File | Nội dung |
 |---|---|
-| `gold_qa_v2.jsonl` | 615 câu hỏi ô bảng (gồm 129/130 qid của gold cũ + 486 câu mới) |
+| `gold_qa_v2.jsonl` | 615 câu hỏi ô bảng (gồm 129 qid duy nhất của gold cũ (130 dòng, 1 qid trùng) + 486 câu mới) |
 | `gold_qa_v2.stats.json` | Thống kê phân bố theo file, kỳ/chỉ số, mẫu câu |
 
 Sinh bằng `scripts/eval/enrich_gold.py` (seed 42, `--per-table 60`). Gold cũ ở `data/eval/` bị `.gitignore`, nên bản v2 đặt ở đây để được version.
